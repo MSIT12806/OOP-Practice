@@ -1,4 +1,4 @@
-namespace PaymentSystem.Models
+namespace PaymentSystem.ViewModel
 {
     public class ErrorViewModel
     {

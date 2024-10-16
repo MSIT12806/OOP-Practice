@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Models;
+using PaymentSystem.ViewModel;
 using System.Diagnostics;
 
 namespace PaymentSystem.Controllers

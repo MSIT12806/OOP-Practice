@@ -53,3 +53,27 @@
 	
 	前端的 URL 的部分，我盡量善用 MVC 的特性，把 C# 強型別的寫法溶入進來，使用 nameof 運算式，取得 Controller 和 action 的名字。
 	
+1. 建立畫面
+
+	首先得要建立 各種功能需要的 ViewModel
+	
+	- AddEmp: EmpId, name, address
+	- DelEmp: EmpId
+	- ChgEmp: EmpId, name, address // , hourly, salaried, commissioned, hold, direct, mail, member, dues, nomember // 規格書上說要這些欄位，但目前不懂為什麼，所以也先不加上。
+	- ServiceCharge: memberId, amount
+	- Payday
+
+	目前會碰到的問題：
+	
+	1. AddEmp 的 view model 跟 ChgEmp 的 view model 長得一樣，在開發上就會想要借用，但是在此時需要謹慎。
+	1. view model 檔案的管理：我目前是用 Controller 的階層去處理，但我不確定這樣的放法是否是最好的。
+	
+	建置好 view model 之後，就可以用 .net core 自動新增模板畫面。
+	
+	然後 View model 可以用 Attribute 語法，快速加入驗證機制。
+	
+	還可以快速加入 防偽造標籤，作為資安的需求。
+	
+	在撰寫 Controller 的過程中，還碰到 return View, Redirect 還是 RedirectToAction 的問題。
+	
+	另外就是 ChgEmp 如果傳入的 empId 是無效的，就應該回傳錯誤畫面
