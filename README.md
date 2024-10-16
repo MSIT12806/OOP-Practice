@@ -76,4 +76,4 @@
 	
 	在撰寫 Controller 的過程中，還碰到 return View, Redirect 還是 RedirectToAction 的問題。
 	
-	另外就是 ChgEmp 如果傳入的 empId 是無效的，就應該回傳錯誤畫面
+	另外就是 ChgEmp 如果傳入的 empId 是無效的，就應該回傳錯誤畫面，需要注意回傳錯誤畫面的語法。
