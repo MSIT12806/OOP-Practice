@@ -77,3 +77,9 @@
 	在撰寫 Controller 的過程中，還碰到 return View, Redirect 還是 RedirectToAction 的問題。
 	
 	另外就是 ChgEmp 如果傳入的 empId 是無效的，就應該回傳錯誤畫面，需要注意回傳錯誤畫面的語法。
+	
+1. 建立畫面 -2
+
+	產生 案例五的 View model 的時候，我發現好像漏掉 和 Emp 建立關聯的設定，我先擅自加上去，不知道之後書本的內容會不會提到。
+	
+接下來，就要處理資料儲存的問題了。
