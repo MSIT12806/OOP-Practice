@@ -1,8 +1,49 @@
-﻿@{
+﻿@using PaymentSystem.Controllers
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>function name</td>
+                <td>URL</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>AddEmp</td>
+                <td>
+                    <a asp-controller="@nameof(EmpController).Replace("Controller","")" asp-action="@nameof(EmpController.AddEmp)">AddEmp</a>
+                </td>
+            </tr>
+            <tr>
+                <td>DelEmp</td>
+                <td>
+                    <a asp-controller="@nameof(EmpController).Replace("Controller","")" asp-action="@nameof(EmpController.DelEmp)">DelEmp</a>
+                </td>
+            </tr>
+            <tr>
+                <td>ChgEmp</td>
+                <td>
+                    <a asp-controller="@nameof(EmpController).Replace("Controller","")" asp-action="@nameof(EmpController.ChgEmp)">ChgEmp</a>
+                </td>
+            </tr>
+            <tr>
+                <td>ServiceCharge</td>
+                <td>
+                    <a asp-controller="@nameof(GuildController).Replace("Controller","")" asp-action="@nameof(GuildController.ServiceCharge)">ServiceCharge</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Payday</td>
+                <td>
+                    <a asp-controller="@nameof(PayController).Replace("Controller","")" asp-action="@nameof(PayController.Payday)">Payday</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
