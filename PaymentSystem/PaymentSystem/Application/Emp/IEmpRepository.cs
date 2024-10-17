@@ -5,7 +5,7 @@ namespace PaymentSystem.Application.Emp
 {
     public interface IEmpRepository
     {
-        void AddEmp(EmpCore emp);
+        void Add(EmpCore emp);
         IEnumerable<EmpCore> GetList();
     }
 }

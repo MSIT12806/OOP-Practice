@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
-namespace PaymentSystem.ViewModel
+namespace PaymentSystem.Adapter
 {
     public record ServiceChargeViewModel
     {
@@ -15,6 +14,6 @@ namespace PaymentSystem.ViewModel
 
         [Required]
         [DisplayName("每月扣繳服務費")]
-        public string Amount { get; set; }
+        public int Amount { get; set; }
     }
 }

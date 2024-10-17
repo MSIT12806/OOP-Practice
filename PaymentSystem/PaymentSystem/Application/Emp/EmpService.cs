@@ -14,7 +14,7 @@ namespace PaymentSystem.Application.Emp
         }
         public void AddEmp(EmpCore emp)
         {
-            _empRepository.AddEmp(emp);
+            _empRepository.Add(emp);
         }
 
         public IEnumerable<EmpCore> GetList()

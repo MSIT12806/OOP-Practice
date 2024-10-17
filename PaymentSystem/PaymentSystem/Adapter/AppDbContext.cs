@@ -10,10 +10,26 @@ namespace PaymentSystem.Adapter
         }
 
         public DbSet<EmpDbModel> Emps { get; set; }
+        public DbSet<ServiceChargeDbModel> ServiceCharges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EmpDbModel>().HasIndex(e => e.Name);
+            modelBuilder.Entity<EmpDbModel>().HasIndex(e => e.EmpId);
+            modelBuilder.Entity<EmpDbModel>().Property(p => p.EmpId).IsRequired();
+            modelBuilder.Entity<EmpDbModel>().Property(p=>p.Name).IsRequired();
+            modelBuilder.Entity<EmpDbModel>().Property(p => p.Address).IsRequired();
+
+            modelBuilder.Entity<ServiceChargeDbModel>().HasIndex(e => e.EmpId);
+            modelBuilder.Entity<ServiceChargeDbModel>().HasIndex(e => e.MemberId);
+
+            modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.EmpId).IsRequired();
+            modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.MemberId).IsRequired();
+            modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.Amount).IsRequired();
+
+            modelBuilder.Entity<ServiceChargeDbModel>()
+                .HasOne<EmpDbModel>()
+                .WithOne()
+                .HasForeignKey<EmpDbModel>(x => x.EmpId);
         }
     }
 }

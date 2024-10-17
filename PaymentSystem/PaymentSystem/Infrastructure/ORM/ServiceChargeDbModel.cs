@@ -2,12 +2,13 @@
 
 namespace PaymentSystem.Infrastructure.ORM
 {
-    public class EmpDbModel
+    public class ServiceChargeDbModel
     {
+
         public string EmpId { get; internal set; }
 
-        public string Name { get; internal set; }
+        public string MemberId { get; internal set; }
 
-        public string Address { get; internal set; }
+        public int Amount { get; internal set; }
     }
 }

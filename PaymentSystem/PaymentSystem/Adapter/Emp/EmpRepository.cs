@@ -20,7 +20,7 @@ namespace PaymentSystem.Adapter
             _appDbContext.SaveChanges();
         }
 
-        public void AddEmp(EmpCore emp)
+        public void Add(EmpCore emp)
         {
             EmpDbModel empDbModel = ToDbModel(emp);
 
