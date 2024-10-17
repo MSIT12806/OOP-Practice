@@ -1,20 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Models;
+using PaymentSystem.Adapter;
+using PaymentSystem.Application.Emp;
 using PaymentSystem.ViewModel;
-using PaymentSystem.ViewModel.Emp;
 
 namespace PaymentSystem.Controllers
 {
     public class EmpController : Controller
     {
-        private IEmpRepository _empRepository;
-        private Emp _emp;
+        private EmpMapper _empMapper;
+        private EmpService _emp;
 
-        public EmpController(IEmpRepository empRepository)
+        public EmpController(EmpService service, EmpMapper mapper)
         {
-            this._empRepository = empRepository;
-            this._emp = new Emp(empRepository);
+            this._empMapper = mapper;
+            this._emp = service;
         }
+        public IActionResult EmpList()
+        {
+            var empList = _emp.GetList().Select(_empMapper.ToChgModel).ToList();
+            return View();
+        }
+
         public IActionResult AddEmp()
         {
             return View();
@@ -24,7 +30,7 @@ namespace PaymentSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddEmp(AddEmpViewModel addEmp)
         {
-            _emp.AddEmp(addEmp);
+            _emp.AddEmp(_empMapper.ToCoreModel(addEmp));
             return RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }
 

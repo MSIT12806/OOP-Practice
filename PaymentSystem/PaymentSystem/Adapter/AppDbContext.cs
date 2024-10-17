@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PaymentSystem.Infrastructure.ORM;
 
-namespace PaymentSystem.Application
+namespace PaymentSystem.Adapter
 {
     public class AppDbContext : DbContext
     {

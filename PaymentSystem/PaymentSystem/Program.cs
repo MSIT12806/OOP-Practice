@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using PaymentSystem.Application;
-using PaymentSystem.Models;
+using PaymentSystem.Adapter;
+using PaymentSystem.Application.Emp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +12,8 @@ builder.Services.AddControllersWithViews();
 // 加入 Entity Framework Core 服務(需要 using Microsoft.EntityFrameworkCore 以及 Microsoft.EntityFrameworkCore.InMemory)
 builder.Services.AddDbContext<AppDbContext>(o=> o.UseInMemoryDatabase("InMemoryDb"));
 builder.Services.AddTransient<IEmpRepository, EmpRepository>();
+builder.Services.AddTransient<EmpMapper, EmpMapper>();
+builder.Services.AddTransient<EmpService, EmpService>();
 
 #endregion
 

@@ -114,3 +114,15 @@
 	介面的實作則放在 Application 層，將由 Application 層負責與 Infrastructure 進行互動。
 	
 	為了滿足 Entity Framework 的行為，需要為 DbModel 定義一些屬性，有些要寫在 OnModelCreating 方法，有些可以用 Attribute 的方法寫在 DbModel 裡面，目前還在權衡哪一種寫法比較好。
+	
+1. 資料驗證
+
+	為了方便人工測試，我還是需要生成 List 表單的畫面。
+	
+	然後我突然意識到，我到目前其實都還沒有碰到資料的核心邏輯，因為資料的 crud ，其實還是算 application 的東西。
+	
+	因此寫到這裡，我突然發現我還沒為我真正的業務物件，也就是 Emp 進行建模，而我先前寫的 Emp，因為要對 Emp 資料進行 crud ，因此並不算 Emp 本身，我已經將其改名為 EmpServiece。
+	
+	建立了 Emp 模型，現在依賴關係就變得比較清楚了，核心業務邏輯，也就是 Emp，本身不可以有任何依賴。應用程式層，則依賴核心模型，
+	
+	然後我觸碰到了 Adapter 層的物件，才發現 Repository 、 View Model 都屬於 Adapter 層，也就是所謂的實作層。

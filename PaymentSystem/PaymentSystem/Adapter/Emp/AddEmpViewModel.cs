@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PaymentSystem.ViewModel.Emp
+namespace PaymentSystem.Adapter
 {
     public record AddEmpViewModel
     {

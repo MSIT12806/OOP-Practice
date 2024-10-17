@@ -1,4 +1,4 @@
-﻿namespace PaymentSystem.ViewModel.Emp
+﻿namespace PaymentSystem.Adapter
 {
     public record ChgEmpViewModel
     {
