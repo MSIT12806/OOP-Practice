@@ -82,4 +82,35 @@
 
 	產生 案例五的 View model 的時候，我發現好像漏掉 和 Emp 建立關聯的設定，我先擅自加上去，不知道之後書本的內容會不會提到。
 	
-接下來，就要處理資料儲存的問題了。
+1. 資料儲存
+
+	我預期使用 Entity Framework 來處理，首先要做一個 Infrastructure 層，用來處理跟外部套件，例如 Entity Framework 等工具的互動。
+	
+	然後在 Program.cs 加入 DbContext 服務，並註冊為 InMemory 的機制。
+	
+	```csharp
+	var builder = WebApplication.CreateBuilder(args);
+
+	// Add services to the container.
+	builder.Services.AddControllersWithViews();
+
+	#region 加入各種服務
+
+	// 加入 Entity Framework Core 服務(需要 using Microsoft.EntityFrameworkCore 以及 Microsoft.EntityFrameworkCore.InMemory)
+	builder.Services.AddDbContext<AppDbContext>(o=> o.UseInMemoryDatabase("InMemoryDb"));
+
+	#endregion
+
+	var app = builder.Build();
+
+	// and so on...
+
+	```
+	
+	接著，我終於碰觸到核心業務邏輯，我在 Model 層，加入了第一個類別，「Emp.cs」，並撰寫了第一個方法。
+	
+	Model 層對外需要使用 interface 介接，為了儲存員工的資料，我宣告了 IEmpRepository 的介面。
+	
+	介面的實作則放在 Application 層，將由 Application 層負責與 Infrastructure 進行互動。
+	
+	為了滿足 Entity Framework 的行為，需要為 DbModel 定義一些屬性，有些要寫在 OnModelCreating 方法，有些可以用 Attribute 的方法寫在 DbModel 裡面，目前還在權衡哪一種寫法比較好。
