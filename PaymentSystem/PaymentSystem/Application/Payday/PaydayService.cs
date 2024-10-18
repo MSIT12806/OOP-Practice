@@ -42,7 +42,7 @@ namespace PaymentSystem.Application.Payday
 
         public AmountCore GetSingle(string empId)
         {
-            throw new NotImplementedException();
+            return this._paydayRepopsitory.GetAmounts().FirstOrDefault(x => x.EmpId == empId);
         }
     }
 }
