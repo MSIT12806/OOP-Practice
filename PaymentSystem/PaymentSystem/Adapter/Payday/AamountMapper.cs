@@ -9,7 +9,7 @@ namespace PaymentSystem.Adapter.Payday
             return new AmountCore
             {
                 EmpId = addEmp.EmpId,
-                Amount = addEmp.Amount,
+                Salaried = addEmp.Amount,
             };
         }
     }

@@ -27,7 +27,7 @@ namespace PaymentSystem.Application.Payday
                 results.Add(new PaydayResult
                 {
                     EmpId = emp.EmpId,
-                    Salary = emp.Amount,
+                    Salary = emp.Salaried,
                     ServiceCharge = serviceCharge?.Amount
                 });
             }

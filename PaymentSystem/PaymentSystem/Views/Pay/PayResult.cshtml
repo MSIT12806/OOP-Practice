@@ -22,32 +22,39 @@
                 @Html.DisplayNameFor(model => model.ServiceCharge)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.SalesReceipt)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ShouldPay)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmpId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Salary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServiceCharge)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShouldPay)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmpId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Salary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceCharge)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SalesReceipt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShouldPay)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -21,7 +21,7 @@ namespace PaymentSystem.Adapter
                 EmpId = emp.Id,
                 Name = emp.Name,
                 Address = emp.Address,
-                Amount = amount.Amount
+                Amount = amount.Salaried
             };
         }
 

@@ -29,7 +29,7 @@ namespace PaymentSystem.Adapter.Payday
             return new AmountCore
             {
                 EmpId = source.EmpId,
-                Amount = source.Amount,
+                Salaried = source.Amount,
             };
         }
 
@@ -38,7 +38,7 @@ namespace PaymentSystem.Adapter.Payday
             return new AmountDbModel
             {
                 EmpId = amountCore.EmpId,
-                Amount = amountCore.Amount,
+                Amount = amountCore.Salaried,
             };
         }
     }
