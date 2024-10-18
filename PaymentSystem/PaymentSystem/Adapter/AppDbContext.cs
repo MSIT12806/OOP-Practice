@@ -14,11 +14,12 @@ namespace PaymentSystem.Adapter
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EmpDbModel>().HasIndex(e => e.EmpId);
+            modelBuilder.Entity<EmpDbModel>().HasKey(e => e.EmpId);
             modelBuilder.Entity<EmpDbModel>().Property(p => p.EmpId).IsRequired();
-            modelBuilder.Entity<EmpDbModel>().Property(p=>p.Name).IsRequired();
+            modelBuilder.Entity<EmpDbModel>().Property(p => p.Name).IsRequired();
             modelBuilder.Entity<EmpDbModel>().Property(p => p.Address).IsRequired();
 
+            modelBuilder.Entity<ServiceChargeDbModel>().HasKey(e => e.EmpId);
             modelBuilder.Entity<ServiceChargeDbModel>().HasIndex(e => e.EmpId);
             modelBuilder.Entity<ServiceChargeDbModel>().HasIndex(e => e.MemberId);
 
