@@ -1,5 +1,4 @@
-﻿using PaymentSystem.Application;
-using PaymentSystem.Application.Emp;
+﻿using PaymentSystem.Application.Emp;
 using PaymentSystem.Infrastructure.ORM;
 using PaymentSystem.Models;
 
@@ -11,32 +10,41 @@ namespace PaymentSystem.Adapter
 
         public EmpRepository(AppDbContext appDbContext)
         {
-            _appDbContext = appDbContext;
+            this._appDbContext = appDbContext;
         }
 
         public void AddEmp(EmpDbModel empDbModel)
         {
-            _appDbContext.Emps.Add(empDbModel);
-            _appDbContext.SaveChanges();
+            this._appDbContext.Emps.Add(empDbModel);
+            this._appDbContext.SaveChanges();
         }
 
         public void Add(EmpCore emp)
         {
-            EmpDbModel empDbModel = ToDbModel(emp);
+            EmpDbModel empDbModel = this.ToDbModel(emp);
 
-            AddEmp(empDbModel);
+            this.AddEmp(empDbModel);
         }
 
         public IEnumerable<EmpCore> GetList()
         {
             List<EmpCore> empList = new List<EmpCore>();
 
-            foreach (EmpDbModel empDbModel in _appDbContext.Emps)
+            foreach (EmpDbModel empDbModel in this._appDbContext.Emps)
             {
-                empList.Add(ToCoreModel(empDbModel));
+                empList.Add(this.ToCoreModel(empDbModel));
             }
 
             return empList;
+        }
+
+
+
+        public EmpCore GetSingle(string empId)
+        {
+            EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empId);
+
+            return this.ToCoreModel(empDbModel);
         }
 
 

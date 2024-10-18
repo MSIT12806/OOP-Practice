@@ -1,5 +1,4 @@
-﻿using PaymentSystem.Infrastructure.ORM;
-using PaymentSystem.Models;
+﻿using PaymentSystem.Models;
 
 namespace PaymentSystem.Application.Emp
 {
@@ -10,16 +9,21 @@ namespace PaymentSystem.Application.Emp
 
         public EmpService(IEmpRepository empRepository)
         {
-            _empRepository = empRepository;
+            this._empRepository = empRepository;
         }
         public void AddEmp(EmpCore emp)
         {
-            _empRepository.Add(emp);
+            this._empRepository.Add(emp);
         }
 
         public IEnumerable<EmpCore> GetList()
         {
-            return _empRepository.GetList();
+            return this._empRepository.GetList();
+        }
+
+        public EmpCore GetSingle(string empId)
+        {
+            return this._empRepository.GetSingle(empId);
         }
     }
 }
