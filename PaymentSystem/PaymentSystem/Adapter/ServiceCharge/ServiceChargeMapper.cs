@@ -2,9 +2,9 @@
 
 namespace PaymentSystem.Adapter
 {
-    public class ServiceChargeMapper
+    public static class ServiceChargeMapper
     {
-        public ServiceChargeViewModel ToViewModel(ServiceChargeCore serviceChargeCore)
+        public static ServiceChargeViewModel ToViewModel(ServiceChargeCore serviceChargeCore)
         {
             return new ServiceChargeViewModel
             {
@@ -15,7 +15,7 @@ namespace PaymentSystem.Adapter
         }
 
 
-        public ServiceChargeCore ToCoreModel(ServiceChargeViewModel serviceChargeViewModel)
+        public static ServiceChargeCore ToCoreModel(ServiceChargeViewModel serviceChargeViewModel)
         {
             return new ServiceChargeCore
             {

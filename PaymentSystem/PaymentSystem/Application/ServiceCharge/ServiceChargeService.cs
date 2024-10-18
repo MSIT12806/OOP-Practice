@@ -9,17 +9,22 @@ namespace PaymentSystem.Application.Emp
 
         public ServiceChargeService(IServiceChargeRepository serviceChargeRepository, IEmpExistChecker empExistChecker)
         {
-            _serviceChargeRepository = serviceChargeRepository;
-            _empExistChecker = empExistChecker;
+            this._serviceChargeRepository = serviceChargeRepository;
+            this._empExistChecker = empExistChecker;
         }
         public void SetServiceCharge(ServiceChargeCore serviceCharge)
         {
-            if (!_empExistChecker.Check(serviceCharge.EmpId))
+            if (!this._empExistChecker.Check(serviceCharge.EmpId))
             {
                 throw new InvalidOperationException("Emp is not exist");
             }
 
-            _serviceChargeRepository.SetServiceCharge(serviceCharge);
+            this._serviceChargeRepository.SetServiceCharge(serviceCharge);
+        }
+
+        public IEnumerable<ServiceChargeCore> GetList()
+        {
+            return this._serviceChargeRepository.GetServiceCharges();
         }
     }
 }

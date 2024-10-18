@@ -11,6 +11,8 @@ namespace PaymentSystem.Adapter
 
         public DbSet<EmpDbModel> Emps { get; set; }
         public DbSet<ServiceChargeDbModel> ServiceCharges { get; set; }
+        public DbSet<AmountDbModel> Amounts { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,12 +27,18 @@ namespace PaymentSystem.Adapter
 
             modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.EmpId).IsRequired();
             modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.MemberId).IsRequired();
-            modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.Amount).IsRequired();
+            modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.ServiceCharge).IsRequired();
 
             modelBuilder.Entity<ServiceChargeDbModel>()
                 .HasOne<EmpDbModel>()
                 .WithOne()
                 .HasForeignKey<EmpDbModel>(x => x.EmpId);
+
+            modelBuilder.Entity<AmountDbModel>().HasKey(e => e.EmpId);
+            modelBuilder.Entity<AmountDbModel>()
+                .HasOne<EmpDbModel>()
+                .WithOne()
+                .HasForeignKey<AmountDbModel>(x => x.EmpId);
         }
     }
 }

@@ -1,11 +1,10 @@
-﻿using PaymentSystem.Application.Emp;
-using PaymentSystem.Models;
+﻿using PaymentSystem.Models;
 
 namespace PaymentSystem.Adapter
 {
-    public class EmpMapper 
+    public static class EmpMapper
     {
-        public AddEmpViewModel ToAddModel(EmpCore emp)
+        public static AddEmpViewModel ToAddModel(EmpCore emp)
         {
             return new AddEmpViewModel
             {
@@ -15,17 +14,18 @@ namespace PaymentSystem.Adapter
             };
         }
 
-        public ChgEmpViewModel ToChgModel(EmpCore emp)
+        public static ChgEmpViewModel ToChgModel(EmpCore emp, AmountCore amount)
         {
             return new ChgEmpViewModel
             {
                 EmpId = emp.Id,
                 Name = emp.Name,
-                Address = emp.Address
+                Address = emp.Address,
+                Amount = amount.Amount
             };
         }
 
-        public EmpCore ToCoreModel(AddEmpViewModel addEmp)
+        public static EmpCore ToCoreModel(AddEmpViewModel addEmp)
         {
             return new EmpCore
             {
@@ -35,7 +35,7 @@ namespace PaymentSystem.Adapter
             };
         }
 
-        public EmpCore ToCoreModel(ChgEmpViewModel chgEmp)
+        public static EmpCore ToCoreModel(ChgEmpViewModel chgEmp)
         {
             return new EmpCore
             {
@@ -44,7 +44,5 @@ namespace PaymentSystem.Adapter
                 Address = chgEmp.Address
             };
         }
-
-
     }
 }

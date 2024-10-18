@@ -10,35 +10,21 @@ namespace PaymentSystem.Adapter
 
         public ServiceChargeRepository(AppDbContext context)
         {
-            _context = context;
+            this._context = context;
         }
         public void SetServiceCharge(ServiceChargeCore serviceCharge)
         {
-            ServiceChargeDbModel serviceChargeDbModel = ToDbModel(serviceCharge);
+            ServiceChargeDbModel serviceChargeDbModel = this.ToDbModel(serviceCharge);
 
-            if (_context.ServiceCharges.Any(x => x.EmpId == serviceCharge.EmpId && x.MemberId == serviceCharge.MemberId))
+            if (this._context.ServiceCharges.Any(x => x.EmpId == serviceCharge.EmpId && x.MemberId == serviceCharge.MemberId))
             {
-                Update(serviceChargeDbModel);
+                this.Update(serviceChargeDbModel);
                 return;
             }
             else
             {
-                Insert(serviceChargeDbModel);
+                this.Insert(serviceChargeDbModel);
             }
-        }
-
-        private void Insert(ServiceChargeDbModel serviceChargeDbModel)
-        {
-            _context.ServiceCharges.Add(serviceChargeDbModel);
-            _context.SaveChanges();
-        }
-
-        private void Update(ServiceChargeDbModel serviceChargeDbModel)
-        {
-            ServiceChargeDbModel serviceChargeDbModelToUpdate = _context.ServiceCharges.First(x => x.EmpId == serviceChargeDbModel.EmpId && x.MemberId == serviceChargeDbModel.MemberId);
-            serviceChargeDbModelToUpdate.Amount = serviceChargeDbModel.Amount;
-            _context.ServiceCharges.Update(serviceChargeDbModelToUpdate);
-            _context.SaveChanges();
         }
 
         public ServiceChargeDbModel ToDbModel(ServiceChargeCore serviceCharge)
@@ -47,7 +33,7 @@ namespace PaymentSystem.Adapter
             {
                 EmpId = serviceCharge.EmpId,
                 MemberId = serviceCharge.MemberId,
-                Amount = serviceCharge.Amount
+                ServiceCharge = serviceCharge.Amount
             };
         }
 
@@ -57,8 +43,30 @@ namespace PaymentSystem.Adapter
             {
                 EmpId = serviceChargeDbModel.EmpId,
                 MemberId = serviceChargeDbModel.MemberId,
-                Amount = serviceChargeDbModel.Amount
+                Amount = serviceChargeDbModel.ServiceCharge
             };
+        }
+
+        public IEnumerable<ServiceChargeCore> GetServiceCharges()
+        {
+            var result = this._context.ServiceCharges.ToList().Select(this.ToCoreModel);
+            return result;
+        }
+
+
+
+        private void Insert(ServiceChargeDbModel serviceChargeDbModel)
+        {
+            this._context.ServiceCharges.Add(serviceChargeDbModel);
+            this._context.SaveChanges();
+        }
+
+        private void Update(ServiceChargeDbModel serviceChargeDbModel)
+        {
+            ServiceChargeDbModel serviceChargeDbModelToUpdate = this._context.ServiceCharges.First(x => x.EmpId == serviceChargeDbModel.EmpId && x.MemberId == serviceChargeDbModel.MemberId);
+            serviceChargeDbModelToUpdate.ServiceCharge = serviceChargeDbModel.ServiceCharge;
+            this._context.ServiceCharges.Update(serviceChargeDbModelToUpdate);
+            this._context.SaveChanges();
         }
     }
 }

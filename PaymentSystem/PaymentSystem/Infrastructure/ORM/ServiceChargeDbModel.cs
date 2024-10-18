@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PaymentSystem.Infrastructure.ORM
+﻿namespace PaymentSystem.Infrastructure.ORM
 {
     public class ServiceChargeDbModel
     {
@@ -9,6 +7,6 @@ namespace PaymentSystem.Infrastructure.ORM
 
         public string MemberId { get; internal set; }
 
-        public int Amount { get; internal set; }
+        public int ServiceCharge { get; internal set; }
     }
 }

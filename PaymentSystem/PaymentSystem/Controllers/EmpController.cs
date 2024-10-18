@@ -1,25 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentSystem.Adapter;
+using PaymentSystem.Adapter.Payday;
 using PaymentSystem.Application.Emp;
+using PaymentSystem.Application.Payday;
 using PaymentSystem.ViewModel;
 
 namespace PaymentSystem.Controllers
 {
     public class EmpController : Controller
     {
-        private EmpMapper _empMapper;
         private EmpService _emp;
+        private PaydayService _payday;
 
-        public EmpController(EmpService service, EmpMapper mapper)
+        public EmpController(EmpService service, PaydayService paydayService)
         {
-            this._empMapper = mapper;
             this._emp = service;
+            this._payday = paydayService;
         }
-        public IActionResult EmpList()
-        {
-            var empList = this._emp.GetList().Select(this._empMapper.ToChgModel).ToList();
-            return this.View();
-        }
+        //public IActionResult EmpList()
+        //{
+        //    var empList = this._emp.GetList().Select(EmpMapper.ToChgModel).ToList();
+        //    return this.View(empList);
+        //}
 
         public IActionResult AddEmp()
         {
@@ -30,7 +32,8 @@ namespace PaymentSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddEmp(AddEmpViewModel addEmp)
         {
-            this._emp.AddEmp(this._empMapper.ToCoreModel(addEmp));
+            this._emp.AddEmp(EmpMapper.ToCoreModel(addEmp));
+            this._payday.SaveAmount(AamountMapper.ToCoreModel(addEmp));
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }
 
@@ -53,7 +56,7 @@ namespace PaymentSystem.Controllers
                 return this.View("Error", new ErrorViewModel { RequestId = empId });
             }
 
-            var chgem = this._empMapper.ToChgModel(this._emp.GetSingle(empId));
+            var chgem = EmpMapper.ToChgModel(this._emp.GetSingle(empId), this._payday.GetSingle(empId));
             return this.View(chgem);
         }
 
