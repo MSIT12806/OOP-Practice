@@ -1,11 +1,11 @@
-﻿namespace PaymentSystem.Application.Payday
+﻿namespace PaymentSystem.Models
 {
     public class PaydayResult
     {
         public string EmpId { get; set; }
         public int Salary { get; set; }
         public int? ServiceCharge { get; set; }
-        public int ShouldPay => Salary - (ServiceCharge ?? 0);
+        public int ShouldPay => this.Salary - (this.ServiceCharge ?? 0);
     }
 
 }
