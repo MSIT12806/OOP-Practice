@@ -7,9 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-#region ¥[¤J¦UºØªA°È
+#region åŠ å…¥å„ç¨®æœå‹™
 
-// ¥[¤J Entity Framework Core ªA°È(»İ­n using Microsoft.EntityFrameworkCore ¥H¤Î Microsoft.EntityFrameworkCore.InMemory)
+// åŠ å…¥ Entity Framework Core æœå‹™(éœ€è¦ using Microsoft.EntityFrameworkCore ä»¥åŠ Microsoft.EntityFrameworkCore.InMemory)
 builder.Services.AddDbContext<AppDbContext>(o=> o.UseInMemoryDatabase("InMemoryDb"));
 builder.Services.AddTransient<IEmpRepository, EmpRepository>();
 builder.Services.AddTransient<EmpMapper, EmpMapper>();
