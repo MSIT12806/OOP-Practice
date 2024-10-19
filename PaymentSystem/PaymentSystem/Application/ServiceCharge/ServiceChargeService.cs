@@ -26,5 +26,10 @@ namespace PaymentSystem.Application.Emp
         {
             return this._serviceChargeRepository.GetServiceCharges();
         }
+
+        public ServiceChargeCore GetSingle(string empId)
+        {
+            return this._serviceChargeRepository.GetServiceCharges().FirstOrDefault(x => x.EmpId == empId);
+        }
     }
 }

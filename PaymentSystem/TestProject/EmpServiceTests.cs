@@ -30,6 +30,7 @@ namespace TestProject
         [Test]
         public void AddAndModifyEmployee_Test()
         {
+            // empService
             var empService = _serviceProvider.GetRequiredService<EmpService>();
 
             // 添加員工
@@ -59,20 +60,76 @@ namespace TestProject
                 Assert.That(emp.Name, Is.EqualTo("Jane Smith"));
             }
 
+            // paydayService
             var paydayService = _serviceProvider.GetRequiredService<PaydayService>();
-            // 添加員工薪資
+
+            // 設定員工薪資
             var salary = new EmpSalaryCore
             {
                 EmpId = employee.Id,
                 Salary = 1000
             };
-            paydayService.SaveSalary(salary);
+            paydayService.SetSalary(salary);
 
             if (ASSERT)
             {
                 // 確認薪資是否正確
                 var emp = paydayService.GetSingle(employee.Id);
                 Assert.That(emp.Salary, Is.EqualTo(1000));
+            }
+
+            // 修改員工薪資
+            salary.Salary = 2000;
+            paydayService.SetSalary(salary);
+            if (ASSERT)
+            {
+                // 確認修改是否正確
+                var emp = paydayService.GetSingle(employee.Id);
+                Assert.That(emp.Salary, Is.EqualTo(2000));
+            }
+
+            // chargeService
+            var chargeService = _serviceProvider.GetRequiredService<ServiceChargeService>();
+
+            // 設定員工公會服務費
+            var serviceCharge = new ServiceChargeCore
+            {
+                EmpId = employee.Id,
+                MemberId = "AA",
+                Amount = 100
+            };
+            chargeService.SetServiceCharge(serviceCharge);
+
+            if (ASSERT)
+            {
+                // 確認服務費是否正確
+                var emp = chargeService.GetSingle(employee.Id);
+                Assert.That(emp.Amount, Is.EqualTo(100));
+            }
+
+            // 修改員工公會服務費
+            serviceCharge.Amount = 200;
+            chargeService.SetServiceCharge(serviceCharge);
+
+            if (ASSERT)
+            {
+                // 確認修改是否正確
+                var emp = chargeService.GetSingle(employee.Id);
+                Assert.That(emp.Amount, Is.EqualTo(200));
+            }
+
+            // 薪水結算
+            var paydays = paydayService.Pay();
+
+            if (ASSERT)
+            {
+                // 確認薪水結算是否正確
+                Assert.That(paydays.Count(), Is.EqualTo(1));
+                Assert.That(paydays.First().EmpId, Is.EqualTo(employee.Id));
+                Assert.That(paydays.First().Salary, Is.EqualTo(2000));
+                Assert.That(paydays.First().ServiceCharge, Is.EqualTo(200));
+                Assert.That(paydays.First().SalesReceipt, Is.EqualTo(null));
+                Assert.That(paydays.First().ShouldPay, Is.EqualTo(1800));
             }
         }
     }

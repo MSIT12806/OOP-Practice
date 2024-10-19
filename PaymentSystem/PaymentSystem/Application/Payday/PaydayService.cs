@@ -18,14 +18,12 @@ namespace PaymentSystem.Application.Payday
 
         public IEnumerable<PaydayCore> Pay()
         {
-            var emps = this._paydayRepopsitory.GetEmpSalaries().ToList().Select(ToPaydayCore);
-
-            var results = new List<PaydayCore>();
+            var emps = this._paydayRepopsitory.GetEmpSalaries().ToList().Select(ToPaydayCore).ToList();
 
             this._serviceChargeSetter.SetServiceCharge(emps);
             this._salesReceiptSetter.SetSalesReceipt(emps);
 
-            return results;
+            return emps;
         }
 
         private PaydayCore ToPaydayCore(EmpSalaryCore salaryCore)
@@ -37,7 +35,7 @@ namespace PaymentSystem.Application.Payday
             };
         }
 
-        public void SaveSalary(EmpSalaryCore salaryCore)
+        public void SetSalary(EmpSalaryCore salaryCore)
         {
             this._paydayRepopsitory.Save(salaryCore);
         }

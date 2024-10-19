@@ -13,10 +13,21 @@ namespace PaymentSystem.Adapter.Payday
         }
         public void Save(EmpSalaryCore amountCore)
         {
-            SalaryDbModel dbModel = this.ToDbModel(amountCore);
+            var dbModel = this._appDbContext.Salaries.SingleOrDefault(x => x.EmpId == amountCore.EmpId);
+            if (dbModel == null)
+            {
+                dbModel = this.ToDbModel(amountCore);
+                this._appDbContext.Salaries.Add(dbModel);
+                this._appDbContext.SaveChanges();
+                return;
+            }
 
-            this._appDbContext.Salaries.Add(dbModel);
-            this._appDbContext.SaveChanges();
+            if (this._appDbContext.Salaries.Any(x => x.EmpId == amountCore.EmpId))
+            {
+                this._appDbContext.Update(dbModel, this.ToDbModel(amountCore));
+                this._appDbContext.SaveChanges();
+                return;
+            }
         }
 
         public IEnumerable<EmpSalaryCore> GetEmpSalaries()

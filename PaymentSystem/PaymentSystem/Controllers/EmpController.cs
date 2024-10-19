@@ -33,7 +33,7 @@ namespace PaymentSystem.Controllers
         public IActionResult AddEmp(AddEmpViewModel addEmp)
         {
             this._emp.AddEmp(EmpMapper.ToCoreModel(addEmp));
-            this._payday.SaveSalary(AamountMapper.ToCoreModel(addEmp));
+            this._payday.SetSalary(AamountMapper.ToCoreModel(addEmp));
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }
 
@@ -64,7 +64,7 @@ namespace PaymentSystem.Controllers
         public IActionResult ChgEmp(ChgEmpViewModel chgEmp)
         {
             this._emp.ChgEmp(EmpMapper.ToCoreModel(chgEmp));
-            this._payday.SaveSalary(AamountMapper.ToCoreModel(chgEmp));
+            this._payday.SetSalary(AamountMapper.ToCoreModel(chgEmp));
             return this.RedirectToAction(nameof(ChgEmp), new { empId = chgEmp.EmpId });
         }
 

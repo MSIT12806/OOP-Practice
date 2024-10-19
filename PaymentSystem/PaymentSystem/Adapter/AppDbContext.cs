@@ -6,6 +6,12 @@ namespace PaymentSystem.Adapter
 {
     public class AppDbContext : DbContext
     {
+        public TEntity Update<TEntity>(TEntity dbSource, TEntity updateObject) where TEntity : class
+        {
+            Entry(dbSource).CurrentValues.SetValues(updateObject);
+            return base.Update(dbSource).Entity;
+        }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -32,7 +38,6 @@ namespace PaymentSystem.Adapter
             modelBuilder.Entity<EmpDbModel>().Property(p => p.Name).IsRequired();
             modelBuilder.Entity<EmpDbModel>().Property(p => p.Address).IsRequired();
         }
-
         private static void SetServiceCharge(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ServiceChargeDbModel>().HasKey(e => e.EmpId);
@@ -56,14 +61,11 @@ namespace PaymentSystem.Adapter
                 .WithOne()
                 .HasForeignKey<SalaryDbModel>(x => x.EmpId);
         }
-
-
         private static void SetSalesReceipt(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SalesReceiptDbModel>().HasKey(e => e.EmpId);
             modelBuilder.Entity<SalesReceiptDbModel>().HasIndex(e => e.EmpId);
         }
-
 
     }
 
