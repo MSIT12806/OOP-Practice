@@ -6,7 +6,7 @@ builder.Services.AddControllersWithViews();
 
 //// 加入各種服務Start
 
-ServiceSetup.RegisterService(builder);
+ServiceSetup.RegisterService(builder.Services);
 
 //// 加入各種服務End
 

@@ -8,5 +8,6 @@ namespace PaymentSystem.Application.Emp
         void Add(EmpCore emp);
         IEnumerable<EmpCore> GetList();
         EmpCore GetSingle(string empId);
+        void Update(EmpCore empCore);
     }
 }

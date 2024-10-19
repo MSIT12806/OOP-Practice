@@ -59,6 +59,14 @@ namespace PaymentSystem.Controllers
             var chgem = EmpMapper.ToChgModel(this._emp.GetSingle(empId), this._payday.GetSingle(empId));
             return this.View(chgem);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChgEmp(ChgEmpViewModel chgEmp)
+        {
+            this._emp.ChgEmp(EmpMapper.ToCoreModel(chgEmp));
+            this._payday.SaveSalary(AamountMapper.ToCoreModel(chgEmp));
+            return this.RedirectToAction(nameof(ChgEmp), new { empId = chgEmp.EmpId });
+        }
 
     }
 }

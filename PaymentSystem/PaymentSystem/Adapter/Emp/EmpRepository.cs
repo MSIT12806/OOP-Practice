@@ -47,6 +47,15 @@ namespace PaymentSystem.Adapter
             return this.ToCoreModel(empDbModel);
         }
 
+        public void Update(EmpCore empCore)
+        {
+            EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empCore.Id);
+
+            empDbModel.Name = empCore.Name;
+            empDbModel.Address = empCore.Address;
+
+            this._appDbContext.SaveChanges();
+        }
 
 
         private EmpDbModel ToDbModel(EmpCore emp)
@@ -68,5 +77,6 @@ namespace PaymentSystem.Adapter
                 Address = empDbModel.Address
             };
         }
+
     }
 }

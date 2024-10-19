@@ -6,7 +6,6 @@ namespace PaymentSystem.Application.Emp
     {
         private IEmpRepository _empRepository;
 
-
         public EmpService(IEmpRepository empRepository)
         {
             this._empRepository = empRepository;
@@ -24,6 +23,11 @@ namespace PaymentSystem.Application.Emp
         public EmpCore GetSingle(string empId)
         {
             return this._empRepository.GetSingle(empId);
+        }
+
+        public void ChgEmp(EmpCore empCore)
+        {
+            this._empRepository.Update(empCore);
         }
     }
 }

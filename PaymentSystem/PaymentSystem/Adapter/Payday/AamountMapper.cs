@@ -4,13 +4,24 @@ namespace PaymentSystem.Adapter.Payday
 {
     public static class AamountMapper
     {
-        public static EmpSalaryCore ToCoreModel(AddEmpViewModel addEmp)
+        public static EmpSalaryCore ToCoreModel(AddEmpViewModel emp)
         {
             return new EmpSalaryCore
             {
-                EmpId = addEmp.EmpId,
-                Salary = addEmp.Amount,
+                EmpId = emp.EmpId,
+                Salary = emp.Amount,
             };
         }
+
+        public static EmpSalaryCore ToCoreModel(ChgEmpViewModel emp)
+        {
+            return new EmpSalaryCore
+            {
+                EmpId = emp.EmpId,
+                Salary = emp.Amount,
+            };
+        }
+
+
     }
 }
