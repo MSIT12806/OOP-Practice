@@ -1,48 +1,50 @@
-﻿using PaymentSystem.Models;
+﻿using Humanizer;
+using PaymentSystem.Models;
 
 namespace PaymentSystem.Application.Payday
 {
     public class PaydayService
     {
-        private IServiceChargeGetter _serviceChargeGetter;
         private IPaydayRepository _paydayRepopsitory;
+        private IServiceChargeSetter _serviceChargeSetter;
+        private ISalesReceiptSetter _salesReceiptSetter;
 
-        public PaydayService(IServiceChargeGetter serviceChargeGetter, IPaydayRepository paydayRepopsitory)
+        public PaydayService(IServiceChargeSetter serviceChargeGetter, IPaydayRepository paydayRepopsitory, ISalesReceiptSetter salesReceiptSetter)
         {
-            this._serviceChargeGetter = serviceChargeGetter;
+            this._serviceChargeSetter = serviceChargeGetter;
             this._paydayRepopsitory = paydayRepopsitory;
+            this._salesReceiptSetter = salesReceiptSetter;
         }
 
-        public IEnumerable<PaydayResult> Pay()
+        public IEnumerable<PaydayCore> Pay()
         {
-            var emps = this._paydayRepopsitory.GetAmounts();
-            var serviceCharges = this._serviceChargeGetter.GetServiceCharges();
+            var emps = this._paydayRepopsitory.GetEmpSalaries().ToList().Select(ToPaydayCore);
 
-            var results = new List<PaydayResult>();
+            var results = new List<PaydayCore>();
 
-            foreach (var emp in emps)
-            {
-                var serviceCharge = serviceCharges.FirstOrDefault(x => x.EmpId == emp.EmpId);
-
-                results.Add(new PaydayResult
-                {
-                    EmpId = emp.EmpId,
-                    Salary = emp.Salaried,
-                    ServiceCharge = serviceCharge?.Amount
-                });
-            }
+            this._serviceChargeSetter.SetServiceCharge(emps);
+            this._salesReceiptSetter.SetSalesReceipt(emps);
 
             return results;
         }
 
-        public void SaveAmount(AmountCore amountCore)
+        private PaydayCore ToPaydayCore(EmpSalaryCore salaryCore)
         {
-            this._paydayRepopsitory.Save(amountCore);
+            return new PaydayCore
+            {
+                EmpId = salaryCore.EmpId,
+                Salary = salaryCore.Salary,
+            };
         }
 
-        public AmountCore GetSingle(string empId)
+        public void SaveSalary(EmpSalaryCore salaryCore)
         {
-            return this._paydayRepopsitory.GetAmounts().FirstOrDefault(x => x.EmpId == empId);
+            this._paydayRepopsitory.Save(salaryCore);
+        }
+
+        public EmpSalaryCore GetSingle(string empId)
+        {
+            return this._paydayRepopsitory.GetEmpSalaries().FirstOrDefault(x => x.EmpId == empId);
         }
     }
 }

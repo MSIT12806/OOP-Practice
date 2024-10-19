@@ -1,9 +1,9 @@
 ﻿namespace PaymentSystem.Models
 {
-    public class AmountCore
+    public class EmpSalaryCore
     {
         public string EmpId { get; set; }
-        public int Salaried { get; set; }
+        public int Salary { get; set; }
     }
 
 }

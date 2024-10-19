@@ -4,7 +4,7 @@ namespace PaymentSystem.Application.Payday
 {
     public interface IPaydayRepository
     {
-        IEnumerable<AmountCore> GetAmounts();
-        void Save(AmountCore amountCore);
+        IEnumerable<EmpSalaryCore> GetEmpSalaries();
+        void Save(EmpSalaryCore amountCore);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace PaymentSystem.Models
 {
-    public class PaydayResult
+    public class PaydayCore
     {
         public string EmpId { get; set; }
         public int Salary { get; set; }

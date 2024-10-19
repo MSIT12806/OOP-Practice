@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PaymentSystem.Infrastructure.ORM;
+using System.Linq.Expressions;
 
 namespace PaymentSystem.Adapter
 {
@@ -11,16 +12,29 @@ namespace PaymentSystem.Adapter
 
         public DbSet<EmpDbModel> Emps { get; set; }
         public DbSet<ServiceChargeDbModel> ServiceCharges { get; set; }
-        public DbSet<AmountDbModel> Amounts { get; set; }
+        public DbSet<SalaryDbModel> Salaries { get; set; }
 
+        public DbSet<SalesReceiptDbModel> SalesReceipts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            SetEmp(modelBuilder);
+            SetServiceCharge(modelBuilder);
+            SetSalary(modelBuilder);
+            SetSalesReceipt(modelBuilder);
+        }
+
+
+        private static void SetEmp(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EmpDbModel>().HasKey(e => e.EmpId);
             modelBuilder.Entity<EmpDbModel>().Property(p => p.EmpId).IsRequired();
             modelBuilder.Entity<EmpDbModel>().Property(p => p.Name).IsRequired();
             modelBuilder.Entity<EmpDbModel>().Property(p => p.Address).IsRequired();
+        }
 
+        private static void SetServiceCharge(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<ServiceChargeDbModel>().HasKey(e => e.EmpId);
             modelBuilder.Entity<ServiceChargeDbModel>().HasIndex(e => e.EmpId);
             modelBuilder.Entity<ServiceChargeDbModel>().HasIndex(e => e.MemberId);
@@ -33,12 +47,24 @@ namespace PaymentSystem.Adapter
                 .HasOne<EmpDbModel>()
                 .WithOne()
                 .HasForeignKey<EmpDbModel>(x => x.EmpId);
-
-            modelBuilder.Entity<AmountDbModel>().HasKey(e => e.EmpId);
-            modelBuilder.Entity<AmountDbModel>()
+        }
+        private static void SetSalary(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SalaryDbModel>().HasKey(e => e.EmpId);
+            modelBuilder.Entity<SalaryDbModel>()
                 .HasOne<EmpDbModel>()
                 .WithOne()
-                .HasForeignKey<AmountDbModel>(x => x.EmpId);
+                .HasForeignKey<SalaryDbModel>(x => x.EmpId);
         }
+
+
+        private static void SetSalesReceipt(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SalesReceiptDbModel>().HasKey(e => e.EmpId);
+            modelBuilder.Entity<SalesReceiptDbModel>().HasIndex(e => e.EmpId);
+        }
+
+
     }
+
 }

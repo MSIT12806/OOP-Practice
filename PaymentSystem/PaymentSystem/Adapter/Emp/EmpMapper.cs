@@ -14,14 +14,14 @@ namespace PaymentSystem.Adapter
             };
         }
 
-        public static ChgEmpViewModel ToChgModel(EmpCore emp, AmountCore amount)
+        public static ChgEmpViewModel ToChgModel(EmpCore emp, EmpSalaryCore amount)
         {
             return new ChgEmpViewModel
             {
                 EmpId = emp.Id,
                 Name = emp.Name,
                 Address = emp.Address,
-                Amount = amount.Salaried
+                Amount = amount.Salary
             };
         }
 

@@ -11,34 +11,34 @@ namespace PaymentSystem.Adapter.Payday
         {
             this._appDbContext = appDbContext;
         }
-        public void Save(AmountCore amountCore)
+        public void Save(EmpSalaryCore amountCore)
         {
-            AmountDbModel dbModel = this.ToDbModel(amountCore);
+            SalaryDbModel dbModel = this.ToDbModel(amountCore);
 
-            this._appDbContext.Amounts.Add(dbModel);
+            this._appDbContext.Salaries.Add(dbModel);
             this._appDbContext.SaveChanges();
         }
 
-        public IEnumerable<AmountCore> GetAmounts()
+        public IEnumerable<EmpSalaryCore> GetEmpSalaries()
         {
-            return this._appDbContext.Amounts.ToList().Select(this.ToCoreModel);
+            return this._appDbContext.Salaries.ToList().Select(this.ToCoreModel);
         }
 
-        private AmountCore ToCoreModel(AmountDbModel source)
+        private EmpSalaryCore ToCoreModel(SalaryDbModel source)
         {
-            return new AmountCore
+            return new EmpSalaryCore
             {
                 EmpId = source.EmpId,
-                Salaried = source.Amount,
+                Salary = source.Amount,
             };
         }
 
-        private AmountDbModel ToDbModel(AmountCore amountCore)
+        private SalaryDbModel ToDbModel(EmpSalaryCore amountCore)
         {
-            return new AmountDbModel
+            return new SalaryDbModel
             {
                 EmpId = amountCore.EmpId,
-                Amount = amountCore.Salaried,
+                Amount = amountCore.Salary,
             };
         }
     }

@@ -1,9 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using PaymentSystem.Adapter;
-using PaymentSystem.Adapter.Payday;
-using PaymentSystem.Application.Emp;
-using PaymentSystem.Application.Payday;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,22 +6,7 @@ builder.Services.AddControllersWithViews();
 
 //// 加入各種服務Start
 
-// 加入 Entity Framework Core 服務(需要 using Microsoft.EntityFrameworkCore 以及 Microsoft.EntityFrameworkCore.InMemory)
-builder.Services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("InMemoryDb"));
-
-// 加入 Emp 相關服務
-builder.Services.AddTransient<IEmpRepository, EmpRepository>();
-builder.Services.AddTransient<EmpService, EmpService>();
-
-// 加入 ServiceCharge 相關服務
-builder.Services.AddTransient<IServiceChargeRepository, ServiceChargeRepository>();
-builder.Services.AddTransient<IEmpExistChecker, EmpExistChecker>();
-builder.Services.AddTransient<ServiceChargeService, ServiceChargeService>();
-
-// 加入 Payday 相關服務
-builder.Services.AddTransient<IServiceChargeGetter, ServiceChargeGetter>();
-builder.Services.AddTransient<IPaydayRepository, PaydayRepository>();
-builder.Services.AddTransient<PaydayService, PaydayService>();
+ServiceSetup.RegisterService(builder);
 
 //// 加入各種服務End
 
@@ -55,5 +34,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
 
 #endregion
