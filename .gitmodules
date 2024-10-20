@@ -1,0 +1,3 @@
+[submodule "PaymentSystem/LH.Tool.Decoupling"]
+	path = PaymentSystem/LH.Tool.Decoupling
+	url = https://github.com/MSIT12806/LH.Tool.Decoupling.git

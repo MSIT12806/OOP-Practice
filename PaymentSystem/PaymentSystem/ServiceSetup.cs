@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LH.Tool.Decoupling;
+using Microsoft.EntityFrameworkCore;
 using PaymentSystem.Adapter;
 using PaymentSystem.Adapter.Payday;
 using PaymentSystem.Application.Emp;
@@ -9,6 +10,9 @@ public static class ServiceSetup
 
     public static void RegisterService(IServiceCollection services)
     {
+        // 註冊 DateProvider
+        services.AddSingleton<DateProvider>();
+
         // 加入 Entity Framework Core 服務(需要 using Microsoft.EntityFrameworkCore 以及 Microsoft.EntityFrameworkCore.InMemory)
         services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("InMemoryDb"));
 
