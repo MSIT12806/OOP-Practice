@@ -8,5 +8,4 @@
         public int? SalesReceipt { get; set; }
         public int ShouldPay => this.Salary - (this.ServiceCharge ?? 0) + (this.SalesReceipt ?? 0);
     }
-
 }

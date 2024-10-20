@@ -1,27 +1,29 @@
-﻿using PaymentSystem.Models;
+﻿using PaymentSystem.Controllers;
+using PaymentSystem.Models;
 
 namespace PaymentSystem.Adapter.Payday
 {
-    public static class AamountMapper
+    public static class PaydayMapper
     {
-        public static EmpSalaryCore ToCoreModel(AddEmpViewModel emp)
+        public static EmpSalaryCore ToCore(SalarySaveViewModel vm)
         {
             return new EmpSalaryCore
             {
-                EmpId = emp.EmpId,
-                Salary = emp.Amount,
+                EmpId = vm.EmpId,
+                Salary = vm.Salary,
+                PayWay = vm.PayWay
             };
+
         }
 
-        public static EmpSalaryCore ToCoreModel(ChgEmpViewModel emp)
+        public static SalarySaveViewModel ToSaveViewModel(EmpSalaryCore core)
         {
-            return new EmpSalaryCore
+            return new SalarySaveViewModel
             {
-                EmpId = emp.EmpId,
-                Salary = emp.Amount,
+                EmpId = core.EmpId,
+                Salary = core.Salary,
+                PayWay = core.PayWay
             };
         }
-
-
     }
 }

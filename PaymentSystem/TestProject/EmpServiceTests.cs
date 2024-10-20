@@ -74,7 +74,7 @@ namespace TestProject
             if (ASSERT)
             {
                 // 確認薪資是否正確
-                var emp = paydayService.GetSingle(employee.Id);
+                var emp = paydayService.GetEmpSalary(employee.Id);
                 Assert.That(emp.Salary, Is.EqualTo(1000));
             }
 
@@ -84,7 +84,7 @@ namespace TestProject
             if (ASSERT)
             {
                 // 確認修改是否正確
-                var emp = paydayService.GetSingle(employee.Id);
+                var emp = paydayService.GetEmpSalary(employee.Id);
                 Assert.That(emp.Salary, Is.EqualTo(2000));
             }
 

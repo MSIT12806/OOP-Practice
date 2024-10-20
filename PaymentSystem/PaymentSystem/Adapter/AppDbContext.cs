@@ -6,11 +6,6 @@ namespace PaymentSystem.Adapter
 {
     public class AppDbContext : DbContext
     {
-        public TEntity Update<TEntity>(TEntity dbSource, TEntity updateObject) where TEntity : class
-        {
-            Entry(dbSource).CurrentValues.SetValues(updateObject);
-            return base.Update(dbSource).Entity;
-        }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -19,8 +14,8 @@ namespace PaymentSystem.Adapter
         public DbSet<EmpDbModel> Emps { get; set; }
         public DbSet<ServiceChargeDbModel> ServiceCharges { get; set; }
         public DbSet<SalaryDbModel> Salaries { get; set; }
-
         public DbSet<SalesReceiptDbModel> SalesReceipts { get; set; }
+        public DbSet<TimeCardDbModel> TimeCards { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,7 +24,6 @@ namespace PaymentSystem.Adapter
             SetSalary(modelBuilder);
             SetSalesReceipt(modelBuilder);
         }
-
 
         private static void SetEmp(ModelBuilder modelBuilder)
         {
@@ -66,7 +60,17 @@ namespace PaymentSystem.Adapter
             modelBuilder.Entity<SalesReceiptDbModel>().HasKey(e => e.EmpId);
             modelBuilder.Entity<SalesReceiptDbModel>().HasIndex(e => e.EmpId);
         }
+        private static void SetTimeCard(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TimeCardDbModel>().HasKey(e => e.EmpId);
+            modelBuilder.Entity<TimeCardDbModel>().HasIndex(e => e.EmpId);
+        }
 
+        public TEntity Update<TEntity>(TEntity dbSource, TEntity updateObject) where TEntity : class
+        {
+            Entry(dbSource).CurrentValues.SetValues(updateObject);
+            return base.Update(dbSource).Entity;
+        }
     }
 
 }

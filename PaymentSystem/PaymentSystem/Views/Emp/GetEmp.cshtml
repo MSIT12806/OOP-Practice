@@ -1,0 +1,54 @@
+﻿@using PaymentSystem.Controllers
+@model IEnumerable<PaymentSystem.Adapter.EmpInfoViewModel>
+
+@{
+    ViewData["Title"] = "GetEmp";
+}
+
+<h1>GetEmp</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EmpId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var setSalaryController = nameof(SalaryController).Replace("Controller", "");
+            var setTimeCardController = nameof(TimeCardController).Replace("Controller", "");
+            var setSalaryAction = nameof(SalaryController.SetSalary);
+            var setTimeCardAction = nameof(TimeCardController.SaveTimeCard);
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmpId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    <a class="btn btn-primary" href="@Url.Action(setSalaryAction, setSalaryController, new{empId = item.EmpId})">設定薪水</a>
+                    <a class="btn btn-primary" href="@Url.Action(setTimeCardAction, setTimeCardController, new{empId = item.EmpId})">設定工作出勤卡</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

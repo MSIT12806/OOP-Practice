@@ -3,13 +3,10 @@ using PaymentSystem.Application.Payday;
 
 namespace PaymentSystem.Controllers
 {
-    public class PayController : Controller
+    public class PayController : PayControllerBase
     {
-        private PaydayService _service;
-
-        public PayController(PaydayService service)
+        public PayController(PaydayService service) : base(service)
         {
-            this._service = service;
         }
 
         public IActionResult Payday()
@@ -19,7 +16,7 @@ namespace PaymentSystem.Controllers
 
         public IActionResult PayResult()
         {
-            var result = _service.Pay();
+            var result = protectedPaydayService.Pay();
             return View(result);
         }
     }

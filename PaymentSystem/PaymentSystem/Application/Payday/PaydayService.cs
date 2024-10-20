@@ -40,9 +40,20 @@ namespace PaymentSystem.Application.Payday
             this._paydayRepopsitory.Save(salaryCore);
         }
 
-        public EmpSalaryCore GetSingle(string empId)
+        public EmpSalaryCore GetEmpSalary(string empId)
         {
             return this._paydayRepopsitory.GetEmpSalaries().FirstOrDefault(x => x.EmpId == empId);
+        }
+
+        public IEnumerable<TimeCardCore> GetTimeCards(string empId)
+        {
+            IEnumerable<TimeCardCore> timeCardCoreList = _paydayRepopsitory.GetTimeCards(empId);
+            return timeCardCoreList;
+        }
+
+        public TimeCardCore GetTimeCard(string timeCardId)
+        {
+            return this._paydayRepopsitory.GetTimeCard(timeCardId);
         }
     }
 }

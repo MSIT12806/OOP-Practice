@@ -23,6 +23,12 @@ namespace PaymentSystem.Controllers
         //    return this.View(empList);
         //}
 
+        public IActionResult GetEmp()
+        {
+            var empList = this._emp.GetList().Select(EmpMapper.ToInfoModel).ToList();
+            return this.View(empList);
+        }
+
         public IActionResult AddEmp()
         {
             return this.View();
@@ -33,7 +39,6 @@ namespace PaymentSystem.Controllers
         public IActionResult AddEmp(AddEmpViewModel addEmp)
         {
             this._emp.AddEmp(EmpMapper.ToCoreModel(addEmp));
-            this._payday.SetSalary(AamountMapper.ToCoreModel(addEmp));
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }
 
@@ -56,7 +61,7 @@ namespace PaymentSystem.Controllers
                 return this.View("Error", new ErrorViewModel { RequestId = empId });
             }
 
-            var chgem = EmpMapper.ToChgModel(this._emp.GetSingle(empId), this._payday.GetSingle(empId));
+            var chgem = EmpMapper.ToChgModel(this._emp.GetSingle(empId));
             return this.View(chgem);
         }
         [HttpPost]
@@ -64,7 +69,6 @@ namespace PaymentSystem.Controllers
         public IActionResult ChgEmp(ChgEmpViewModel chgEmp)
         {
             this._emp.ChgEmp(EmpMapper.ToCoreModel(chgEmp));
-            this._payday.SetSalary(AamountMapper.ToCoreModel(chgEmp));
             return this.RedirectToAction(nameof(ChgEmp), new { empId = chgEmp.EmpId });
         }
 

@@ -35,6 +35,36 @@ namespace PaymentSystem.Adapter.Payday
             return this._appDbContext.Salaries.ToList().Select(this.ToCoreModel);
         }
 
+        public IEnumerable<TimeCardCore> GetTimeCards(string empId)
+        {
+            return this._appDbContext.TimeCards.Where(x => x.EmpId == empId).ToList().Select(this.ToCoreModel);
+        }
+
+        public TimeCardCore GetTimeCard(string timeCardId)
+        {
+            return this.ToCoreModel(this._appDbContext.TimeCards.SingleOrDefault(x => x.EmpId == timeCardId));
+        }
+
+        private TimeCardCore ToCoreModel(TimeCardDbModel source)
+        {
+            return new TimeCardCore
+            {
+                EmpId = source.EmpId,
+                WorkDate = source.WorkDate,
+                Hours = source.Hours,
+            };
+        }
+
+        private TimeCardDbModel ToDbModel(TimeCardCore timeCardCore)
+        {
+            return new TimeCardDbModel
+            {
+                EmpId = timeCardCore.EmpId,
+                WorkDate = timeCardCore.WorkDate,
+                Hours = timeCardCore.Hours,
+            };
+        }
+
         private EmpSalaryCore ToCoreModel(SalaryDbModel source)
         {
             return new EmpSalaryCore

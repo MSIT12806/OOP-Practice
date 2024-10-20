@@ -14,14 +14,13 @@ namespace PaymentSystem.Adapter
             };
         }
 
-        public static ChgEmpViewModel ToChgModel(EmpCore emp, EmpSalaryCore amount)
+        public static ChgEmpViewModel ToChgModel(EmpCore emp)
         {
             return new ChgEmpViewModel
             {
                 EmpId = emp.Id,
                 Name = emp.Name,
-                Address = emp.Address,
-                Amount = amount.Salary
+                Address = emp.Address
             };
         }
 
@@ -42,6 +41,16 @@ namespace PaymentSystem.Adapter
                 Id = chgEmp.EmpId,
                 Name = chgEmp.Name,
                 Address = chgEmp.Address
+            };
+        }
+
+        public static EmpInfoViewModel ToInfoModel(EmpCore core)
+        {
+            return new EmpInfoViewModel
+            {
+                EmpId = core.Id,
+                Name = core.Name,
+                Address = core.Address
             };
         }
     }
