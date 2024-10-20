@@ -12,11 +12,6 @@
         <form asp-action="SetServiceCharge">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="MemberId" class="control-label"></label>
-                <input asp-for="MemberId" class="form-control" />
-                <span asp-validation-for="MemberId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="EmpId" class="control-label"></label>
                 <input asp-for="EmpId" class="form-control" />
                 <span asp-validation-for="EmpId" class="text-danger"></span>
@@ -25,6 +20,11 @@
                 <label asp-for="Amount" class="control-label"></label>
                 <input asp-for="Amount" class="form-control" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChargeDate" class="control-label"></label>
+                <input asp-for="ChargeDate" class="form-control" />
+                <span asp-validation-for="ChargeDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -38,5 +38,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

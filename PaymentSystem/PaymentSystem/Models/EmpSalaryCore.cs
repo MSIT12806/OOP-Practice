@@ -11,5 +11,4 @@
         public int Salary { get; set; }
         public PayWayEnum PayWay { get; set; }
     }
-
 }

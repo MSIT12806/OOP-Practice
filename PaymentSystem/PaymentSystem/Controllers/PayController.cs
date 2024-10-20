@@ -16,7 +16,7 @@ namespace PaymentSystem.Controllers
 
         public IActionResult PayResult()
         {
-            var result = protectedPaydayService.Pay();
+            var result = protectedPaydayService.Pay(DateOnly.FromDateTime(DateTime.Now));
             return View(result);
         }
     }

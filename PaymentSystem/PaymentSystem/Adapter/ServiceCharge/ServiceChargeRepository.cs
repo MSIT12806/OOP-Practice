@@ -12,28 +12,29 @@ namespace PaymentSystem.Adapter
         {
             this._context = context;
         }
-        public void SetServiceCharge(ServiceChargeCore serviceCharge)
+        public string AddServiceCharge(ServiceChargeCore serviceCharge)
         {
             ServiceChargeDbModel serviceChargeDbModel = this.ToDbModel(serviceCharge);
+            this.Insert(serviceChargeDbModel);
 
-            if (this._context.ServiceCharges.Any(x => x.EmpId == serviceCharge.EmpId && x.MemberId == serviceCharge.MemberId))
-            {
-                this.Update(serviceChargeDbModel);
-                return;
-            }
-            else
-            {
-                this.Insert(serviceChargeDbModel);
-            }
+            return serviceChargeDbModel.ServiceChargeId;
+        }
+
+        public void DeleteServiceCharge(string serviceChargeId)
+        {
+            ServiceChargeDbModel serviceChargeDbModel = this._context.ServiceCharges.First(x => x.ServiceChargeId == serviceChargeId);
+            this._context.ServiceCharges.Remove(serviceChargeDbModel);
+            this._context.SaveChanges();
         }
 
         public ServiceChargeDbModel ToDbModel(ServiceChargeCore serviceCharge)
         {
             return new ServiceChargeDbModel
             {
+                ServiceChargeId = serviceCharge.Id,
                 EmpId = serviceCharge.EmpId,
-                MemberId = serviceCharge.MemberId,
-                ServiceCharge = serviceCharge.Amount
+                ServiceCharge = serviceCharge.Amount,
+                ApplyDate = serviceCharge.ApplyDate,
             };
         }
 
@@ -42,7 +43,7 @@ namespace PaymentSystem.Adapter
             return new ServiceChargeCore
             {
                 EmpId = serviceChargeDbModel.EmpId,
-                MemberId = serviceChargeDbModel.MemberId,
+                Id = serviceChargeDbModel.ServiceChargeId,
                 Amount = serviceChargeDbModel.ServiceCharge
             };
         }
@@ -63,7 +64,7 @@ namespace PaymentSystem.Adapter
 
         private void Update(ServiceChargeDbModel serviceChargeDbModel)
         {
-            ServiceChargeDbModel serviceChargeDbModelToUpdate = this._context.ServiceCharges.First(x => x.EmpId == serviceChargeDbModel.EmpId && x.MemberId == serviceChargeDbModel.MemberId);
+            ServiceChargeDbModel serviceChargeDbModelToUpdate = this._context.ServiceCharges.First(x => x.EmpId == serviceChargeDbModel.EmpId && x.ServiceChargeId == serviceChargeDbModel.ServiceChargeId);
             serviceChargeDbModelToUpdate.ServiceCharge = serviceChargeDbModel.ServiceCharge;
             this._context.ServiceCharges.Update(serviceChargeDbModelToUpdate);
             this._context.SaveChanges();

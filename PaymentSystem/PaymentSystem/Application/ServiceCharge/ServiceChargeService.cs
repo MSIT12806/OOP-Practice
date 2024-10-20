@@ -12,14 +12,20 @@ namespace PaymentSystem.Application.Emp
             this._serviceChargeRepository = serviceChargeRepository;
             this._empExistChecker = empExistChecker;
         }
-        public void SetServiceCharge(ServiceChargeCore serviceCharge)
+        public string AddServiceCharge(string empId, int amount, DateOnly date)
         {
+            var serviceCharge = this.GenerateNewOne(empId, amount, date);
             if (!this._empExistChecker.Check(serviceCharge.EmpId))
             {
                 throw new InvalidOperationException("Emp is not exist");
             }
 
-            this._serviceChargeRepository.SetServiceCharge(serviceCharge);
+            return this._serviceChargeRepository.AddServiceCharge(serviceCharge);
+        }
+
+        public void DeleteServiceCharge(string serviceChargeId)
+        {
+            this._serviceChargeRepository.DeleteServiceCharge(serviceChargeId);
         }
 
         public IEnumerable<ServiceChargeCore> GetList()
@@ -27,9 +33,26 @@ namespace PaymentSystem.Application.Emp
             return this._serviceChargeRepository.GetServiceCharges();
         }
 
-        public ServiceChargeCore GetSingle(string empId)
+        public IEnumerable<ServiceChargeCore> GetListBy(string empId)
         {
-            return this._serviceChargeRepository.GetServiceCharges().FirstOrDefault(x => x.EmpId == empId);
+            return this._serviceChargeRepository.GetServiceCharges().Where(x => x.EmpId == empId);
+        }
+
+        public ServiceChargeCore GetSingle(string id)
+        {
+            return this._serviceChargeRepository.GetServiceCharges().FirstOrDefault(x => x.Id == id);
+        }
+
+        public ServiceChargeCore GenerateNewOne(string empId, int amount, DateOnly date)
+        {
+
+            return new ServiceChargeCore
+            {
+                Id = Guid.NewGuid().ToString(),
+                EmpId = empId,
+                Amount = amount,
+                ApplyDate = date,
+            };
         }
     }
 }

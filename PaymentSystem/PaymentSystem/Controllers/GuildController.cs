@@ -12,16 +12,16 @@ namespace PaymentSystem.Controllers
         {
             this._service = service;
         }
-        public IActionResult SetServiceCharge()
+        public IActionResult AddServiceCharge()
         {
             return this.View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SetServiceCharge(ServiceChargeViewModel viewModel)
+        public IActionResult AddServiceCharge(ServiceChargeViewModel viewModel)
         {
-            this._service.SetServiceCharge(ServiceChargeMapper.ToCoreModel(viewModel));
+            this._service.AddServiceCharge(viewModel.EmpId, viewModel.Amount, viewModel.ChargeDate);
             return this.RedirectToAction("Index", "Home");
         }
     }

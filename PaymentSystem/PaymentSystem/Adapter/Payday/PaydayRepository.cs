@@ -30,6 +30,10 @@ namespace PaymentSystem.Adapter.Payday
             }
         }
 
+        public IEnumerable<PayRecordCore> GetPayRecordsBy(DateOnly date)
+        {
+            return this._appDbContext.PayRecords.Where(x => x.PayDate == date).ToList().Select(this.ToCoreModel);
+        }
         public IEnumerable<EmpSalaryCore> GetEmpSalaries()
         {
             return this._appDbContext.Salaries.ToList().Select(this.ToCoreModel);
@@ -52,6 +56,16 @@ namespace PaymentSystem.Adapter.Payday
                 EmpId = source.EmpId,
                 WorkDate = source.WorkDate,
                 Hours = source.Hours,
+            };
+        }
+
+        private PayRecordCore ToCoreModel(PayRecordDbModel source)
+        {
+            return new PayRecordCore
+            {
+                EmpId = source.EmpId,
+                PayDate = source.PayDate,
+                Amount = source.Amount,
             };
         }
 
@@ -82,5 +96,6 @@ namespace PaymentSystem.Adapter.Payday
                 Amount = amountCore.Salary,
             };
         }
+
     }
 }

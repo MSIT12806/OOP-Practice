@@ -16,6 +16,7 @@ namespace PaymentSystem.Adapter
         public DbSet<SalaryDbModel> Salaries { get; set; }
         public DbSet<SalesReceiptDbModel> SalesReceipts { get; set; }
         public DbSet<TimeCardDbModel> TimeCards { get; set; }
+        public DbSet<PayRecordDbModel> PayRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,6 +24,8 @@ namespace PaymentSystem.Adapter
             SetServiceCharge(modelBuilder);
             SetSalary(modelBuilder);
             SetSalesReceipt(modelBuilder);
+            SetTimeCard(modelBuilder);
+            SetPayRecord(modelBuilder);
         }
 
         private static void SetEmp(ModelBuilder modelBuilder)
@@ -34,18 +37,19 @@ namespace PaymentSystem.Adapter
         }
         private static void SetServiceCharge(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ServiceChargeDbModel>().HasKey(e => e.EmpId);
+            modelBuilder.Entity<ServiceChargeDbModel>().HasKey(e => e.ServiceChargeId);
+            modelBuilder.Entity<ServiceChargeDbModel>().HasIndex(e => e.ServiceChargeId);
+
             modelBuilder.Entity<ServiceChargeDbModel>().HasIndex(e => e.EmpId);
-            modelBuilder.Entity<ServiceChargeDbModel>().HasIndex(e => e.MemberId);
 
             modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.EmpId).IsRequired();
-            modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.MemberId).IsRequired();
+            modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.ServiceChargeId).IsRequired();
             modelBuilder.Entity<ServiceChargeDbModel>().Property(p => p.ServiceCharge).IsRequired();
 
             modelBuilder.Entity<ServiceChargeDbModel>()
                 .HasOne<EmpDbModel>()
-                .WithOne()
-                .HasForeignKey<EmpDbModel>(x => x.EmpId);
+                .WithMany()
+                .HasForeignKey(x => x.EmpId);
         }
         private static void SetSalary(ModelBuilder modelBuilder)
         {
@@ -64,6 +68,15 @@ namespace PaymentSystem.Adapter
         {
             modelBuilder.Entity<TimeCardDbModel>().HasKey(e => e.EmpId);
             modelBuilder.Entity<TimeCardDbModel>().HasIndex(e => e.EmpId);
+        }
+        private static void SetPayRecord(ModelBuilder modelBuilder)
+        {
+            // TODO: 思考：因為是 record，所以不要有任何 ForeignKey? 不想要被連帶刪除
+            modelBuilder.Entity<PayRecordDbModel>().HasKey(e => e.Id);
+            modelBuilder.Entity<PayRecordDbModel>().Property(p => p.Id).IsRequired();
+            modelBuilder.Entity<PayRecordDbModel>().Property(p => p.EmpId).IsRequired();
+            modelBuilder.Entity<PayRecordDbModel>().Property(p => p.PayDate).IsRequired();
+            modelBuilder.Entity<PayRecordDbModel>().Property(p => p.Amount).IsRequired();
         }
 
         public TEntity Update<TEntity>(TEntity dbSource, TEntity updateObject) where TEntity : class

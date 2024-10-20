@@ -16,8 +16,14 @@ namespace PaymentSystem.Application.Payday
             this._salesReceiptSetter = salesReceiptSetter;
         }
 
-        public IEnumerable<PaydayCore> Pay()
+        public IEnumerable<PaydayCore> Pay(DateOnly date)
         {
+            var recordes = _paydayRepopsitory.GetPayRecordsBy(date);
+            if (recordes.Any())
+            {
+                throw new InvalidOperationException("Already paid");
+            }
+
             var emps = this._paydayRepopsitory.GetEmpSalaries().ToList().Select(ToPaydayCore).ToList();
 
             this._serviceChargeSetter.SetServiceCharge(emps);
