@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentSystem.Adapter;
-using PaymentSystem.Adapter.Payday;
 using PaymentSystem.Application.Emp;
-using PaymentSystem.Application.Payday;
 using PaymentSystem.ViewModel;
 
 namespace PaymentSystem.Controllers
@@ -10,18 +8,11 @@ namespace PaymentSystem.Controllers
     public class EmpController : Controller
     {
         private EmpService _emp;
-        private PaydayService _payday;
 
-        public EmpController(EmpService service, PaydayService paydayService)
+        public EmpController(EmpService service)
         {
             this._emp = service;
-            this._payday = paydayService;
         }
-        //public IActionResult EmpList()
-        //{
-        //    var empList = this._emp.GetList().Select(EmpMapper.ToChgModel).ToList();
-        //    return this.View(empList);
-        //}
 
         public IActionResult GetEmp()
         {

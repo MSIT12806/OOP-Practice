@@ -44,9 +44,9 @@ namespace PaymentSystem.Adapter
             };
         }
 
-        public static EmpInfoViewModel ToInfoModel(EmpCore core)
+        public static EmpQueryViewModel ToInfoModel(EmpCore core)
         {
-            return new EmpInfoViewModel
+            return new EmpQueryViewModel
             {
                 EmpId = core.Id,
                 Name = core.Name,

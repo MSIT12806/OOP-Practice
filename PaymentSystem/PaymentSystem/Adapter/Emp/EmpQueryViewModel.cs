@@ -1,6 +1,6 @@
 ﻿namespace PaymentSystem.Adapter
 {
-    public class EmpInfoViewModel
+    public class EmpQueryViewModel
     {
         public string EmpId { get; set; }
 

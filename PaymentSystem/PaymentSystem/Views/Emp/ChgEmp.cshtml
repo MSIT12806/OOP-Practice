@@ -1,4 +1,5 @@
-﻿@model PaymentSystem.Adapter.ChgEmpViewModel
+﻿@using PaymentSystem.Controllers
+@model PaymentSystem.Adapter.ChgEmpViewModel
 
 @{
     ViewData["Title"] = "ChgEmp";
@@ -29,7 +30,7 @@
             </div>
             <div class="form-group">
                 <a class="btn btn-primary" href="@Url.Action()">設定薪水</a>
-                <a class="btn btn-primary" href="@Url.Action()">設定銷售單據</a>
+                <a class="btn btn-primary" href="@Url.Action(nameof(SalesReceiptController.Index),nameof(SalesReceiptController).Replace("Controller",""),new {empId = Model.EmpId})">設定銷售單據</a>
                 <a class="btn btn-primary" href="@Url.Action()">設定工作出勤卡</a>
             </div>
             <div class="form-group">

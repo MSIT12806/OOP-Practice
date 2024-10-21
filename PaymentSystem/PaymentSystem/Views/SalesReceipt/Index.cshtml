@@ -1,0 +1,37 @@
+﻿@model PaymentSystem.Adapter.SalesReceiptQueryPage
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a href="@Url.Action(nameof(PaymentSystem.Controllers.SalesReceiptController.Create), new {empId = Model.EmpId})">新增</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesReceipts.FirstOrDefault().SalesDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesReceipts.FirstOrDefault().Commission)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.SalesReceipts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SalesDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Commission)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
