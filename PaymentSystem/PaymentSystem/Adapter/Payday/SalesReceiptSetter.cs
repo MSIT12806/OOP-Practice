@@ -21,7 +21,7 @@ namespace PaymentSystem.Adapter.Payday
 
                 if (salesReceiptByEmpId != null && salesReceiptByEmpId.Count()!=0)
                 {
-                    payday.SalesReceipt = salesReceiptByEmpId.Sum(i => i.Amount);
+                    payday.SalesReceipt = salesReceiptByEmpId.Sum(i => i.Commission);
                 }
             }
         }

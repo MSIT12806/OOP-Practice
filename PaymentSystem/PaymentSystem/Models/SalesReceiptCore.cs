@@ -1,6 +1,6 @@
-﻿namespace PaymentSystem.Infrastructure.ORM
+﻿namespace PaymentSystem.Models
 {
-    public class SalesReceiptDbModel
+    public class SalesReceiptCore
     {
         public string Id { get; set; }
         public string EmpId { get; set; }

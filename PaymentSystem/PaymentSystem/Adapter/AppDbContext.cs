@@ -61,12 +61,12 @@ namespace PaymentSystem.Adapter
         }
         private static void SetSalesReceipt(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SalesReceiptDbModel>().HasKey(e => e.EmpId);
+            modelBuilder.Entity<SalesReceiptDbModel>().HasKey(e => e.Id);
             modelBuilder.Entity<SalesReceiptDbModel>().HasIndex(e => e.EmpId);
         }
         private static void SetTimeCard(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TimeCardDbModel>().HasKey(e => e.EmpId);
+            modelBuilder.Entity<TimeCardDbModel>().HasKey(e => e.Id);
             modelBuilder.Entity<TimeCardDbModel>().HasIndex(e => e.EmpId);
         }
         private static void SetPayRecord(ModelBuilder modelBuilder)

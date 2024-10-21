@@ -44,11 +44,11 @@ namespace TestProject
             [v] 設定員工公會服務費
             [v] 刪除員工公會服務費
             [v] 重新設定員工公會服務費
-            [] 再加入一筆公會服務費
-            [] 加入一筆銷售收據
-            [] 刪除一筆銷售收據
-            [] 重新加入一筆銷售收據
-            [] 再加入一筆銷售收據
+            [v] 再加入一筆公會服務費
+            [v] 加入一筆銷售收據
+            [v] 刪除一筆銷售收據
+            [v] 重新加入一筆銷售收據
+            [v] 再加入一筆銷售收據
             [v] 薪水結算
              */
 
@@ -130,6 +130,7 @@ namespace TestProject
 
 
             // 重新設定員工公會服務費
+            // 再加入一筆公會服務費
             setviceChargeId = chargeService.AddServiceCharge(employee.Id, 200, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
             setviceChargeId = chargeService.AddServiceCharge(employee.Id, 300, DateOnly.FromDateTime(new DateTime(2021, 1, 5)));
             if (ASSERT)
@@ -137,6 +138,43 @@ namespace TestProject
                 // 確認服務費數目是否
                 var chargeServices = chargeService.GetListBy(employee.Id);
                 Assert.That(chargeServices.Count(), Is.EqualTo(2));
+            }
+
+            // 加入一筆銷售收據
+           string salesReceiptId =  empService.AddSalesReceipt(
+                employee.Id,
+                DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
+                100
+            );
+            if (ASSERT)
+            {
+                // 確認銷售收據是否正確
+                IEnumerable<SalesReceiptCore> salesReceipts = empService.GetSalesReceipts(employee.Id);
+                Assert.That(salesReceipts.Count(), Is.EqualTo(1));
+            }
+
+            // 刪除一筆銷售收據
+            empService.DeleteSalesReceiptBy(salesReceiptId);
+
+            // 重新加入一筆銷售收據
+            salesReceiptId = empService.AddSalesReceipt(
+                employee.Id,
+                DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
+                200
+            );
+
+            // 再加入一筆銷售收據
+            salesReceiptId = empService.AddSalesReceipt(
+                employee.Id,
+                DateOnly.FromDateTime(new DateTime(2021, 1, 5)),
+                300
+            );
+
+            if (ASSERT)
+            {
+                // 確認銷售收據數目是否正確
+                IEnumerable<SalesReceiptCore> salesReceipts = empService.GetSalesReceipts(employee.Id);
+                Assert.That(salesReceipts.Count(), Is.EqualTo(2));
             }
 
             // 薪水結算
@@ -149,8 +187,8 @@ namespace TestProject
                 Assert.That(paydays.First().EmpId, Is.EqualTo(employee.Id));
                 Assert.That(paydays.First().Salary, Is.EqualTo(2000));
                 Assert.That(paydays.First().ServiceCharge, Is.EqualTo(500));
-                Assert.That(paydays.First().SalesReceipt, Is.EqualTo(null));
-                Assert.That(paydays.First().ShouldPay, Is.EqualTo(1800));
+                Assert.That(paydays.First().SalesReceipt, Is.EqualTo(500));
+                Assert.That(paydays.First().ShouldPay, Is.EqualTo(2000));
             }
         }
     }

@@ -22,8 +22,17 @@ namespace PaymentSystem.Adapter
         public void Add(EmpCore emp)
         {
             EmpDbModel empDbModel = this.ToDbModel(emp);
-
             this.AddEmp(empDbModel);
+        }
+
+        public void Update(EmpCore empCore)
+        {
+            EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empCore.Id);
+
+            empDbModel.Name = empCore.Name;
+            empDbModel.Address = empCore.Address;
+
+            this._appDbContext.SaveChanges();
         }
 
         public IEnumerable<EmpCore> GetList()
@@ -38,8 +47,6 @@ namespace PaymentSystem.Adapter
             return empList;
         }
 
-
-
         public EmpCore GetSingle(string empId)
         {
             EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empId);
@@ -47,14 +54,48 @@ namespace PaymentSystem.Adapter
             return this.ToCoreModel(empDbModel);
         }
 
-        public void Update(EmpCore empCore)
+        public string AddSalesReceipt(SalesReceiptCore salesReceipt)
         {
-            EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empCore.Id);
+            var Id = Guid.NewGuid().ToString();
 
-            empDbModel.Name = empCore.Name;
-            empDbModel.Address = empCore.Address;
+            var dbData = _appDbContext.SalesReceipts.Add(new SalesReceiptDbModel
+            {
+                Id = Id,
+                EmpId = salesReceipt.EmpId,
+                SalesDate = salesReceipt.SalesDate,
+                Commission = salesReceipt.Commission
+            });
+            _appDbContext.SaveChanges();
 
-            this._appDbContext.SaveChanges();
+            return Id;
+        }
+
+        public IEnumerable<SalesReceiptCore> GetSalesReceipts(string empId)
+        {
+            List<SalesReceiptCore> salesReceiptList = new List<SalesReceiptCore>();
+
+            foreach (SalesReceiptDbModel salesReceiptDbModel in this._appDbContext.SalesReceipts.Where(s => s.EmpId == empId))
+            {
+                salesReceiptList.Add(new SalesReceiptCore
+                {
+                    Id = salesReceiptDbModel.Id,
+                    EmpId = salesReceiptDbModel.EmpId,
+                    SalesDate = salesReceiptDbModel.SalesDate,
+                    Commission = salesReceiptDbModel.Commission
+                });
+            }
+
+            return salesReceiptList;
+        }
+
+        public void DeleteSalesReceiptBy(string salesReceiptId)
+        {
+            var salesReceipt = _appDbContext.SalesReceipts.FirstOrDefault(s => s.Id == salesReceiptId);
+            if (salesReceipt != null)
+            {
+                _appDbContext.SalesReceipts.Remove(salesReceipt);
+                _appDbContext.SaveChanges();
+            }
         }
 
 
@@ -77,6 +118,5 @@ namespace PaymentSystem.Adapter
                 Address = empDbModel.Address
             };
         }
-
     }
 }

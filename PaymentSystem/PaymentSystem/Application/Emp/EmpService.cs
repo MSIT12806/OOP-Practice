@@ -29,5 +29,27 @@ namespace PaymentSystem.Application.Emp
         {
             this._empRepository.Update(empCore);
         }
+
+        public string AddSalesReceipt(string id, DateOnly dateOnly, int commission)
+        {
+            var salesReceipt = new SalesReceiptCore
+            {
+                EmpId = id,
+                SalesDate = dateOnly,
+                Commission = commission
+            };
+
+            return this._empRepository.AddSalesReceipt(salesReceipt);
+        }
+
+        public IEnumerable<SalesReceiptCore> GetSalesReceipts(string empId)
+        {
+            return this._empRepository.GetSalesReceipts(empId);
+        }
+
+        public void DeleteSalesReceiptBy(string salesReceiptId)
+        {
+            this._empRepository.DeleteSalesReceiptBy(salesReceiptId);
+        }
     }
 }
