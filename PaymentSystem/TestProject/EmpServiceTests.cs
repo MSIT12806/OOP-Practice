@@ -56,12 +56,9 @@ namespace TestProject
             var empService = _serviceProvider.GetRequiredService<EmpService>();
 
             // ²K¥[­û¤u
-            var employee = new EmpCore
-            {
-                Id = "AA",
-                Name = "Jane Doe",
-                Address = "123 Main St"
-            };
+
+            var employee = new EmpCore("AA");
+            employee.InjectData("Jane Doe", "123 Main St");
             empService.AddEmp(employee);
             if (ASSERT)
             {

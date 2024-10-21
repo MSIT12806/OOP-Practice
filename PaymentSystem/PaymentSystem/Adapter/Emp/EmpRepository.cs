@@ -118,5 +118,19 @@ namespace PaymentSystem.Adapter
                 Address = empDbModel.Address
             };
         }
+
+        // DDD 重構
+
+        public void InjectData(EmpCore empCore)
+        {
+            var empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empCore.Id);
+            if (empDbModel != null)
+            {
+                empCore.InjectData(empDbModel.Name, empDbModel.Address);
+                return;
+            }
+
+            throw new InvalidDataException("Emp not found");
+        }
     }
 }

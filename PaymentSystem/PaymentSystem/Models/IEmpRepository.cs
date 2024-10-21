@@ -1,7 +1,5 @@
-﻿using PaymentSystem.Infrastructure.ORM;
-using PaymentSystem.Models;
-
-namespace PaymentSystem.Application.Emp
+﻿
+namespace PaymentSystem.Models
 {
     public interface IEmpRepository
     {
@@ -11,6 +9,7 @@ namespace PaymentSystem.Application.Emp
         IEnumerable<EmpCore> GetList();
         IEnumerable<SalesReceiptCore> GetSalesReceipts(string empId);
         EmpCore GetSingle(string empId);
+        void InjectData(EmpCore empCore);
         void Update(EmpCore empCore);
     }
 }

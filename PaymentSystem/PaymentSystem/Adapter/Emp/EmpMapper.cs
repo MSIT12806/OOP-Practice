@@ -26,12 +26,9 @@ namespace PaymentSystem.Adapter
 
         public static EmpCore ToCoreModel(AddEmpViewModel addEmp)
         {
-            return new EmpCore
-            {
-                Id = addEmp.EmpId,
-                Name = addEmp.Name,
-                Address = addEmp.Address
-            };
+            var core = new EmpCore(addEmp.EmpId);
+            core.InjectData(addEmp.Name, addEmp.Address);
+            return core;
         }
 
         public static EmpCore ToCoreModel(ChgEmpViewModel chgEmp)
