@@ -17,11 +17,11 @@ namespace PaymentSystem.Adapter.Payday
 
             foreach (var payday in paydays)
             {
-                var salesReceipt = salesReceipts.FirstOrDefault(x => x.EmpId == payday.EmpId);
+                var salesReceiptByEmpId = salesReceipts.Where(x => x.EmpId == payday.EmpId);
 
-                if (salesReceipt != null)
+                if (salesReceiptByEmpId != null && salesReceiptByEmpId.Count()!=0)
                 {
-                    payday.SalesReceipt = salesReceipt.Amount;
+                    payday.SalesReceipt = salesReceiptByEmpId.Sum(i => i.Amount);
                 }
             }
         }

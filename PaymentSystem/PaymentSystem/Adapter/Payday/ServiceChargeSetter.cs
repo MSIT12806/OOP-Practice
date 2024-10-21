@@ -19,11 +19,11 @@ namespace PaymentSystem.Adapter.Payday
 
             foreach (var payday in paydays)
             {
-                var serviceCharge = serviceCharges.FirstOrDefault(x => x.EmpId == payday.EmpId);
+                var serviceChargeByEmpId = serviceCharges.Where(x => x.EmpId == payday.EmpId);
 
-                if (serviceCharge != null)
+                if (serviceChargeByEmpId != null && serviceChargeByEmpId.Count() != 0)
                 {
-                    payday.ServiceCharge = serviceCharge.Amount;
+                    payday.ServiceCharge = serviceChargeByEmpId.Sum(i => i.Amount);
                 }
             }
         }

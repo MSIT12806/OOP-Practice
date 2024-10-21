@@ -131,11 +131,12 @@ namespace TestProject
 
             // 重新設定員工公會服務費
             setviceChargeId = chargeService.AddServiceCharge(employee.Id, 200, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
+            setviceChargeId = chargeService.AddServiceCharge(employee.Id, 300, DateOnly.FromDateTime(new DateTime(2021, 1, 5)));
             if (ASSERT)
             {
                 // 確認服務費數目是否
                 var chargeServices = chargeService.GetListBy(employee.Id);
-                Assert.That(chargeServices.Count(), Is.EqualTo(1));
+                Assert.That(chargeServices.Count(), Is.EqualTo(2));
             }
 
             // 薪水結算
@@ -147,7 +148,7 @@ namespace TestProject
                 Assert.That(paydays.Count(), Is.EqualTo(1));
                 Assert.That(paydays.First().EmpId, Is.EqualTo(employee.Id));
                 Assert.That(paydays.First().Salary, Is.EqualTo(2000));
-                Assert.That(paydays.First().ServiceCharge, Is.EqualTo(200));
+                Assert.That(paydays.First().ServiceCharge, Is.EqualTo(500));
                 Assert.That(paydays.First().SalesReceipt, Is.EqualTo(null));
                 Assert.That(paydays.First().ShouldPay, Is.EqualTo(1800));
             }
