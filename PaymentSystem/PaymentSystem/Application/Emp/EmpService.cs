@@ -1,4 +1,5 @@
-﻿using PaymentSystem.Models;
+﻿using NuGet.Protocol.Core.Types;
+using PaymentSystem.Models;
 
 namespace PaymentSystem.Application.Emp
 {
@@ -38,28 +39,6 @@ namespace PaymentSystem.Application.Emp
         public EmpCore GetSingle(string empId)
         {
             return this._empRepository.GetSingle(empId);
-        }
-
-        public string AddSalesReceipt(string id, DateOnly dateOnly, int commission)
-        {
-            var salesReceipt = new SalesReceiptCore
-            {
-                EmpId = id,
-                SalesDate = dateOnly,
-                Commission = commission
-            };
-
-            return this._empRepository.AddSalesReceipt(salesReceipt);
-        }
-
-        public IEnumerable<SalesReceiptCore> GetSalesReceipts(string empId)
-        {
-            return this._empRepository.GetSalesReceipts(empId);
-        }
-
-        public void DeleteSalesReceiptBy(string salesReceiptId)
-        {
-            this._empRepository.DeleteSalesReceiptBy(salesReceiptId);
         }
     }
 }

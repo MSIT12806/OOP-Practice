@@ -124,7 +124,7 @@ namespace TestProject
             }
 
             // 加入一筆銷售收據
-           string salesReceiptId =  empService.AddSalesReceipt(
+           string salesReceiptId = employee.AddSalesReceipt(
                 employee.Id,
                 DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
                 100
@@ -132,22 +132,22 @@ namespace TestProject
             if (ASSERT)
             {
                 // 確認銷售收據是否正確
-                IEnumerable<SalesReceiptCore> salesReceipts = empService.GetSalesReceipts(employee.Id);
+                IEnumerable<SalesReceiptCore> salesReceipts = employee.GetSalesReceipts();
                 Assert.That(salesReceipts.Count(), Is.EqualTo(1));
             }
 
             // 刪除一筆銷售收據
-            empService.DeleteSalesReceiptBy(salesReceiptId);
+            employee.DeleteSalesReceiptBy(salesReceiptId);
 
             // 重新加入一筆銷售收據
-            salesReceiptId = empService.AddSalesReceipt(
+            salesReceiptId = employee.AddSalesReceipt(
                 employee.Id,
                 DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
                 200
             );
 
             // 再加入一筆銷售收據
-            salesReceiptId = empService.AddSalesReceipt(
+            salesReceiptId = employee.AddSalesReceipt(
                 employee.Id,
                 DateOnly.FromDateTime(new DateTime(2021, 1, 5)),
                 300
@@ -156,7 +156,7 @@ namespace TestProject
             if (ASSERT)
             {
                 // 確認銷售收據數目是否正確
-                IEnumerable<SalesReceiptCore> salesReceipts = empService.GetSalesReceipts(employee.Id);
+                IEnumerable<SalesReceiptCore> salesReceipts = employee.GetSalesReceipts();
                 Assert.That(salesReceipts.Count(), Is.EqualTo(2));
             }
 

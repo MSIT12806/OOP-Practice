@@ -12,8 +12,6 @@ namespace PaymentSystem.Models
         public string Name { get; private set; }
         public string Address { get; private set; }
 
-        public IEnumerable<SalesReceiptCore> SalesReceipts => _repository.GetSalesReceipts(this.Id);
-        public IEnumerable<ServiceChargeCore> ServiceCharges => _repository.GetServiceCharges(this.Id);
 
         public EmpCore(string id, IEmpRepository repository)
         {
@@ -27,14 +25,11 @@ namespace PaymentSystem.Models
             this.Address = address;
         }
 
-        public void InjectDataFromDB()
-        {
-            _repository.InjectData(this);
-        }
 
         public void Update(string name, string address)
         {
-            this.InitialData(name, address);
+            this.Name = name;
+            this.Address = address;
             _repository.Update(this);
         }
 
@@ -49,6 +44,8 @@ namespace PaymentSystem.Models
             this.Address = address;
             _repository.Update(this);
         }
+
+        // Salary
 
         public void SetSalary(int amount, EmpSalaryCore.PayWayEnum payWay)
         {
@@ -76,6 +73,10 @@ namespace PaymentSystem.Models
             };
         }
 
+        // ServiceCharges
+
+        public IEnumerable<ServiceChargeCore> ServiceCharges => _repository.GetServiceCharges(this.Id);
+
         public string AddServiceCharge(string id, int amount, DateOnly dateOnly)
         {
             var serviceCharge = new ServiceChargeCore
@@ -102,6 +103,32 @@ namespace PaymentSystem.Models
         public IEnumerable<ServiceChargeCore> GetServiceCharge()
         {
             return _repository.GetServiceCharges(this.Id);
+        }
+
+        // SalesReceipts
+
+        public IEnumerable<SalesReceiptCore> SalesReceipts => _repository.GetSalesReceipts(this.Id);
+
+        public string AddSalesReceipt(string id, DateOnly dateOnly, int commission)
+        {
+            var salesReceipt = new SalesReceiptCore
+            {
+                EmpId = id,
+                SalesDate = dateOnly,
+                Commission = commission
+            };
+
+            return this._repository.AddSalesReceipt(salesReceipt);
+        }
+
+        public IEnumerable<SalesReceiptCore> GetSalesReceipts()
+        {
+            return this._repository.GetSalesReceipts(this.Id);
+        }
+
+        public void DeleteSalesReceiptBy(string salesReceiptId)
+        {
+            this._repository.DeleteSalesReceiptBy(salesReceiptId);
         }
     }
 }
