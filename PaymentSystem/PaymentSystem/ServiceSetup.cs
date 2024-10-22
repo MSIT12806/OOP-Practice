@@ -1,9 +1,9 @@
-﻿using LH.Tool.Decoupling;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PaymentSystem.Adapter;
 using PaymentSystem.Adapter.Payday;
 using PaymentSystem.Application.Emp;
 using PaymentSystem.Application.Payday;
+using PaymentSystem.Models;
 
 public static class ServiceSetup
 {

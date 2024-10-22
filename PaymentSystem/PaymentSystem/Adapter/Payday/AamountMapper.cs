@@ -7,13 +7,7 @@ namespace PaymentSystem.Adapter.Payday
     {
         public static EmpSalaryCore ToCore(SalarySaveViewModel vm)
         {
-            return new EmpSalaryCore
-            {
-                EmpId = vm.EmpId,
-                Salary = vm.Salary,
-                PayWay = vm.PayWay
-            };
-
+            return new EmpSalaryCore(vm.EmpId, vm.Salary, vm.PayWay);
         }
 
         public static SalarySaveViewModel ToSaveViewModel(EmpSalaryCore core)
@@ -21,7 +15,7 @@ namespace PaymentSystem.Adapter.Payday
             return new SalarySaveViewModel
             {
                 EmpId = core.EmpId,
-                Salary = core.Salary,
+                Salary = core.Amount,
                 PayWay = core.PayWay
             };
         }

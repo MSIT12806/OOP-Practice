@@ -1,4 +1,6 @@
-﻿using PaymentSystem.Models;
+﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using PaymentSystem.Models;
+using PaymentSystem.Models.ValueObjects;
 
 namespace PaymentSystem.Application.Emp
 {
@@ -10,10 +12,25 @@ namespace PaymentSystem.Application.Emp
         {
             this._empRepository = empRepository;
         }
+
+        public EmpCore InstantiationEmp(string empId, string name, string address)
+        {
+            var emp = new EmpCore(empId, this._empRepository);
+            emp.InitialData(name, address);
+
+            return emp;
+        }
         public void AddEmp(EmpCore emp)
         {
             this._empRepository.Add(emp);
         }
+
+        public void ChgEmp(string empId, string name, string address)
+        {
+            var emp = new EmpCore(empId, this._empRepository);
+            emp.Update(name, address);
+        }
+
 
         public IEnumerable<EmpCore> GetList()
         {
@@ -23,11 +40,6 @@ namespace PaymentSystem.Application.Emp
         public EmpCore GetSingle(string empId)
         {
             return this._empRepository.GetSingle(empId);
-        }
-
-        public void ChgEmp(EmpCore empCore)
-        {
-            this._empRepository.Update(empCore);
         }
 
         public string AddSalesReceipt(string id, DateOnly dateOnly, int commission)

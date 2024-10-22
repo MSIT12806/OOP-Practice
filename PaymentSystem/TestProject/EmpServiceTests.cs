@@ -54,11 +54,10 @@ namespace TestProject
 
             // empService
             var empService = _serviceProvider.GetRequiredService<EmpService>();
+            var empRepository = _serviceProvider.GetRequiredService<IEmpRepository>();
 
             // 添加員工
-
-            var employee = new EmpCore("AA");
-            employee.InjectData("Jane Doe", "123 Main St");
+            var employee = empService.InstantiationEmp("AA","Jane Doe", "123 Main St");
             empService.AddEmp(employee);
             if (ASSERT)
             {
@@ -68,8 +67,7 @@ namespace TestProject
             }
 
             // 修改員工姓名
-            employee.Name = "Jane Smith";
-            empService.ChgEmp(employee);
+            employee.UpdateName( "Jane Smith");
             if (ASSERT)
             {
                 // 確認修改是否正確
@@ -77,31 +75,22 @@ namespace TestProject
                 Assert.That(emp.Name, Is.EqualTo("Jane Smith"));
             }
 
-            // paydayService
-            var paydayService = _serviceProvider.GetRequiredService<PaydayService>();
-
             // 設定員工薪資
-            var salary = new EmpSalaryCore
-            {
-                EmpId = employee.Id,
-                Salary = 1000
-            };
-            paydayService.SetSalary(salary);
+            employee.SetSalary(1000, EmpSalaryCore.PayWayEnum.Monthly);
             if (ASSERT)
             {
                 // 確認薪資是否正確
-                var emp = paydayService.GetEmpSalary(employee.Id);
-                Assert.That(emp.Salary, Is.EqualTo(1000));
+                var salary = employee.GetSalary();
+                Assert.That(salary.Amount, Is.EqualTo(1000));
             }
 
             // 修改員工薪資
-            salary.Salary = 2000;
-            paydayService.SetSalary(salary);
+            employee.SetSalary(2000, EmpSalaryCore.PayWayEnum.Monthly);
             if (ASSERT)
             {
                 // 確認修改是否正確
-                var emp = paydayService.GetEmpSalary(employee.Id);
-                Assert.That(emp.Salary, Is.EqualTo(2000));
+                var salary = employee.GetSalary();
+                Assert.That(salary.Amount, Is.EqualTo(2000));
             }
 
             // chargeService
@@ -173,6 +162,9 @@ namespace TestProject
                 IEnumerable<SalesReceiptCore> salesReceipts = empService.GetSalesReceipts(employee.Id);
                 Assert.That(salesReceipts.Count(), Is.EqualTo(2));
             }
+
+            // paydayService
+            var paydayService = _serviceProvider.GetRequiredService<PaydayService>();
 
             // 薪水結算
             var paydays = paydayService.Pay(DateOnly.FromDateTime(new DateTime(2021, 1, 30)));

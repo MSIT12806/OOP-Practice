@@ -24,24 +24,21 @@ namespace PaymentSystem.Adapter
             };
         }
 
-        public static EmpCore ToCoreModel(AddEmpViewModel addEmp)
-        {
-            var core = new EmpCore(addEmp.EmpId);
-            core.InjectData(addEmp.Name, addEmp.Address);
-            return core;
-        }
+        //public static EmpCore ToCoreModel(AddEmpViewModel addEmp)
+        //{
+        //    var core = new EmpCore(addEmp.EmpId);
+        //    core.InjectData(addEmp.Name, addEmp.Address);
+        //    return core;
+        //}
 
-        public static EmpCore ToCoreModel(ChgEmpViewModel chgEmp)
-        {
-            return new EmpCore
-            {
-                Id = chgEmp.EmpId,
-                Name = chgEmp.Name,
-                Address = chgEmp.Address
-            };
-        }
+        //public static EmpCore ToCoreModel(ChgEmpViewModel chgEmp)
+        //{
+        //    var core = new EmpCore(chgEmp.EmpId);
+        //    core.InjectData(chgEmp.Name, chgEmp.Address);
+        //    return core;
+        //}
 
-        public static EmpQueryViewModel ToInfoModel(EmpCore core)
+        public static EmpQueryViewModel ToQueryModel(EmpCore core)
         {
             return new EmpQueryViewModel
             {

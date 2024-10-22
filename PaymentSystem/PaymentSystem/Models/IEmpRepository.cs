@@ -11,5 +11,10 @@ namespace PaymentSystem.Models
         EmpCore GetSingle(string empId);
         void InjectData(EmpCore empCore);
         void Update(EmpCore empCore);
+
+        void AddSalary(EmpSalaryCore amountCore);
+        IEnumerable<EmpSalaryCore> GetEmpSalaries();
+        EmpSalaryCore GetSalary(string empId);
+        IEnumerable<ServiceChargeCore> GetServiceCharges(string id);
     }
 }

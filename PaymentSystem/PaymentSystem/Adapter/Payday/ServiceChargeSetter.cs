@@ -28,4 +28,5 @@ namespace PaymentSystem.Adapter.Payday
             }
         }
     }
+
 }

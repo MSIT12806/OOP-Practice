@@ -11,33 +11,6 @@ namespace PaymentSystem.Adapter.Payday
         {
             this._appDbContext = appDbContext;
         }
-        public void Save(EmpSalaryCore amountCore)
-        {
-            var dbModel = this._appDbContext.Salaries.SingleOrDefault(x => x.EmpId == amountCore.EmpId);
-            if (dbModel == null)
-            {
-                dbModel = this.ToDbModel(amountCore);
-                this._appDbContext.Salaries.Add(dbModel);
-                this._appDbContext.SaveChanges();
-                return;
-            }
-
-            if (this._appDbContext.Salaries.Any(x => x.EmpId == amountCore.EmpId))
-            {
-                this._appDbContext.Update(dbModel, this.ToDbModel(amountCore));
-                this._appDbContext.SaveChanges();
-                return;
-            }
-        }
-
-        public IEnumerable<PayRecordCore> GetPayRecordsBy(DateOnly date)
-        {
-            return this._appDbContext.PayRecords.Where(x => x.PayDate == date).ToList().Select(this.ToCoreModel);
-        }
-        public IEnumerable<EmpSalaryCore> GetEmpSalaries()
-        {
-            return this._appDbContext.Salaries.ToList().Select(this.ToCoreModel);
-        }
 
         public IEnumerable<TimeCardCore> GetTimeCards(string empId)
         {
@@ -47,6 +20,10 @@ namespace PaymentSystem.Adapter.Payday
         public TimeCardCore GetTimeCard(string timeCardId)
         {
             return this.ToCoreModel(this._appDbContext.TimeCards.SingleOrDefault(x => x.EmpId == timeCardId));
+        }
+        public IEnumerable<PayRecordCore> GetPayRecordsBy(DateOnly date)
+        {
+            return this._appDbContext.PayRecords.Where(x => x.PayDate == date).ToList().Select(this.ToCoreModel);
         }
 
         private TimeCardCore ToCoreModel(TimeCardDbModel source)
@@ -79,23 +56,6 @@ namespace PaymentSystem.Adapter.Payday
             };
         }
 
-        private EmpSalaryCore ToCoreModel(SalaryDbModel source)
-        {
-            return new EmpSalaryCore
-            {
-                EmpId = source.EmpId,
-                Salary = source.Amount,
-            };
-        }
-
-        private SalaryDbModel ToDbModel(EmpSalaryCore amountCore)
-        {
-            return new SalaryDbModel
-            {
-                EmpId = amountCore.EmpId,
-                Amount = amountCore.Salary,
-            };
-        }
 
     }
 }

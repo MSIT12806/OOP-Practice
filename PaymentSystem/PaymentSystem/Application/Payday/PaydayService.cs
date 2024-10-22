@@ -8,12 +8,14 @@ namespace PaymentSystem.Application.Payday
         private IPaydayRepository _paydayRepopsitory;
         private IServiceChargeSetter _serviceChargeSetter;
         private ISalesReceiptSetter _salesReceiptSetter;
+        private IEmpRepository _empRepository;
 
-        public PaydayService(IServiceChargeSetter serviceChargeGetter, IPaydayRepository paydayRepopsitory, ISalesReceiptSetter salesReceiptSetter)
+        public PaydayService(IServiceChargeSetter serviceChargeGetter, IPaydayRepository paydayRepopsitory, ISalesReceiptSetter salesReceiptSetter, IEmpRepository empRepository)
         {
             this._serviceChargeSetter = serviceChargeGetter;
             this._paydayRepopsitory = paydayRepopsitory;
             this._salesReceiptSetter = salesReceiptSetter;
+            this._empRepository = empRepository;
         }
 
         public IEnumerable<PaydayCore> Pay(DateOnly date)
@@ -24,12 +26,11 @@ namespace PaymentSystem.Application.Payday
                 throw new InvalidOperationException("Already paid");
             }
 
-            var emps = this._paydayRepopsitory.GetEmpSalaries().ToList().Select(ToPaydayCore).ToList();
+            var emps = this._empRepository.GetList();
 
-            this._serviceChargeSetter.SetServiceCharge(emps);
-            this._salesReceiptSetter.SetSalesReceipt(emps);
+            var paydays = emps.Select(i=>i.Pay()).ToList();
 
-            return emps;
+            return paydays;
         }
 
         private PaydayCore ToPaydayCore(EmpSalaryCore salaryCore)
@@ -37,18 +38,20 @@ namespace PaymentSystem.Application.Payday
             return new PaydayCore
             {
                 EmpId = salaryCore.EmpId,
-                Salary = salaryCore.Salary,
+                Salary = salaryCore.Amount,
             };
         }
 
         public void SetSalary(EmpSalaryCore salaryCore)
         {
-            this._paydayRepopsitory.Save(salaryCore);
+            var core = _empRepository.GetSingle(salaryCore.EmpId);
+            core.SetSalary(salaryCore.Amount, salaryCore.PayWay);
         }
 
         public EmpSalaryCore GetEmpSalary(string empId)
         {
-            return this._paydayRepopsitory.GetEmpSalaries().FirstOrDefault(x => x.EmpId == empId);
+            var core = _empRepository.GetSingle(empId);
+            return core.GetSalary();
         }
 
         public IEnumerable<TimeCardCore> GetTimeCards(string empId)

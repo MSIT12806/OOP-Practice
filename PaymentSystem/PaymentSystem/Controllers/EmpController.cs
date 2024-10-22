@@ -16,7 +16,7 @@ namespace PaymentSystem.Controllers
 
         public IActionResult GetEmp()
         {
-            var empList = this._emp.GetList().Select(EmpMapper.ToInfoModel).ToList();
+            var empList = this._emp.GetList().Select(EmpMapper.ToQueryModel).ToList();
             return this.View(empList);
         }
 
@@ -29,7 +29,7 @@ namespace PaymentSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddEmp(AddEmpViewModel addEmp)
         {
-            this._emp.AddEmp(EmpMapper.ToCoreModel(addEmp));
+            this._emp.AddEmp(_emp.InstantiationEmp(addEmp.EmpId, addEmp.Name, addEmp.Address));
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }
 
@@ -59,7 +59,7 @@ namespace PaymentSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ChgEmp(ChgEmpViewModel chgEmp)
         {
-            this._emp.ChgEmp(EmpMapper.ToCoreModel(chgEmp));
+            this._emp.ChgEmp(chgEmp.EmpId, chgEmp.Name, chgEmp.Address);
             return this.RedirectToAction(nameof(ChgEmp), new { empId = chgEmp.EmpId });
         }
 
