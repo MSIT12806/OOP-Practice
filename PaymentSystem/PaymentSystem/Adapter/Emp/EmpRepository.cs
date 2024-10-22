@@ -99,11 +99,38 @@ namespace PaymentSystem.Adapter
                     Id = serviceChargeDbModel.ServiceChargeId,
                     EmpId = serviceChargeDbModel.EmpId,
                     Amount = serviceChargeDbModel.ServiceCharge,
-                    ApplyDate= serviceChargeDbModel.ApplyDate
+                    ApplyDate = serviceChargeDbModel.ApplyDate
                 });
             }
 
             return serviceChargeList;
+        }
+
+        public void DeleteServiceChargeBy(string serviceChargeId)
+        {
+            var serviceCharge = _appDbContext.ServiceCharges.FirstOrDefault(s => s.ServiceChargeId == serviceChargeId);
+            if (serviceCharge != null)
+            {
+                _appDbContext.ServiceCharges.Remove(serviceCharge);
+                _appDbContext.SaveChanges();
+            }
+        }
+
+        public string AddServiceCharge(ServiceChargeCore serviceCharge)
+        {
+            var Id = Guid.NewGuid().ToString();
+
+            var dbData = _appDbContext.ServiceCharges.Add(new ServiceChargeDbModel
+            {
+                ServiceChargeId = Id,
+                EmpId = serviceCharge.EmpId,
+                ServiceCharge = serviceCharge.Amount,
+                ApplyDate = serviceCharge.ApplyDate
+            });
+
+            _appDbContext.SaveChanges();
+
+            return Id;
         }
 
         public void DeleteSalesReceiptBy(string salesReceiptId)
@@ -171,7 +198,7 @@ namespace PaymentSystem.Adapter
         {
             var dbModel = this._appDbContext.Salaries
                 .Where(x => x.EmpId == empId)
-                .OrderByDescending(i=>i.CreateDatetime)
+                .OrderByDescending(i => i.CreateDatetime)
                 .FirstOrDefault();
 
             if (dbModel == null)

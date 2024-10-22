@@ -18,5 +18,7 @@ namespace PaymentSystem.Models
         EmpSalaryCore GetSalary(string empId);
 
         IEnumerable<ServiceChargeCore> GetServiceCharges(string id);
+        void DeleteServiceChargeBy(string setviceChargeId);
+        string AddServiceCharge(ServiceChargeCore serviceCharge);
     }
 }

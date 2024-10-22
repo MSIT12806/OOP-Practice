@@ -84,7 +84,24 @@ namespace PaymentSystem.Models
                 Amount = amount,
                 ApplyDate = dateOnly,
             };
-            throw new NotImplementedException();
+
+            return _repository.AddServiceCharge(serviceCharge);
+        }
+
+        public ServiceChargeCore GetServiceChargeBy(string setviceChargeId)
+        {
+            var db = _repository.GetServiceCharges(this.Id).FirstOrDefault(x => x.Id == setviceChargeId);
+            return db;
+        }
+
+        public void DeleteServiceCharge(string setviceChargeId)
+        {
+            _repository.DeleteServiceChargeBy(setviceChargeId);
+        }
+
+        public IEnumerable<ServiceChargeCore> GetServiceCharge()
+        {
+            return _repository.GetServiceCharges(this.Id);
         }
     }
 }

@@ -98,7 +98,7 @@ namespace TestProject
             if (ASSERT)
             {
                 // 確認服務費是否正確
-                var emp = employee.GetServiceChargeBy(setviceChargeId);
+                ServiceChargeCore emp = employee.GetServiceChargeBy(setviceChargeId);
                 Assert.That(emp.Amount, Is.EqualTo(100));
             }
 
@@ -107,19 +107,19 @@ namespace TestProject
             if (ASSERT)
             {
                 // 確認刪除是否正確
-                var emp = employee.GetServiceChargeBy(setviceChargeId);
+                ServiceChargeCore emp = employee.GetServiceChargeBy(setviceChargeId);
                 Assert.That(emp, Is.EqualTo(null));
             }
 
 
             // 重新設定員工公會服務費
             // 再加入一筆公會服務費
-            setviceChargeId = chargeService.AddServiceCharge(employee.Id, 200, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
-            setviceChargeId = chargeService.AddServiceCharge(employee.Id, 300, DateOnly.FromDateTime(new DateTime(2021, 1, 5)));
+            setviceChargeId = employee.AddServiceCharge(employee.Id, 200, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
+            setviceChargeId = employee.AddServiceCharge(employee.Id, 300, DateOnly.FromDateTime(new DateTime(2021, 1, 5)));
             if (ASSERT)
             {
                 // 確認服務費數目是否
-                var chargeServices = chargeService.GetListBy(employee.Id);
+                var chargeServices = employee.GetServiceCharge();
                 Assert.That(chargeServices.Count(), Is.EqualTo(2));
             }
 
