@@ -93,24 +93,21 @@ namespace TestProject
                 Assert.That(salary.Amount, Is.EqualTo(2000));
             }
 
-            // chargeService
-            var chargeService = _serviceProvider.GetRequiredService<ServiceChargeService>();
-
             // 設定員工公會服務費
-            var setviceChargeId = chargeService.AddServiceCharge(employee.Id, 100, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
+            string setviceChargeId = employee.AddServiceCharge(employee.Id, 100, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
             if (ASSERT)
             {
                 // 確認服務費是否正確
-                var emp = chargeService.GetSingle(setviceChargeId);
+                var emp = employee.GetServiceChargeBy(setviceChargeId);
                 Assert.That(emp.Amount, Is.EqualTo(100));
             }
 
             // 刪除員工公會服務費
-            chargeService.DeleteServiceCharge(setviceChargeId);
+            employee.DeleteServiceCharge(setviceChargeId);
             if (ASSERT)
             {
                 // 確認刪除是否正確
-                var emp = chargeService.GetSingle(setviceChargeId);
+                var emp = employee.GetServiceChargeBy(setviceChargeId);
                 Assert.That(emp, Is.EqualTo(null));
             }
 

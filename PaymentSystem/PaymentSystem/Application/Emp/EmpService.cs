@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using PaymentSystem.Models;
-using PaymentSystem.Models.ValueObjects;
+﻿using PaymentSystem.Models;
 
 namespace PaymentSystem.Application.Emp
 {

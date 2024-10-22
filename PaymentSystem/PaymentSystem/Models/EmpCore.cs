@@ -2,6 +2,7 @@
 
 
 
+
 namespace PaymentSystem.Models
 {
     public class EmpCore
@@ -73,6 +74,17 @@ namespace PaymentSystem.Models
                 SalesReceipt = salesReceipts.Sum(x => x.Commission),
                 ServiceCharge = serviceCharge.Sum(x => x.Amount)
             };
+        }
+
+        public string AddServiceCharge(string id, int amount, DateOnly dateOnly)
+        {
+            var serviceCharge = new ServiceChargeCore
+            {
+                EmpId = id,
+                Amount = amount,
+                ApplyDate = dateOnly,
+            };
+            throw new NotImplementedException();
         }
     }
 }

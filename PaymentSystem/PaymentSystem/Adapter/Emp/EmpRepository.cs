@@ -1,7 +1,6 @@
 ﻿using PaymentSystem.Application.Emp;
 using PaymentSystem.Infrastructure.ORM;
 using PaymentSystem.Models;
-using PaymentSystem.Models.ValueObjects;
 
 namespace PaymentSystem.Adapter
 {
