@@ -588,7 +588,7 @@ int 銷售數量
 
 ``` mermaid
 ---
-title: Animal example
+title: 支付薪水領域模型
 ---
 classDiagram 
     
