@@ -3,7 +3,6 @@ namespace PaymentSystem.Models
 {
     public interface IEmpRepository: IAsyncDisposable
     {
-        bool Disposed { get; }
         void Add(EmpCore emp);
         IEnumerable<EmpCore> GetList();
         EmpCore Rebuild(string empId);
@@ -14,7 +13,7 @@ namespace PaymentSystem.Models
         IEnumerable<SalesReceiptCore> GetSalesReceipts(string empId);
 
         void AddSalary(EmpSalaryCore amountCore);
-        IEnumerable<EmpSalaryCore> GetEmpSalaries();
+        IEnumerable<EmpSalaryCore> GetSalaries();
         EmpSalaryCore GetSalary(string empId);
 
         IEnumerable<ServiceChargeCore> GetServiceCharges(string id);

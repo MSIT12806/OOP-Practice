@@ -1,4 +1,5 @@
-﻿using PaymentSystem.Application.Emp;
+﻿using Microsoft.EntityFrameworkCore;
+using PaymentSystem.Application.Emp;
 using PaymentSystem.Infrastructure.ORM;
 using PaymentSystem.Models;
 
@@ -7,6 +8,8 @@ namespace PaymentSystem.Adapter
     public class EmpRepository : IEmpRepository
     {
         private AppDbContext _appDbContext;
+
+
         public EmpRepository(AppDbContext appDbContext)
         {
             this._appDbContext = appDbContext;
@@ -14,7 +17,6 @@ namespace PaymentSystem.Adapter
         private void AddEmp(EmpDbModel empDbModel)
         {
             this._appDbContext.Emps.Add(empDbModel);
-            this._appDbContext.SaveChanges();
         }
         public void Add(EmpCore emp)
         {
@@ -23,16 +25,15 @@ namespace PaymentSystem.Adapter
         }
         public void Update(EmpCore empCore)
         {
-            EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empCore.Id);
+            EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empCore.Id);
 
             empDbModel.Name = empCore.Name;
             empDbModel.Address = empCore.Address;
-
-            this._appDbContext.SaveChanges();
+            this._appDbContext.Emps.Update(empDbModel);
         }
         public EmpCore Rebuild(string empId)
         {
-            EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empId);
+            EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empId);
 
             return this.ToCoreModel(empDbModel);
         }
@@ -76,7 +77,6 @@ namespace PaymentSystem.Adapter
                 SalesDate = salesReceipt.SalesDate,
                 Commission = salesReceipt.Commission
             });
-            _appDbContext.SaveChanges();
 
             return Id;
         }
@@ -120,7 +120,6 @@ namespace PaymentSystem.Adapter
             if (serviceCharge != null)
             {
                 _appDbContext.ServiceCharges.Remove(serviceCharge);
-                _appDbContext.SaveChanges();
             }
         }
         public string AddServiceCharge(ServiceChargeCore serviceCharge)
@@ -135,8 +134,6 @@ namespace PaymentSystem.Adapter
                 ApplyDate = serviceCharge.ApplyDate
             });
 
-            _appDbContext.SaveChanges();
-
             return Id;
         }
         public void DeleteSalesReceiptBy(string salesReceiptId)
@@ -145,7 +142,6 @@ namespace PaymentSystem.Adapter
             if (salesReceipt != null)
             {
                 _appDbContext.SalesReceipts.Remove(salesReceipt);
-                _appDbContext.SaveChanges();
             }
         }
 
@@ -158,14 +154,12 @@ namespace PaymentSystem.Adapter
             {
                 dbModel = this.ToDbModel(amountCore);
                 this._appDbContext.Salaries.Add(dbModel);
-                this._appDbContext.SaveChanges();
                 return;
             }
 
             if (this._appDbContext.Salaries.Any(x => x.EmpId == amountCore.EmpId))
             {
                 this._appDbContext.Update(dbModel, this.ToDbModel(amountCore));
-                this._appDbContext.SaveChanges();
                 return;
             }
         }
@@ -183,7 +177,7 @@ namespace PaymentSystem.Adapter
 
             return ToCoreModel(dbModel);
         }
-        public IEnumerable<EmpSalaryCore> GetEmpSalaries()
+        public IEnumerable<EmpSalaryCore> GetSalaries()
         {
             return this._appDbContext.Salaries.ToList().Select(this.ToCoreModel);
         }
@@ -200,12 +194,11 @@ namespace PaymentSystem.Adapter
             };
         }
 
-        public void Dispose()
+
+        public async ValueTask DisposeAsync()
         {
             Console.WriteLine("Dispose");
             this._appDbContext.SaveChanges();
-            this.Disposed = true;
         }
-        public bool Disposed { get; private set; }  
     }
 }

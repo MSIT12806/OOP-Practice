@@ -29,102 +29,101 @@ namespace TestProject
             _serviceProvider = host.Services;
         }
         /*
-         * [_] AcceptanceMounthlyPaymentTest
+         * [v] AcceptanceMounthlyPaymentTest
          * [] AcceptanceHourlyPaymentTest
+         * [] AcceptanceMounthlySwitchToHourlyTest
+         * [] AcceptanceHourlySwitchToMounthlyTest
          */
         [Test]
         public void AcceptanceMounthlyPaymentTest()
         {
             /*
-             ³Ì½ÆÂøªº¾Ş§@®×¨Ò¡G
-            [v] ²K¥[­û¤u
-            [v] ­×§ï­û¤u©m¦W
-            [v] ³]©w­û¤uÁ~¸ê¡m¤ëÁ~¡n
-            [v] ­×§ï­û¤uÁ~¸ê
-            [v] ³]©w­û¤u¤½·|ªA°È¶O
-            [v] §R°£­û¤u¤½·|ªA°È¶O
-            [v] ­«·s³]©w­û¤u¤½·|ªA°È¶O
-            [v] ¦A¥[¤J¤@µ§¤½·|ªA°È¶O
-            [v] ¥[¤J¤@µ§¾P°â¦¬¾Ú
-            [v] §R°£¤@µ§¾P°â¦¬¾Ú
-            [v] ­«·s¥[¤J¤@µ§¾P°â¦¬¾Ú
-            [v] ¦A¥[¤J¤@µ§¾P°â¦¬¾Ú
-            [v] Á~¤ôµ²ºâ
-            [] ½T»{¦b³Ì«á¦³½Õ¥Î repository ªº Dispose
+             æœ€è¤‡é›œçš„æ“ä½œæ¡ˆä¾‹ï¼š
+            [v] æ·»åŠ å“¡å·¥
+            [v] ä¿®æ”¹å“¡å·¥å§“å
+            [v] è¨­å®šå“¡å·¥è–ªè³‡ã€Šæ™‚è–ªã€‹
+            [v] ä¿®æ”¹å“¡å·¥è–ªè³‡
+            [v] è¨­å®šå“¡å·¥å…¬æœƒæœå‹™è²»
+            [v] åˆªé™¤å“¡å·¥å…¬æœƒæœå‹™è²»
+            [v] é‡æ–°è¨­å®šå“¡å·¥å…¬æœƒæœå‹™è²»
+            [v] å†åŠ å…¥ä¸€ç­†å…¬æœƒæœå‹™è²»
+            [v] åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
+            [v] åˆªé™¤ä¸€ç­†éŠ·å”®æ”¶æ“š
+            [v] é‡æ–°åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
+            [v] å†åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
+            [v] è–ªæ°´çµç®—
              */
 
             // empService
             var empService = _serviceProvider.GetRequiredService<EmpService>();
-            var empRepository = _serviceProvider.GetRequiredService<IEmpRepository>();
 
-            // ²K¥[­û¤u
-            var employee = empService.InstantiationEmp("AA","Jane Doe", "123 Main St");
-            empService.AddEmp(employee);
+            // æ·»åŠ å“¡å·¥
+            var employee = empService.Build("AA","Jane Doe", "123 Main St");
             if (ASSERT)
             {
-                // ½T»{­û¤u¬O§_¦¨¥\²K¥[
+                // ç¢ºèªå“¡å·¥æ˜¯å¦æˆåŠŸæ·»åŠ 
                 var emp = empService.Rebuild(employee.Id);
                 Assert.That(emp.Id, Is.EqualTo(employee.Id));
             }
 
-            // ­×§ï­û¤u©m¦W
+            // ä¿®æ”¹å“¡å·¥å§“å
             employee.UpdateName( "Jane Smith");
             if (ASSERT)
             {
-                // ½T»{­×§ï¬O§_¥¿½T
+                // ç¢ºèªä¿®æ”¹æ˜¯å¦æ­£ç¢º
                 var emp = empService.Rebuild(employee.Id);
                 Assert.That(emp.Name, Is.EqualTo("Jane Smith"));
             }
 
-            // ³]©w­û¤uÁ~¸ê
+            // è¨­å®šå“¡å·¥è–ªè³‡
             employee.SetSalary(1000, EmpSalaryCore.PayWayEnum.Monthly);
             if (ASSERT)
             {
-                // ½T»{Á~¸ê¬O§_¥¿½T
+                // ç¢ºèªè–ªè³‡æ˜¯å¦æ­£ç¢º
                 var salary = employee.GetSalary();
                 Assert.That(salary.Amount, Is.EqualTo(1000));
             }
 
-            // ­×§ï­û¤uÁ~¸ê
+            // ä¿®æ”¹å“¡å·¥è–ªè³‡
             employee.SetSalary(2000, EmpSalaryCore.PayWayEnum.Monthly);
             if (ASSERT)
             {
-                // ½T»{­×§ï¬O§_¥¿½T
+                // ç¢ºèªä¿®æ”¹æ˜¯å¦æ­£ç¢º
                 var salary = employee.GetSalary();
                 Assert.That(salary.Amount, Is.EqualTo(2000));
             }
 
-            // ³]©w­û¤u¤½·|ªA°È¶O
+            // è¨­å®šå“¡å·¥å…¬æœƒæœå‹™è²»
             string setviceChargeId = employee.AddServiceCharge(employee.Id, 100, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
             if (ASSERT)
             {
-                // ½T»{ªA°È¶O¬O§_¥¿½T
+                // ç¢ºèªæœå‹™è²»æ˜¯å¦æ­£ç¢º
                 ServiceChargeCore emp = employee.GetServiceChargeBy(setviceChargeId);
                 Assert.That(emp.Amount, Is.EqualTo(100));
             }
 
-            // §R°£­û¤u¤½·|ªA°È¶O
+            // åˆªé™¤å“¡å·¥å…¬æœƒæœå‹™è²»
             employee.DeleteServiceCharge(setviceChargeId);
             if (ASSERT)
             {
-                // ½T»{§R°£¬O§_¥¿½T
+                // ç¢ºèªåˆªé™¤æ˜¯å¦æ­£ç¢º
                 ServiceChargeCore emp = employee.GetServiceChargeBy(setviceChargeId);
                 Assert.That(emp, Is.EqualTo(null));
             }
 
 
-            // ­«·s³]©w­û¤u¤½·|ªA°È¶O
-            // ¦A¥[¤J¤@µ§¤½·|ªA°È¶O
+            // é‡æ–°è¨­å®šå“¡å·¥å…¬æœƒæœå‹™è²»
+            // å†åŠ å…¥ä¸€ç­†å…¬æœƒæœå‹™è²»
             setviceChargeId = employee.AddServiceCharge(employee.Id, 200, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
             setviceChargeId = employee.AddServiceCharge(employee.Id, 300, DateOnly.FromDateTime(new DateTime(2021, 1, 5)));
             if (ASSERT)
             {
-                // ½T»{ªA°È¶O¼Æ¥Ø¬O§_
+                // ç¢ºèªæœå‹™è²»æ•¸ç›®æ˜¯å¦
                 var chargeServices = employee.GetServiceCharge();
                 Assert.That(chargeServices.Count(), Is.EqualTo(2));
             }
 
-            // ¥[¤J¤@µ§¾P°â¦¬¾Ú
+            // åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
            string salesReceiptId = employee.AddSalesReceipt(
                 employee.Id,
                 DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
@@ -132,22 +131,22 @@ namespace TestProject
             );
             if (ASSERT)
             {
-                // ½T»{¾P°â¦¬¾Ú¬O§_¥¿½T
+                // ç¢ºèªéŠ·å”®æ”¶æ“šæ˜¯å¦æ­£ç¢º
                 IEnumerable<SalesReceiptCore> salesReceipts = employee.GetSalesReceipts();
                 Assert.That(salesReceipts.Count(), Is.EqualTo(1));
             }
 
-            // §R°£¤@µ§¾P°â¦¬¾Ú
+            // åˆªé™¤ä¸€ç­†éŠ·å”®æ”¶æ“š
             employee.DeleteSalesReceiptBy(salesReceiptId);
 
-            // ­«·s¥[¤J¤@µ§¾P°â¦¬¾Ú
+            // é‡æ–°åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
             salesReceiptId = employee.AddSalesReceipt(
                 employee.Id,
                 DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
                 200
             );
 
-            // ¦A¥[¤J¤@µ§¾P°â¦¬¾Ú
+            // å†åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
             salesReceiptId = employee.AddSalesReceipt(
                 employee.Id,
                 DateOnly.FromDateTime(new DateTime(2021, 1, 5)),
@@ -156,7 +155,7 @@ namespace TestProject
 
             if (ASSERT)
             {
-                // ½T»{¾P°â¦¬¾Ú¼Æ¥Ø¬O§_¥¿½T
+                // ç¢ºèªéŠ·å”®æ”¶æ“šæ•¸ç›®æ˜¯å¦æ­£ç¢º
                 IEnumerable<SalesReceiptCore> salesReceipts = employee.GetSalesReceipts();
                 Assert.That(salesReceipts.Count(), Is.EqualTo(2));
             }
@@ -164,12 +163,161 @@ namespace TestProject
             // paydayService
             var paydayService = _serviceProvider.GetRequiredService<PaydayService>();
 
-            // Á~¤ôµ²ºâ
+            // è–ªæ°´çµç®—
             var paydays = paydayService.Pay(DateOnly.FromDateTime(new DateTime(2021, 1, 30)));
 
             if (ASSERT)
             {
-                // ½T»{Á~¤ôµ²ºâ¬O§_¥¿½T
+                // ç¢ºèªè–ªæ°´çµç®—æ˜¯å¦æ­£ç¢º
+                Assert.That(paydays.Count(), Is.EqualTo(1));
+                Assert.That(paydays.First().EmpId, Is.EqualTo(employee.Id));
+                Assert.That(paydays.First().Salary, Is.EqualTo(2000));
+                Assert.That(paydays.First().ServiceCharge, Is.EqualTo(500));
+                Assert.That(paydays.First().SalesReceipt, Is.EqualTo(500));
+                Assert.That(paydays.First().ShouldPay, Is.EqualTo(2000));
+            }
+        }
+
+        [Test]
+        public void AcceptanceHourlyPaymentTest()
+        {
+
+            /*
+             æœ€è¤‡é›œçš„æ“ä½œæ¡ˆä¾‹ï¼š
+            [] æ·»åŠ å“¡å·¥
+            [] ä¿®æ”¹å“¡å·¥å§“å
+            [] è¨­å®šå“¡å·¥è–ªè³‡ã€Šæ™‚è–ªã€‹
+            [] ä¿®æ”¹å“¡å·¥è–ªè³‡
+            [] è¨­å®šå“¡å·¥å…¬æœƒæœå‹™è²»
+            [] åˆªé™¤å“¡å·¥å…¬æœƒæœå‹™è²»
+            [] é‡æ–°è¨­å®šå“¡å·¥å…¬æœƒæœå‹™è²»
+            [] å†åŠ å…¥ä¸€ç­†å…¬æœƒæœå‹™è²»
+            [] åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
+            [] åˆªé™¤ä¸€ç­†éŠ·å”®æ”¶æ“š
+            [] é‡æ–°åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
+            [] å†åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
+            [] å†åŠ å…¥ä¸€ç­†å‡ºç¼ºå‹¤ç´€éŒ„
+            [] å†åˆªé™¤ä¸€ç­†å‡ºç¼ºå‹¤ç´€éŒ„
+            [] å†åŠ å…¥ä¸€ç­†å‡ºç¼ºå‹¤ç´€éŒ„
+            [] è–ªæ°´çµç®—
+             */
+
+
+            // empService
+            var empService = _serviceProvider.GetRequiredService<EmpService>();
+
+            // æ·»åŠ å“¡å·¥
+            var employee = empService.Build("AA", "Jane Doe", "123 Main St");
+            if (ASSERT)
+            {
+                // ç¢ºèªå“¡å·¥æ˜¯å¦æˆåŠŸæ·»åŠ 
+                var emp = empService.Rebuild(employee.Id);
+                Assert.That(emp.Id, Is.EqualTo(employee.Id));
+            }
+
+            // ä¿®æ”¹å“¡å·¥å§“å
+            employee.UpdateName("Jane Smith");
+            if (ASSERT)
+            {
+                // ç¢ºèªä¿®æ”¹æ˜¯å¦æ­£ç¢º
+                var emp = empService.Rebuild(employee.Id);
+                Assert.That(emp.Name, Is.EqualTo("Jane Smith"));
+            }
+
+            // è¨­å®šå“¡å·¥è–ªè³‡
+            employee.SetSalary(1000, EmpSalaryCore.PayWayEnum.Monthly);
+            if (ASSERT)
+            {
+                // ç¢ºèªè–ªè³‡æ˜¯å¦æ­£ç¢º
+                var salary = employee.GetSalary();
+                Assert.That(salary.Amount, Is.EqualTo(1000));
+            }
+
+            // ä¿®æ”¹å“¡å·¥è–ªè³‡
+            employee.SetSalary(2000, EmpSalaryCore.PayWayEnum.Monthly);
+            if (ASSERT)
+            {
+                // ç¢ºèªä¿®æ”¹æ˜¯å¦æ­£ç¢º
+                var salary = employee.GetSalary();
+                Assert.That(salary.Amount, Is.EqualTo(2000));
+            }
+
+            // è¨­å®šå“¡å·¥å…¬æœƒæœå‹™è²»
+            string setviceChargeId = employee.AddServiceCharge(employee.Id, 100, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
+            if (ASSERT)
+            {
+                // ç¢ºèªæœå‹™è²»æ˜¯å¦æ­£ç¢º
+                ServiceChargeCore emp = employee.GetServiceChargeBy(setviceChargeId);
+                Assert.That(emp.Amount, Is.EqualTo(100));
+            }
+
+            // åˆªé™¤å“¡å·¥å…¬æœƒæœå‹™è²»
+            employee.DeleteServiceCharge(setviceChargeId);
+            if (ASSERT)
+            {
+                // ç¢ºèªåˆªé™¤æ˜¯å¦æ­£ç¢º
+                ServiceChargeCore emp = employee.GetServiceChargeBy(setviceChargeId);
+                Assert.That(emp, Is.EqualTo(null));
+            }
+
+
+            // é‡æ–°è¨­å®šå“¡å·¥å…¬æœƒæœå‹™è²»
+            // å†åŠ å…¥ä¸€ç­†å…¬æœƒæœå‹™è²»
+            setviceChargeId = employee.AddServiceCharge(employee.Id, 200, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
+            setviceChargeId = employee.AddServiceCharge(employee.Id, 300, DateOnly.FromDateTime(new DateTime(2021, 1, 5)));
+            if (ASSERT)
+            {
+                // ç¢ºèªæœå‹™è²»æ•¸ç›®æ˜¯å¦
+                var chargeServices = employee.GetServiceCharge();
+                Assert.That(chargeServices.Count(), Is.EqualTo(2));
+            }
+
+            // åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
+            string salesReceiptId = employee.AddSalesReceipt(
+                 employee.Id,
+                 DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
+                 100
+             );
+            if (ASSERT)
+            {
+                // ç¢ºèªéŠ·å”®æ”¶æ“šæ˜¯å¦æ­£ç¢º
+                IEnumerable<SalesReceiptCore> salesReceipts = employee.GetSalesReceipts();
+                Assert.That(salesReceipts.Count(), Is.EqualTo(1));
+            }
+
+            // åˆªé™¤ä¸€ç­†éŠ·å”®æ”¶æ“š
+            employee.DeleteSalesReceiptBy(salesReceiptId);
+
+            // é‡æ–°åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
+            salesReceiptId = employee.AddSalesReceipt(
+                employee.Id,
+                DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
+                200
+            );
+
+            // å†åŠ å…¥ä¸€ç­†éŠ·å”®æ”¶æ“š
+            salesReceiptId = employee.AddSalesReceipt(
+                employee.Id,
+                DateOnly.FromDateTime(new DateTime(2021, 1, 5)),
+                300
+            );
+
+            if (ASSERT)
+            {
+                // ç¢ºèªéŠ·å”®æ”¶æ“šæ•¸ç›®æ˜¯å¦æ­£ç¢º
+                IEnumerable<SalesReceiptCore> salesReceipts = employee.GetSalesReceipts();
+                Assert.That(salesReceipts.Count(), Is.EqualTo(2));
+            }
+
+            // paydayService
+            var paydayService = _serviceProvider.GetRequiredService<PaydayService>();
+
+            // è–ªæ°´çµç®—
+            var paydays = paydayService.Pay(DateOnly.FromDateTime(new DateTime(2021, 1, 30)));
+
+            if (ASSERT)
+            {
+                // ç¢ºèªè–ªæ°´çµç®—æ˜¯å¦æ­£ç¢º
                 Assert.That(paydays.Count(), Is.EqualTo(1));
                 Assert.That(paydays.First().EmpId, Is.EqualTo(employee.Id));
                 Assert.That(paydays.First().Salary, Is.EqualTo(2000));

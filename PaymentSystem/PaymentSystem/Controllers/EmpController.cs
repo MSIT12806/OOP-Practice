@@ -14,38 +14,32 @@ namespace PaymentSystem.Controllers
             this._emp = service;
         }
 
-        public IActionResult GetEmp()
-        {
-            var empList = this._emp.GetList().Select(EmpMapper.ToQueryModel).ToList();
-            return this.View(empList);
-        }
-
-        public IActionResult AddEmp()
+        public async Task<IActionResult> AddEmp()
         {
             return this.View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddEmp(AddEmpViewModel addEmp)
+        public async Task<IActionResult> AddEmp(AddEmpViewModel addEmp)
         {
-            this._emp.AddEmp(_emp.InstantiationEmp(addEmp.EmpId, addEmp.Name, addEmp.Address));
+            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address);
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }
 
-        public IActionResult DelEmp()
+        public async Task<IActionResult> DelEmp()
         {
             return this.View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DelEmp(DelEmpViewModel delEmp)
+        public async Task<IActionResult> DelEmp(DelEmpViewModel delEmp)
         {
             return this.RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""), new { empId = delEmp.EmpId });
         }
 
-        public IActionResult ChgEmp(string empId)
+        public async Task<IActionResult> ChgEmp(string empId)
         {
             if (string.IsNullOrEmpty(empId))
             {
@@ -57,10 +51,10 @@ namespace PaymentSystem.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ChgEmp(ChgEmpViewModel chgEmp)
+        public async Task<IActionResult> ChgEmp(ChgEmpViewModel chgEmp)
         {
             this._emp.ChgEmpName(chgEmp.EmpId, chgEmp.Name);
-                this._emp.ChgEmpName(chgEmp.EmpId, chgEmp.Address);
+                this._emp.ChgEmpAddress(chgEmp.EmpId, chgEmp.Address);
             return this.RedirectToAction(nameof(ChgEmp), new { empId = chgEmp.EmpId });
         }
 
