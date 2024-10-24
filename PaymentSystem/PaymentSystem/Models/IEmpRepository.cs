@@ -1,7 +1,7 @@
 ﻿
 namespace PaymentSystem.Models
 {
-    public interface IEmpRepository: IDisposable
+    public interface IEmpRepository: IAsyncDisposable
     {
         bool Disposed { get; }
         void Add(EmpCore emp);
