@@ -1,12 +1,12 @@
 ﻿
 namespace PaymentSystem.Models
 {
-    public interface IEmpRepository
+    public interface IEmpRepository: IDisposable
     {
+        bool Disposed { get; }
         void Add(EmpCore emp);
         IEnumerable<EmpCore> GetList();
-        EmpCore GetSingle(string empId);
-        void InjectData(EmpCore empCore);
+        EmpCore Rebuild(string empId);
         void Update(EmpCore empCore);
 
         string AddSalesReceipt(SalesReceiptCore salesReceipt);

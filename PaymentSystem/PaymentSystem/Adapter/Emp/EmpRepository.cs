@@ -7,24 +7,20 @@ namespace PaymentSystem.Adapter
     public class EmpRepository : IEmpRepository
     {
         private AppDbContext _appDbContext;
-
         public EmpRepository(AppDbContext appDbContext)
         {
             this._appDbContext = appDbContext;
         }
-
-        public void AddEmp(EmpDbModel empDbModel)
+        private void AddEmp(EmpDbModel empDbModel)
         {
             this._appDbContext.Emps.Add(empDbModel);
             this._appDbContext.SaveChanges();
         }
-
         public void Add(EmpCore emp)
         {
             EmpDbModel empDbModel = this.ToDbModel(emp);
             this.AddEmp(empDbModel);
         }
-
         public void Update(EmpCore empCore)
         {
             EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empCore.Id);
@@ -34,7 +30,12 @@ namespace PaymentSystem.Adapter
 
             this._appDbContext.SaveChanges();
         }
+        public EmpCore Rebuild(string empId)
+        {
+            EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empId);
 
+            return this.ToCoreModel(empDbModel);
+        }
         public IEnumerable<EmpCore> GetList()
         {
             List<EmpCore> empList = new List<EmpCore>();
@@ -46,13 +47,23 @@ namespace PaymentSystem.Adapter
 
             return empList;
         }
-
-        public EmpCore GetSingle(string empId)
+        private EmpDbModel ToDbModel(EmpCore emp)
         {
-            EmpDbModel empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empId);
-
-            return this.ToCoreModel(empDbModel);
+            return new EmpDbModel
+            {
+                EmpId = emp.Id,
+                Name = emp.Name,
+                Address = emp.Address
+            };
         }
+        private EmpCore ToCoreModel(EmpDbModel empDbModel)
+        {
+            var emp = new EmpCore(empDbModel.EmpId, this);
+            emp.InitialData(empDbModel.Name, empDbModel.Address);
+            return emp;
+        }
+
+        // SalesReceipt
 
         public string AddSalesReceipt(SalesReceiptCore salesReceipt)
         {
@@ -69,7 +80,6 @@ namespace PaymentSystem.Adapter
 
             return Id;
         }
-
         public IEnumerable<SalesReceiptCore> GetSalesReceipts(string empId)
         {
             List<SalesReceiptCore> salesReceiptList = new List<SalesReceiptCore>();
@@ -87,7 +97,6 @@ namespace PaymentSystem.Adapter
 
             return salesReceiptList;
         }
-
         public IEnumerable<ServiceChargeCore> GetServiceCharges(string empId)
         {
             List<ServiceChargeCore> serviceChargeList = new List<ServiceChargeCore>();
@@ -105,7 +114,6 @@ namespace PaymentSystem.Adapter
 
             return serviceChargeList;
         }
-
         public void DeleteServiceChargeBy(string serviceChargeId)
         {
             var serviceCharge = _appDbContext.ServiceCharges.FirstOrDefault(s => s.ServiceChargeId == serviceChargeId);
@@ -115,7 +123,6 @@ namespace PaymentSystem.Adapter
                 _appDbContext.SaveChanges();
             }
         }
-
         public string AddServiceCharge(ServiceChargeCore serviceCharge)
         {
             var Id = Guid.NewGuid().ToString();
@@ -132,7 +139,6 @@ namespace PaymentSystem.Adapter
 
             return Id;
         }
-
         public void DeleteSalesReceiptBy(string salesReceiptId)
         {
             var salesReceipt = _appDbContext.SalesReceipts.FirstOrDefault(s => s.Id == salesReceiptId);
@@ -143,37 +149,7 @@ namespace PaymentSystem.Adapter
             }
         }
 
-
-        private EmpDbModel ToDbModel(EmpCore emp)
-        {
-            return new EmpDbModel
-            {
-                EmpId = emp.Id,
-                Name = emp.Name,
-                Address = emp.Address
-            };
-        }
-
-        private EmpCore ToCoreModel(EmpDbModel empDbModel)
-        {
-            var emp = new EmpCore(empDbModel.EmpId, this);
-            emp.InitialData(empDbModel.Name, empDbModel.Address);
-            return emp;
-        }
-
-        // DDD 重構
-
-        public void InjectData(EmpCore empCore)
-        {
-            var empDbModel = this._appDbContext.Emps.FirstOrDefault(e => e.EmpId == empCore.Id);
-            if (empDbModel != null)
-            {
-                empCore.InitialData(empDbModel.Name, empDbModel.Address);
-                return;
-            }
-
-            throw new InvalidDataException("Emp not found");
-        }
+        // Salary
 
         public void AddSalary(EmpSalaryCore amountCore)
         {
@@ -193,7 +169,6 @@ namespace PaymentSystem.Adapter
                 return;
             }
         }
-
         public EmpSalaryCore GetSalary(string empId)
         {
             var dbModel = this._appDbContext.Salaries
@@ -208,17 +183,14 @@ namespace PaymentSystem.Adapter
 
             return ToCoreModel(dbModel);
         }
-
         public IEnumerable<EmpSalaryCore> GetEmpSalaries()
         {
             return this._appDbContext.Salaries.ToList().Select(this.ToCoreModel);
         }
-
         private EmpSalaryCore ToCoreModel(SalaryDbModel source)
         {
             return new EmpSalaryCore(source.EmpId, source.Amount, (EmpSalaryCore.PayWayEnum)source.PayWay);
         }
-
         private SalaryDbModel ToDbModel(EmpSalaryCore amountCore)
         {
             return new SalaryDbModel
@@ -227,5 +199,13 @@ namespace PaymentSystem.Adapter
                 Amount = amountCore.Amount,
             };
         }
+
+        public void Dispose()
+        {
+            Console.WriteLine("Dispose");
+            this._appDbContext.SaveChanges();
+            this.Disposed = true;
+        }
+        public bool Disposed { get; private set; }  
     }
 }

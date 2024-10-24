@@ -50,6 +50,7 @@ namespace TestProject
             [v] 重新加入一筆銷售收據
             [v] 再加入一筆銷售收據
             [v] 薪水結算
+            [] 確認在最後有調用 repository 的 Dispose
              */
 
             // empService
@@ -62,7 +63,7 @@ namespace TestProject
             if (ASSERT)
             {
                 // 確認員工是否成功添加
-                var emp = empService.GetSingle(employee.Id);
+                var emp = empService.Rebuild(employee.Id);
                 Assert.That(emp.Id, Is.EqualTo(employee.Id));
             }
 
@@ -71,7 +72,7 @@ namespace TestProject
             if (ASSERT)
             {
                 // 確認修改是否正確
-                var emp = empService.GetSingle(employee.Id);
+                var emp = empService.Rebuild(employee.Id);
                 Assert.That(emp.Name, Is.EqualTo("Jane Smith"));
             }
 

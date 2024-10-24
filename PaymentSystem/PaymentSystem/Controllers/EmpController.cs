@@ -52,14 +52,15 @@ namespace PaymentSystem.Controllers
                 return this.View("Error", new ErrorViewModel { RequestId = empId });
             }
 
-            var chgem = EmpMapper.ToChgModel(this._emp.GetSingle(empId));
+            var chgem = EmpMapper.ToChgModel(this._emp.Rebuild(empId));
             return this.View(chgem);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ChgEmp(ChgEmpViewModel chgEmp)
         {
-            this._emp.ChgEmp(chgEmp.EmpId, chgEmp.Name, chgEmp.Address);
+            this._emp.ChgEmpName(chgEmp.EmpId, chgEmp.Name);
+                this._emp.ChgEmpName(chgEmp.EmpId, chgEmp.Address);
             return this.RedirectToAction(nameof(ChgEmp), new { empId = chgEmp.EmpId });
         }
 

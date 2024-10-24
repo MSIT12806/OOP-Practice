@@ -21,7 +21,7 @@ namespace PaymentSystem.Controllers
                 return this.View("Error", new ErrorViewModel { RequestId = empId });
             }
 
-            var datas =  this._emp.GetSingle(empId).GetSalesReceipts().Select(i=> SalesReceiptMapper.ToViewModel(i));
+            var datas =  this._emp.Rebuild(empId).GetSalesReceipts().Select(i=> SalesReceiptMapper.ToViewModel(i));
 
             var pageModel = new SalesReceiptQueryPage(empId, datas.ToList());
             return this.View(pageModel);

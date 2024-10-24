@@ -44,13 +44,13 @@ namespace PaymentSystem.Application.Payday
 
         public void SetSalary(EmpSalaryCore salaryCore)
         {
-            var core = _empRepository.GetSingle(salaryCore.EmpId);
+            var core = _empRepository.Rebuild(salaryCore.EmpId);
             core.SetSalary(salaryCore.Amount, salaryCore.PayWay);
         }
 
         public EmpSalaryCore GetEmpSalary(string empId)
         {
-            var core = _empRepository.GetSingle(empId);
+            var core = _empRepository.Rebuild(empId);
             return core.GetSalary();
         }
 

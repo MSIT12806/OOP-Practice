@@ -24,10 +24,16 @@ namespace PaymentSystem.Application.Emp
             this._empRepository.Add(emp);
         }
 
-        public void ChgEmp(string empId, string name, string address)
+        public void ChgEmpName(string empId, string name)
         {
-            var emp = new EmpCore(empId, this._empRepository);
-            emp.Update(name, address);
+            var emp = _empRepository.Rebuild(empId);
+            emp.UpdateName(name);
+        }
+
+        public void ChgEmpAddress(string empId, string address)
+        {
+            var emp = _empRepository.Rebuild(empId);
+            emp.UpdateAddress(address);
         }
 
 
@@ -36,9 +42,9 @@ namespace PaymentSystem.Application.Emp
             return this._empRepository.GetList();
         }
 
-        public EmpCore GetSingle(string empId)
+        public EmpCore Rebuild(string empId)
         {
-            return this._empRepository.GetSingle(empId);
+            return this._empRepository.Rebuild(empId);
         }
     }
 }
