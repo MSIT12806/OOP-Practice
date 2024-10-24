@@ -225,24 +225,26 @@ namespace TestProject
             }
 
             // 設定員工薪資
-            employee.SetSalary(1000, EmpSalaryCore.PayWayEnum.Monthly);
+            employee.SetSalary(10, EmpSalaryCore.PayWayEnum.Hourly);
             if (ASSERT)
             {
                 // 確認薪資是否正確
                 var salary = employee.GetSalary();
-                Assert.That(salary.Amount, Is.EqualTo(1000));
+                Assert.That(salary.Amount, Is.EqualTo(10));
+                Assert.That(salary.PayWay, Is.EqualTo(EmpSalaryCore.PayWayEnum.Hourly));
             }
 
             // 修改員工薪資
-            employee.SetSalary(2000, EmpSalaryCore.PayWayEnum.Monthly);
+            employee.SetSalary(20, EmpSalaryCore.PayWayEnum.Hourly);
             if (ASSERT)
             {
                 // 確認修改是否正確
                 var salary = employee.GetSalary();
-                Assert.That(salary.Amount, Is.EqualTo(2000));
+                Assert.That(salary.Amount, Is.EqualTo(20));
             }
 
             // 設定員工公會服務費
+            // TODO: 這邊要透過建模的方式，自動去限制不能為 時薪員工設定公會服務費
             string setviceChargeId = employee.AddServiceCharge(employee.Id, 100, DateOnly.FromDateTime(new DateTime(2021, 1, 1)));
             if (ASSERT)
             {
