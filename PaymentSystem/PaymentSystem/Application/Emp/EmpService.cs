@@ -12,16 +12,17 @@ namespace PaymentSystem.Application.Emp
             this._empRepository = empRepository;
         }
 
-        public EmpCore InstantiationEmp(string empId, string name, string address)
+        public EmpCore Build(string empId, string name, string address)
         {
             var emp = new EmpCore(empId, this._empRepository);
             emp.InitialData(name, address);
-
+            this._empRepository.Add(emp);
             return emp;
         }
-        public void AddEmp(EmpCore emp)
+
+        public EmpCore Rebuild(string empId)
         {
-            this._empRepository.Add(emp);
+            return this._empRepository.Rebuild(empId);
         }
 
         public void ChgEmpName(string empId, string name)
@@ -40,11 +41,6 @@ namespace PaymentSystem.Application.Emp
         public IEnumerable<EmpCore> GetList()
         {
             return this._empRepository.GetList();
-        }
-
-        public EmpCore Rebuild(string empId)
-        {
-            return this._empRepository.Rebuild(empId);
         }
     }
 }
