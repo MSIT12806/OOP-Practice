@@ -11,7 +11,7 @@ namespace PaymentSystem.Adapter.Payday
             _context = context;
         }
 
-        public void SetSalesReceipt(IEnumerable<PaydayCore> paydays)
+        public void SetSalesReceipt(IEnumerable<Payment> paydays)
         {
             var salesReceipts = _context.SalesReceipts.ToList();
 

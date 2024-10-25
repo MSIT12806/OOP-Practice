@@ -3,23 +3,25 @@
 
 
 
+using System.Configuration;
+
 namespace PaymentSystem.Models
 {
-    public class EmpCore
+    public abstract class Emp
     {
-        private IEmpRepository _repository;
+        protected IEmpRepository _repository;
         public string Id { get; }
         public string Name { get; private set; }
         public string Address { get; private set; }
 
 
-        public EmpCore(string id, IEmpRepository repository)
+        public Emp(string id, IEmpRepository repository)
         {
             this.Id = id;
             this._repository = repository;
         }
 
-        public void InitialData(string name , string address)
+        public void InitialData(string name, string address)
         {
             this.Name = name;
             this.Address = address;
@@ -45,7 +47,13 @@ namespace PaymentSystem.Models
             _repository.Update(this);
         }
 
-        // Salary
+        public abstract Payment Settle();
+    }
+    public class MounthlyEmployee : Emp
+    {
+        public MounthlyEmployee(string id, IEmpRepository repository) : base(id, repository)
+        {
+        }
 
         public void SetSalary(int amount, EmpSalaryCore.PayWayEnum payWay)
         {
@@ -58,26 +66,26 @@ namespace PaymentSystem.Models
             return _repository.GetSalary(this.Id);
         }
 
-        public PaydayCore Pay()
+        public override Payment Settle()
         {
             var salary = _repository.GetSalary(this.Id);
-            var salesReceipts = SalesReceipts;
-            var serviceCharge = _repository.GetServiceCharges(this.Id);
 
-            return new PaydayCore
+            return new Payment
             {
                 EmpId = this.Id,
                 Salary = salary.Amount,
-                SalesReceipt = salesReceipts.Sum(x => x.Commission),
-                ServiceCharge = serviceCharge.Sum(x => x.Amount)
             };
         }
-
-        // ServiceCharges
+    }
+    public class UnionEmployee : MounthlyEmployee
+    {
+        public UnionEmployee(string id, IEmpRepository repository) : base(id, repository)
+        {
+        }
 
         public IEnumerable<ServiceChargeCore> ServiceCharges => _repository.GetServiceCharges(this.Id);
 
-        public string AddServiceCharge(string id, int amount, DateOnly dateOnly)
+        public string SubmitServiceCharge(string id, int amount, DateOnly dateOnly)
         {
             var serviceCharge = new ServiceChargeCore
             {
@@ -95,7 +103,7 @@ namespace PaymentSystem.Models
             return db;
         }
 
-        public void DeleteServiceCharge(string setviceChargeId)
+        public void WithdrawServiceCharge(string setviceChargeId)
         {
             _repository.DeleteServiceChargeBy(setviceChargeId);
         }
@@ -105,7 +113,22 @@ namespace PaymentSystem.Models
             return _repository.GetServiceCharges(this.Id);
         }
 
-        // SalesReceipts
+        public override Payment Settle()
+        {
+            var salary = _repository.GetSalary(this.Id);
+
+            return new Payment
+            {
+                EmpId = this.Id,
+                Salary = salary.Amount - ServiceCharges.Sum(i=>i.Amount),
+            };
+        }
+    }
+    public class SalesEmployee : MounthlyEmployee
+    {
+        public SalesEmployee(string id, IEmpRepository repository) : base(id, repository)
+        {
+        }
 
         public IEnumerable<SalesReceiptCore> SalesReceipts => _repository.GetSalesReceipts(this.Id);
 

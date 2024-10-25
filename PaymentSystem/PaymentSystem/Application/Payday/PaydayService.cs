@@ -18,7 +18,7 @@ namespace PaymentSystem.Application.Payday
             this._empRepository = empRepository;
         }
 
-        public IEnumerable<PaydayCore> Pay(DateOnly date)
+        public IEnumerable<Payment> Pay(DateOnly date)
         {
             var recordes = _paydayRepopsitory.GetPayRecordsBy(date);
             if (recordes.Any())
@@ -33,9 +33,9 @@ namespace PaymentSystem.Application.Payday
             return paydays;
         }
 
-        private PaydayCore ToPaydayCore(EmpSalaryCore salaryCore)
+        private Payment ToPaydayCore(EmpSalaryCore salaryCore)
         {
-            return new PaydayCore
+            return new Payment
             {
                 EmpId = salaryCore.EmpId,
                 Salary = salaryCore.Amount,

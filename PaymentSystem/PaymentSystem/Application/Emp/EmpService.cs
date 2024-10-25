@@ -12,15 +12,15 @@ namespace PaymentSystem.Application.Emp
             this._empRepository = empRepository;
         }
 
-        public EmpCore Build(string empId, string name, string address)
+        public Models.Emp Build(string empId, string name, string address)
         {
-            var emp = new EmpCore(empId, this._empRepository);
+            var emp = new Models.Emp(empId, this._empRepository);
             emp.InitialData(name, address);
             this._empRepository.Add(emp);
             return emp;
         }
 
-        public EmpCore Rebuild(string empId)
+        public Models.Emp Rebuild(string empId)
         {
             return this._empRepository.Rebuild(empId);
         }
@@ -38,7 +38,7 @@ namespace PaymentSystem.Application.Emp
         }
 
 
-        public IEnumerable<EmpCore> GetList()
+        public IEnumerable<Models.Emp> GetList()
         {
             return this._empRepository.GetList();
         }

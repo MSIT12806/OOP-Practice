@@ -13,7 +13,7 @@ namespace PaymentSystem.Adapter.Payday
             this._service = serviceChargeService;
         }
 
-        public void SetServiceCharge(IEnumerable<PaydayCore> paydays)
+        public void SetServiceCharge(IEnumerable<Payment> paydays)
         {
             var serviceCharges = _service.GetList();
 

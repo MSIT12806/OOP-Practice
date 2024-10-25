@@ -4,7 +4,7 @@ namespace PaymentSystem.Adapter
 {
     public static class EmpMapper
     {
-        public static AddEmpViewModel ToAddModel(EmpCore emp)
+        public static AddEmpViewModel ToAddModel(Emp emp)
         {
             return new AddEmpViewModel
             {
@@ -14,7 +14,7 @@ namespace PaymentSystem.Adapter
             };
         }
 
-        public static ChgEmpViewModel ToChgModel(EmpCore emp)
+        public static ChgEmpViewModel ToChgModel(Emp emp)
         {
             return new ChgEmpViewModel
             {
@@ -38,7 +38,7 @@ namespace PaymentSystem.Adapter
         //    return core;
         //}
 
-        public static EmpQueryViewModel ToQueryModel(EmpCore core)
+        public static EmpQueryViewModel ToQueryModel(Emp core)
         {
             return new EmpQueryViewModel
             {

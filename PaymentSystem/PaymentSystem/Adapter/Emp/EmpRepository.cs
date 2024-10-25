@@ -18,12 +18,12 @@ namespace PaymentSystem.Adapter
         {
             this._appDbContext.Emps.Add(empDbModel);
         }
-        public void Add(EmpCore emp)
+        public void Add(Emp emp)
         {
             EmpDbModel empDbModel = this.ToDbModel(emp);
             this.AddEmp(empDbModel);
         }
-        public void Update(EmpCore empCore)
+        public void Update(Emp empCore)
         {
             EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empCore.Id);
 
@@ -31,15 +31,15 @@ namespace PaymentSystem.Adapter
             empDbModel.Address = empCore.Address;
             this._appDbContext.Emps.Update(empDbModel);
         }
-        public EmpCore Rebuild(string empId)
+        public Emp Rebuild(string empId)
         {
             EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empId);
 
             return this.ToCoreModel(empDbModel);
         }
-        public IEnumerable<EmpCore> GetList()
+        public IEnumerable<Emp> GetList()
         {
-            List<EmpCore> empList = new List<EmpCore>();
+            List<Emp> empList = new List<Emp>();
 
             foreach (EmpDbModel empDbModel in this._appDbContext.Emps)
             {
@@ -48,7 +48,7 @@ namespace PaymentSystem.Adapter
 
             return empList;
         }
-        private EmpDbModel ToDbModel(EmpCore emp)
+        private EmpDbModel ToDbModel(Emp emp)
         {
             return new EmpDbModel
             {
@@ -57,9 +57,9 @@ namespace PaymentSystem.Adapter
                 Address = emp.Address
             };
         }
-        private EmpCore ToCoreModel(EmpDbModel empDbModel)
+        private Emp ToCoreModel(EmpDbModel empDbModel)
         {
-            var emp = new EmpCore(empDbModel.EmpId, this);
+            var emp = new Emp(empDbModel.EmpId, this);
             emp.InitialData(empDbModel.Name, empDbModel.Address);
             return emp;
         }

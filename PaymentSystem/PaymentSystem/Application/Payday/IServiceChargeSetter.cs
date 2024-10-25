@@ -2,7 +2,7 @@
 {
     public interface IServiceChargeSetter
     {
-        void SetServiceCharge(IEnumerable<Models.PaydayCore> paydays);
+        void SetServiceCharge(IEnumerable<Models.Payment> paydays);
     }
 
 }

@@ -3,10 +3,10 @@ namespace PaymentSystem.Models
 {
     public interface IEmpRepository: IAsyncDisposable
     {
-        void Add(EmpCore emp);
-        IEnumerable<EmpCore> GetList();
-        EmpCore Rebuild(string empId);
-        void Update(EmpCore empCore);
+        void Add(Emp emp);
+        IEnumerable<Emp> GetList();
+        Emp Rebuild(string empId);
+        void Update(Emp empCore);
 
         string AddSalesReceipt(SalesReceiptCore salesReceipt);
         void DeleteSalesReceiptBy(string salesReceiptId);
