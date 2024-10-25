@@ -28,7 +28,7 @@ namespace PaymentSystem.Application.Payday
 
             var emps = this._empRepository.GetList();
 
-            var paydays = emps.Select(i=>i.Pay()).ToList();
+            var paydays = emps.Select(i=>i.Settle()).ToList();
 
             return paydays;
         }
@@ -44,13 +44,13 @@ namespace PaymentSystem.Application.Payday
 
         public void SetSalary(EmpSalaryCore salaryCore)
         {
-            var core = _empRepository.Rebuild(salaryCore.EmpId);
-            core.SetSalary(salaryCore.Amount, salaryCore.PayWay);
+            var core = _empRepository.Rebuild(salaryCore.EmpId) as MounthlyEmployee;
+            core.SetSalary(salaryCore.Amount);
         }
 
         public EmpSalaryCore GetEmpSalary(string empId)
         {
-            var core = _empRepository.Rebuild(empId);
+            var core = _empRepository.Rebuild(empId) as MounthlyEmployee;
             return core.GetSalary();
         }
 

@@ -1,13 +1,9 @@
-﻿namespace PaymentSystem.Models
+﻿using static PaymentSystem.Models.Emp;
+
+namespace PaymentSystem.Models
 {
     public class EmpSalaryCore
     {
-        public enum PayWayEnum
-        {
-            Monthly,
-            Hourly
-        }
-
         public EmpSalaryCore(string empId, int salary, PayWayEnum payWay)
         {
             EmpId = empId;

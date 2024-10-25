@@ -23,7 +23,7 @@ namespace PaymentSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddEmp(AddEmpViewModel addEmp)
         {
-            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address);
+            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address, Models.Emp.PayWayEnum.Monthly);
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }
 

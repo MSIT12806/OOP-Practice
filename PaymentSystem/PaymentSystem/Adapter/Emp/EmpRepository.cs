@@ -34,7 +34,6 @@ namespace PaymentSystem.Adapter
         public Emp Rebuild(string empId)
         {
             EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empId);
-
             return this.ToCoreModel(empDbModel);
         }
         public IEnumerable<Emp> GetList()
@@ -59,7 +58,7 @@ namespace PaymentSystem.Adapter
         }
         private Emp ToCoreModel(EmpDbModel empDbModel)
         {
-            var emp = new Emp(empDbModel.EmpId, this);
+            var emp = EmpFactory.Build(empDbModel.EmpId, empDbModel.Name, empDbModel.Address, empDbModel.PayWay, this);
             emp.InitialData(empDbModel.Name, empDbModel.Address);
             return emp;
         }
@@ -183,7 +182,7 @@ namespace PaymentSystem.Adapter
         }
         private EmpSalaryCore ToCoreModel(SalaryDbModel source)
         {
-            return new EmpSalaryCore(source.EmpId, source.Amount, (EmpSalaryCore.PayWayEnum)source.PayWay);
+            return new EmpSalaryCore(source.EmpId, source.Amount, (Emp.PayWayEnum)source.PayWay);
         }
         private SalaryDbModel ToDbModel(EmpSalaryCore amountCore)
         {

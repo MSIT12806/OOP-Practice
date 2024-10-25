@@ -3,7 +3,7 @@ using PaymentSystem.Models;
 
 namespace PaymentSystem.Application.Emp
 {
-    public class EmpService
+    public class EmpService : IAsyncDisposable
     {
         private IEmpRepository _empRepository;
 
@@ -12,11 +12,10 @@ namespace PaymentSystem.Application.Emp
             this._empRepository = empRepository;
         }
 
-        public Models.Emp Build(string empId, string name, string address)
+        public Models.Emp Build(string empId, string name, string address, Models.Emp.PayWayEnum payWay)
         {
-            var emp = new Models.Emp(empId, this._empRepository);
-            emp.InitialData(name, address);
-            this._empRepository.Add(emp);
+           var emp = EmpFactory.Build(empId, name, address, payWay, _empRepository);
+            _empRepository.Add(emp);
             return emp;
         }
 
@@ -41,6 +40,10 @@ namespace PaymentSystem.Application.Emp
         public IEnumerable<Models.Emp> GetList()
         {
             return this._empRepository.GetList();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
         }
     }
 }
