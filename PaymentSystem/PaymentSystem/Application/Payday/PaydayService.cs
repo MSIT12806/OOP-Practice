@@ -1,5 +1,6 @@
 ﻿using Humanizer;
 using PaymentSystem.Models;
+using PaymentSystem.Models.Payment;
 
 namespace PaymentSystem.Application.Payday
 {
@@ -8,17 +9,19 @@ namespace PaymentSystem.Application.Payday
         private IPaydayRepository _paydayRepopsitory;
         private IServiceChargeSetter _serviceChargeSetter;
         private ISalesReceiptSetter _salesReceiptSetter;
-        private IEmpRepository _empRepository;
+        private IPaymentRepository _empRepository;
+        private IEmpRepository empRepository1;
 
-        public PaydayService(IServiceChargeSetter serviceChargeGetter, IPaydayRepository paydayRepopsitory, ISalesReceiptSetter salesReceiptSetter, IEmpRepository empRepository)
+        public PaydayService(IServiceChargeSetter serviceChargeGetter, IPaydayRepository paydayRepopsitory, ISalesReceiptSetter salesReceiptSetter, IPaymentRepository paymentRepository, IEmpRepository empRepository)
         {
             this._serviceChargeSetter = serviceChargeGetter;
             this._paydayRepopsitory = paydayRepopsitory;
             this._salesReceiptSetter = salesReceiptSetter;
-            this._empRepository = empRepository;
+            this._empRepository = paymentRepository;
+            this.empRepository1 = empRepository;
         }
 
-        public IEnumerable<PaydayCore> Pay(DateOnly date)
+        public IEnumerable<Payroll> Pay(DateOnly date)
         {
             var recordes = _paydayRepopsitory.GetPayRecordsBy(date);
             if (recordes.Any())
@@ -26,16 +29,16 @@ namespace PaymentSystem.Application.Payday
                 throw new InvalidOperationException("Already paid");
             }
 
-            var emps = this._empRepository.GetList();
+            var emps = this.empRepository1.GetEmpIds();
 
-            var paydays = emps.Select(i=>i.Pay()).ToList();
+            var paydays = emps.Select(i=> this._empRepository.Rebuild(i).Settle()).ToList();
 
             return paydays;
         }
 
-        private PaydayCore ToPaydayCore(EmpSalaryCore salaryCore)
+        private Payroll ToPaydayCore(EmpSalaryCore salaryCore)
         {
-            return new PaydayCore
+            return new Payroll
             {
                 EmpId = salaryCore.EmpId,
                 Salary = salaryCore.Amount,
@@ -44,13 +47,13 @@ namespace PaymentSystem.Application.Payday
 
         public void SetSalary(EmpSalaryCore salaryCore)
         {
-            var core = _empRepository.Rebuild(salaryCore.EmpId);
-            core.SetSalary(salaryCore.Amount, salaryCore.PayWay);
+            var core = _empRepository.Rebuild(salaryCore.EmpId) as MounthlyEmployee;
+            core.SetSalary(salaryCore.Amount);
         }
 
         public EmpSalaryCore GetEmpSalary(string empId)
         {
-            var core = _empRepository.Rebuild(empId);
+            var core = _empRepository.Rebuild(empId) as MounthlyEmployee;
             return core.GetSalary();
         }
 

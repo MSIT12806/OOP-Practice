@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PaymentSystem.Adapter;
 using PaymentSystem.Adapter.Payday;
-using PaymentSystem.Application.Emp;
+using PaymentSystem.Application;
 using PaymentSystem.Application.Payday;
+using PaymentSystem.Application.ServiceCharge;
 using PaymentSystem.Models;
 
 public static class ServiceSetup

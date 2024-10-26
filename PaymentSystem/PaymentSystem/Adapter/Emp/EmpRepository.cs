@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PaymentSystem.Application.Emp;
 using PaymentSystem.Infrastructure.ORM;
 using PaymentSystem.Models;
+using PaymentSystem.Models.BasicDataMaintenece;
 
 namespace PaymentSystem.Adapter
 {
-    public class EmpRepository : IEmpRepository
+    public class EmpRepository : IEmpRepository, IAsyncDisposable
     {
         private AppDbContext _appDbContext;
 
@@ -14,191 +14,50 @@ namespace PaymentSystem.Adapter
         {
             this._appDbContext = appDbContext;
         }
-        private void AddEmp(EmpDbModel empDbModel)
+        public void Build(string empId, string name, string address)
         {
+            EmpDbModel empDbModel = new EmpDbModel
+            {
+                EmpId = empId,
+                Name = name,
+                Address = address
+            };
+
             this._appDbContext.Emps.Add(empDbModel);
         }
-        public void Add(EmpCore emp)
-        {
-            EmpDbModel empDbModel = this.ToDbModel(emp);
-            this.AddEmp(empDbModel);
-        }
-        public void Update(EmpCore empCore)
-        {
-            EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empCore.Id);
-
-            empDbModel.Name = empCore.Name;
-            empDbModel.Address = empCore.Address;
-            this._appDbContext.Emps.Update(empDbModel);
-        }
-        public EmpCore Rebuild(string empId)
+        public Employee Rebuild(string empId)
         {
             EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empId);
 
-            return this.ToCoreModel(empDbModel);
-        }
-        public IEnumerable<EmpCore> GetList()
-        {
-            List<EmpCore> empList = new List<EmpCore>();
-
-            foreach (EmpDbModel empDbModel in this._appDbContext.Emps)
+            return new Employee
             {
-                empList.Add(this.ToCoreModel(empDbModel));
-            }
-
-            return empList;
-        }
-        private EmpDbModel ToDbModel(EmpCore emp)
-        {
-            return new EmpDbModel
-            {
-                EmpId = emp.Id,
-                Name = emp.Name,
-                Address = emp.Address
+                Id = empDbModel.EmpId,
+                Name = empDbModel.Name,
+                Address = empDbModel.Address,
+                PayWay = empDbModel.PayWay
             };
         }
-        private EmpCore ToCoreModel(EmpDbModel empDbModel)
+        public IEnumerable<string> GetEmpIds()
         {
-            var emp = new EmpCore(empDbModel.EmpId, this);
-            emp.InitialData(empDbModel.Name, empDbModel.Address);
-            return emp;
+            return this._appDbContext.Emps.Select(e => e.EmpId).ToList();
+        }
+        public void ChgEmpName(string empId, string name)
+        {
+            var emp = this._appDbContext.Emps.First(e => e.EmpId == empId);
+            emp.Name = name;
         }
 
-        // SalesReceipt
-
-        public string AddSalesReceipt(SalesReceiptCore salesReceipt)
+        public void ChgEmpAddress(string empId, string address)
         {
-            var Id = Guid.NewGuid().ToString();
-
-            var dbData = _appDbContext.SalesReceipts.Add(new SalesReceiptDbModel
-            {
-                Id = Id,
-                EmpId = salesReceipt.EmpId,
-                SalesDate = salesReceipt.SalesDate,
-                Commission = salesReceipt.Commission
-            });
-
-            return Id;
+            var emp = this._appDbContext.Emps.First(e => e.EmpId == empId);
+            emp.Address = address;
         }
-        public IEnumerable<SalesReceiptCore> GetSalesReceipts(string empId)
-        {
-            List<SalesReceiptCore> salesReceiptList = new List<SalesReceiptCore>();
-
-            foreach (SalesReceiptDbModel salesReceiptDbModel in this._appDbContext.SalesReceipts.Where(s => s.EmpId == empId))
-            {
-                salesReceiptList.Add(new SalesReceiptCore
-                {
-                    Id = salesReceiptDbModel.Id,
-                    EmpId = salesReceiptDbModel.EmpId,
-                    SalesDate = salesReceiptDbModel.SalesDate,
-                    Commission = salesReceiptDbModel.Commission
-                });
-            }
-
-            return salesReceiptList;
-        }
-        public IEnumerable<ServiceChargeCore> GetServiceCharges(string empId)
-        {
-            List<ServiceChargeCore> serviceChargeList = new List<ServiceChargeCore>();
-
-            foreach (ServiceChargeDbModel serviceChargeDbModel in this._appDbContext.ServiceCharges.Where(s => s.EmpId == empId))
-            {
-                serviceChargeList.Add(new ServiceChargeCore
-                {
-                    Id = serviceChargeDbModel.ServiceChargeId,
-                    EmpId = serviceChargeDbModel.EmpId,
-                    Amount = serviceChargeDbModel.ServiceCharge,
-                    ApplyDate = serviceChargeDbModel.ApplyDate
-                });
-            }
-
-            return serviceChargeList;
-        }
-        public void DeleteServiceChargeBy(string serviceChargeId)
-        {
-            var serviceCharge = _appDbContext.ServiceCharges.FirstOrDefault(s => s.ServiceChargeId == serviceChargeId);
-            if (serviceCharge != null)
-            {
-                _appDbContext.ServiceCharges.Remove(serviceCharge);
-            }
-        }
-        public string AddServiceCharge(ServiceChargeCore serviceCharge)
-        {
-            var Id = Guid.NewGuid().ToString();
-
-            var dbData = _appDbContext.ServiceCharges.Add(new ServiceChargeDbModel
-            {
-                ServiceChargeId = Id,
-                EmpId = serviceCharge.EmpId,
-                ServiceCharge = serviceCharge.Amount,
-                ApplyDate = serviceCharge.ApplyDate
-            });
-
-            return Id;
-        }
-        public void DeleteSalesReceiptBy(string salesReceiptId)
-        {
-            var salesReceipt = _appDbContext.SalesReceipts.FirstOrDefault(s => s.Id == salesReceiptId);
-            if (salesReceipt != null)
-            {
-                _appDbContext.SalesReceipts.Remove(salesReceipt);
-            }
-        }
-
-        // Salary
-
-        public void AddSalary(EmpSalaryCore amountCore)
-        {
-            var dbModel = this._appDbContext.Salaries.SingleOrDefault(x => x.EmpId == amountCore.EmpId);
-            if (dbModel == null)
-            {
-                dbModel = this.ToDbModel(amountCore);
-                this._appDbContext.Salaries.Add(dbModel);
-                return;
-            }
-
-            if (this._appDbContext.Salaries.Any(x => x.EmpId == amountCore.EmpId))
-            {
-                this._appDbContext.Update(dbModel, this.ToDbModel(amountCore));
-                return;
-            }
-        }
-        public EmpSalaryCore GetSalary(string empId)
-        {
-            var dbModel = this._appDbContext.Salaries
-                .Where(x => x.EmpId == empId)
-                .OrderByDescending(i => i.CreateDatetime)
-                .FirstOrDefault();
-
-            if (dbModel == null)
-            {
-                throw new InvalidDataException("Salary not found");
-            }
-
-            return ToCoreModel(dbModel);
-        }
-        public IEnumerable<EmpSalaryCore> GetSalaries()
-        {
-            return this._appDbContext.Salaries.ToList().Select(this.ToCoreModel);
-        }
-        private EmpSalaryCore ToCoreModel(SalaryDbModel source)
-        {
-            return new EmpSalaryCore(source.EmpId, source.Amount, (EmpSalaryCore.PayWayEnum)source.PayWay);
-        }
-        private SalaryDbModel ToDbModel(EmpSalaryCore amountCore)
-        {
-            return new SalaryDbModel
-            {
-                EmpId = amountCore.EmpId,
-                Amount = amountCore.Amount,
-            };
-        }
-
 
         public async ValueTask DisposeAsync()
         {
             Console.WriteLine("Dispose");
             this._appDbContext.SaveChanges();
         }
+
     }
 }

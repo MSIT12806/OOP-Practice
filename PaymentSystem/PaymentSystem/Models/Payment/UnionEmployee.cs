@@ -1,8 +1,8 @@
-﻿namespace PaymentSystem.Models
+﻿namespace PaymentSystem.Models.Payment
 {
     public class UnionEmployee : MounthlyEmployee
     {
-        public UnionEmployee(string id, IEmpRepository repository) : base(id, repository)
+        public UnionEmployee(string id, IPaymentRepository repository) : base(id, repository)
         {
         }
 
@@ -36,11 +36,11 @@
             return _repository.GetServiceCharges(this.Id);
         }
 
-        public override Payment Settle()
+        public override Payroll Settle()
         {
             var salary = _repository.GetSalary(this.Id);
 
-            return new Payment
+            return new Payroll
             {
                 EmpId = this.Id,
                 Salary = salary.Amount - ServiceCharges.Sum(i => i.Amount),

@@ -1,4 +1,4 @@
-﻿namespace PaymentSystem.Application.Emp
+﻿namespace PaymentSystem.Application.ServiceCharge
 {
     public interface IEmpExistChecker
     {

@@ -1,14 +1,17 @@
-﻿namespace PaymentSystem.Models
+﻿
+using static PaymentSystem.Models.BasicDataMaintenece.Employee;
+
+namespace PaymentSystem.Models.Payment
 {
-    public class MounthlyEmployee : Emp
+    public class MounthlyEmployee : Employee
     {
-        public MounthlyEmployee(string id, IEmpRepository repository) : base(id, repository)
+        public MounthlyEmployee(string id, IPaymentRepository repository) : base(id, repository)
         {
         }
 
         public void SetSalary(int amount)
         {
-            var salary = new EmpSalaryCore(this.Id, amount, PayWayEnum.Monthly);
+            var salary = new EmpSalaryCore(this.Id, amount);
             _repository.AddSalary(salary);
         }
 
@@ -17,11 +20,11 @@
             return _repository.GetSalary(this.Id);
         }
 
-        public override Payment Settle()
+        public override Payroll Settle()
         {
             var salary = _repository.GetSalary(this.Id);
 
-            return new Payment
+            return new Payroll
             {
                 EmpId = this.Id,
                 Salary = salary.Amount,

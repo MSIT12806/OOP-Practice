@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentSystem.Adapter;
-using PaymentSystem.Application.Emp;
+using PaymentSystem.Application;
+using PaymentSystem.Models.Payment;
 using PaymentSystem.ViewModel;
 
 namespace PaymentSystem.Controllers
 {
     public class SalesReceiptController : Controller
     {
-        private EmpService _emp;
+        private PaymentService _service;
 
-        public SalesReceiptController(EmpService service)
+        public SalesReceiptController(PaymentService service)
         {
-            this._emp = service;
+            this._service = service;
         }
 
         public IActionResult Index(string empId)
@@ -21,7 +22,7 @@ namespace PaymentSystem.Controllers
                 return this.View("Error", new ErrorViewModel { RequestId = empId });
             }
 
-            var datas =  this._emp.Rebuild(empId).GetSalesReceipts().Select(i=> SalesReceiptMapper.ToViewModel(i));
+            var datas =  (this._service.Rebuild(empId) as SalesEmployee).GetSalesReceipts().Select(i=> SalesReceiptMapper.ToViewModel(i));
 
             var pageModel = new SalesReceiptQueryPage(empId, datas.ToList());
             return this.View(pageModel);

@@ -1,6 +1,6 @@
 ﻿using PaymentSystem.Models;
 
-namespace PaymentSystem.Application.Emp
+namespace PaymentSystem.Application.ServiceCharge
 {
     public class ServiceChargeService
     {

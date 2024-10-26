@@ -1,5 +1,5 @@
-﻿using PaymentSystem.Application.Emp;
-using PaymentSystem.Application.Payday;
+﻿using PaymentSystem.Application.Payday;
+using PaymentSystem.Application.ServiceCharge;
 using PaymentSystem.Models;
 
 namespace PaymentSystem.Adapter.Payday
@@ -13,7 +13,8 @@ namespace PaymentSystem.Adapter.Payday
             this._service = serviceChargeService;
         }
 
-        public void SetServiceCharge(IEnumerable<PaydayCore> paydays)
+
+        public void SetServiceCharge(IEnumerable<Payroll> paydays)
         {
             var serviceCharges = _service.GetList();
 

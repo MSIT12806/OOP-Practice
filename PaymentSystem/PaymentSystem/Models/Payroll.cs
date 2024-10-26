@@ -1,6 +1,6 @@
 ﻿namespace PaymentSystem.Models
 {
-    public class Payment
+    public class Payroll
     {
         public string EmpId { get; set; }
         public int Salary { get; set; }

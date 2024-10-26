@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentSystem.Adapter;
-using PaymentSystem.Application.Emp;
+using PaymentSystem.Application.ServiceCharge;
 
 namespace PaymentSystem.Controllers
 {

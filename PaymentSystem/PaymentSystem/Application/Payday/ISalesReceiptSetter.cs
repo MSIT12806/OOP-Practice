@@ -1,8 +1,10 @@
-﻿namespace PaymentSystem.Application.Payday
+﻿using PaymentSystem.Models;
+
+namespace PaymentSystem.Application.Payday
 {
     public interface ISalesReceiptSetter
     {
-        void SetSalesReceipt(IEnumerable<Models.PaydayCore> paydays);
+        void SetSalesReceipt(IEnumerable<Payroll> paydays);
     }
 
 }

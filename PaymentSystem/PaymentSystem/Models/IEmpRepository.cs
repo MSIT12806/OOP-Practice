@@ -1,23 +1,17 @@
 ﻿
+
+using PaymentSystem.Models.BasicDataMaintenece;
+
 namespace PaymentSystem.Models
 {
-    public interface IEmpRepository: IAsyncDisposable
+    public interface IEmpRepository 
     {
-        void Add(EmpCore emp);
-        IEnumerable<EmpCore> GetList();
-        EmpCore Rebuild(string empId);
-        void Update(EmpCore empCore);
+        void Build(string empId, string name, string address);
+        Employee Rebuild(string empId);
+        void ChgEmpName(string empId, string name);
+        void ChgEmpAddress(string empId, string address);
+        IEnumerable<string> GetEmpIds();
 
-        string AddSalesReceipt(SalesReceiptCore salesReceipt);
-        void DeleteSalesReceiptBy(string salesReceiptId);
-        IEnumerable<SalesReceiptCore> GetSalesReceipts(string empId);
 
-        void AddSalary(EmpSalaryCore amountCore);
-        IEnumerable<EmpSalaryCore> GetSalaries();
-        EmpSalaryCore GetSalary(string empId);
-
-        IEnumerable<ServiceChargeCore> GetServiceCharges(string id);
-        void DeleteServiceChargeBy(string setviceChargeId);
-        string AddServiceCharge(ServiceChargeCore serviceCharge);
     }
 }
