@@ -4,6 +4,7 @@ namespace PaymentSystem
 {
     public class Program
     {
+        public static bool IsDevelopment { get; set; } = true;
         public static void Main(string[] args)
         {
 
@@ -12,8 +13,11 @@ namespace PaymentSystem
             // Add services to the container.
             builder.Services.AddControllersWithViews(o =>
             {
-            // 使用防偽造中介軟體
-                o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                if (IsDevelopment)
+                {
+                    // 使用防偽造中介軟體
+                    o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                }
             });
 
 

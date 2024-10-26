@@ -9,9 +9,6 @@ namespace TestProject
 {
     public class EmpServiceTests : WebApplicationFactory<PaymentSystem.Program>
     {
-
-
-
         const bool ASSERT = true;
         const bool ARRANGE = true;
 
@@ -23,6 +20,7 @@ namespace TestProject
         [SetUp]
         public void Setup()
         {
+            PaymentSystem.Program.IsDevelopment = false;
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
