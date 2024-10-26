@@ -20,7 +20,6 @@ namespace PaymentSystem.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddEmp(AddEmpViewModel addEmp)
         {
             this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address);
@@ -33,7 +32,6 @@ namespace PaymentSystem.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DelEmp(DelEmpViewModel delEmp)
         {
             return this.RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""), new { empId = delEmp.EmpId });

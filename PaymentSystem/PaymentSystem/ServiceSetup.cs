@@ -18,6 +18,9 @@ public static class ServiceSetup
         services.AddTransient<IEmpRepository, EmpRepository>();
         services.AddTransient<EmpService, EmpService>();
 
+        // 加入 Payment 相關服務
+        services.AddTransient<IPaymentRepository, PaymentRepository>();
+
         // 加入 ServiceCharge 相關服務
         services.AddTransient<ServiceChargeService, ServiceChargeService>();
         services.AddTransient<IServiceChargeRepository, ServiceChargeRepository>();

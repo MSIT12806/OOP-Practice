@@ -1,12 +1,17 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using PaymentSystem.Application;
 using PaymentSystem.Controllers;
+using System.Text.RegularExpressions;
 
 namespace TestProject
 {
     public class EmpServiceTests : WebApplicationFactory<PaymentSystem.Program>
     {
+
+
+
         const bool ASSERT = true;
         const bool ARRANGE = true;
 
@@ -18,6 +23,14 @@ namespace TestProject
         [SetUp]
         public void Setup()
         {
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    ServiceSetup.RegisterService(services);
+                })
+                .Build();
+
+            _serviceProvider = host.Services;
         }
         /*
          * [v] AcceptanceMounthlyPaymentTest
@@ -52,7 +65,7 @@ namespace TestProject
             if (ARRANGE)
             {
                 var client = this.CreateClient();
-                var addEmpUrl = $"{domainName}/{nameof(EmpController).Replace("Controler", "")}/{nameof(EmpController.AddEmp)}";
+                var addEmpUrl = $"{domainName}/{nameof(EmpController).Replace("Controller", "")}/{nameof(EmpController.AddEmp)}";
                 var postData = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     { "EmpId", "AA" },
@@ -60,12 +73,14 @@ namespace TestProject
                     { "Address", "123 Main St" }
                 });
 
-                var result = await client.PostAsync(addEmpUrl, postData);
+                var _ = await client.PostAsync(addEmpUrl, postData);
                 if (ASSERT)
                 {
                     // 確認員工是否成功添加
                     var emp = empService.Rebuild("AA");
                     Assert.That(emp.Id, Is.EqualTo("AA"));
+                    Assert.That(emp.Name, Is.EqualTo("Jane Doe"));
+                    Assert.That(emp.Address, Is.EqualTo("123 Main St"));
                 }
             }
 

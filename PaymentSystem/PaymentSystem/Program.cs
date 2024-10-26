@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace PaymentSystem
 {
     public class Program
@@ -8,7 +10,11 @@ namespace PaymentSystem
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(o =>
+            {
+            // 使用防偽造中介軟體
+                o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
 
             //// 加入各種服務Start
