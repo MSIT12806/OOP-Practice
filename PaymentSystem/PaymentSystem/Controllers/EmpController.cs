@@ -43,12 +43,11 @@ namespace PaymentSystem.Controllers
             {
                 return this.View("Error", new ErrorViewModel { RequestId = empId });
             }
-
-            var chgem = EmpMapper.ToChgModel(this._emp.Rebuild(empId));
+            var emp = this._emp.Rebuild(empId);
+            var chgem = EmpMapper.ToChgModel(emp);
             return this.View(chgem);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChgEmp(ChgEmpViewModel chgEmp)
         {
             this._emp.ChgEmpName(chgEmp.EmpId, chgEmp.Name);

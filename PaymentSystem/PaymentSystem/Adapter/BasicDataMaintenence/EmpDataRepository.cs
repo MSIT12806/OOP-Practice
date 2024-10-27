@@ -43,12 +43,14 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
         {
             var emp = this._appDbContext.Emps.First(e => e.EmpId == empId);
             emp.Name = name;
+            this._appDbContext.Emps.Update(emp);
         }
 
         public void ChgEmpAddress(string empId, string address)
         {
             var emp = this._appDbContext.Emps.First(e => e.EmpId == empId);
             emp.Address = address;
+            this._appDbContext.Emps.Update(emp);
         }
 
         public async ValueTask DisposeAsync()

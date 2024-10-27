@@ -12,23 +12,12 @@ namespace TestProject
         const bool ASSERT = true;
         const bool ARRANGE = true;
 
-
-        private IServiceProvider _serviceProvider;
-
         const string systemPath = "C:\\RonGit\\OOP-Practice\\PaymentSystem\\PaymentSystem\\PaymentSystem.csproj";
         const string domainName = "https://localhost:7252";
         [SetUp]
         public void Setup()
         {
             PaymentSystem.Program.IsDevelopment = false;
-            var host = Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) =>
-                {
-                    ServiceSetup.RegisterService(services);
-                })
-                .Build();
-
-            _serviceProvider = host.Services;
         }
         /*
          * [v] AcceptanceMounthlyPaymentTest
@@ -43,26 +32,18 @@ namespace TestProject
              最複雜的操作案例：
             [v] 添加員工
             [v] 修改員工姓名
-            [v] 設定員工薪資《時薪》
+            [v] 設定員工薪資
             [v] 修改員工薪資
-            [v] 設定員工公會服務費
-            [v] 刪除員工公會服務費
-            [v] 重新設定員工公會服務費
-            [v] 再加入一筆公會服務費
-            [v] 加入一筆銷售收據
-            [v] 刪除一筆銷售收據
-            [v] 重新加入一筆銷售收據
-            [v] 再加入一筆銷售收據
             [v] 薪水結算
              */
 
+
             // empService
-            var empService = _serviceProvider.GetRequiredService<EmpDataService>();
+            var client = this.CreateClient();
 
             // 添加員工
             if (ARRANGE)
             {
-                var client = this.CreateClient();
                 var addEmpUrl = $"{domainName}/{nameof(EmpController).Replace("Controller", "")}/{nameof(EmpController.AddEmp)}";
                 var postData = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
@@ -71,25 +52,46 @@ namespace TestProject
                     { "Address", "123 Main St" }
                 });
 
-                var _ = await client.PostAsync(addEmpUrl, postData);
+                var response = await client.PostAsync(addEmpUrl, postData);
+                response.EnsureSuccessStatusCode();
                 if (ASSERT)
                 {
                     // 確認員工是否成功添加
-                    var emp = empService.Rebuild("AA");
-                    Assert.That(emp.Id, Is.EqualTo("AA"));
-                    Assert.That(emp.Name, Is.EqualTo("Jane Doe"));
-                    Assert.That(emp.Address, Is.EqualTo("123 Main St"));
+                    await using (var s = this.Services.CreateAsyncScope())
+                    {
+                        var empService = s.ServiceProvider.GetRequiredService<EmpDataService>();
+                        var emp = empService.Rebuild("AA");
+                        Assert.That(emp.Id, Is.EqualTo("AA"));
+                        Assert.That(emp.Name, Is.EqualTo("Jane Doe"));
+                        Assert.That(emp.Address, Is.EqualTo("123 Main St"));
+                    }
                 }
             }
 
-            // // 修改員工姓名
-            // employee.UpdateName( "Jane Smith");
-            // if (ASSERT)
-            // {
-            //     // 確認修改是否正確
-            //     var emp = empService.Rebuild(employee.Id);
-            //     Assert.That(emp.Name, Is.EqualTo("Jane Smith"));
-            // }
+            // 修改員工姓名
+            if (ARRANGE)
+            {
+                var updateEmpUrl = $"{domainName}/{nameof(EmpController).Replace("Controller", "")}/{nameof(EmpController.ChgEmp)}";
+                var postData = new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    { "EmpId", "AA" },
+                    { "Name", "Jane Smith" },
+                    { "Address", "123 Main St" }
+                });
+
+                var response = await client.PostAsync(updateEmpUrl, postData);
+                response.EnsureSuccessStatusCode();
+                if (ASSERT)
+                {
+                    // 確認修改是否正確
+                    await using(var s = this.Services.CreateAsyncScope())
+                    {
+                        var empService = s.ServiceProvider.GetRequiredService<EmpDataService>();
+                        var emp = empService.Rebuild("AA");
+                        Assert.That(emp.Name, Is.EqualTo("Jane Smith"));
+                    }
+                }
+            }
 
             // // 設定員工薪資
             // employee.SetSalary(1000, EmpSalaryCore.PayWayEnum.Monthly);

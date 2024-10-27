@@ -30,7 +30,7 @@ namespace PaymentSystem
             #region 基礎設定
 
             var app = builder.Build();
-
+            
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
