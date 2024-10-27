@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PaymentSystem.Application;
 
 namespace PaymentSystem.Controllers
 {
     public class PayController : PaymentControllerBase
     {
-        public PayController(PaydayService service) : base(service)
+        public PayController(PaymentService service) : base(service)
         {
         }
 

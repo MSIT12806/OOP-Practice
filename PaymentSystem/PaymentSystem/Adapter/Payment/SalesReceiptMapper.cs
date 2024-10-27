@@ -1,4 +1,5 @@
-﻿using PaymentSystem.Models;
+﻿using PaymentSystem.Adapter.Payment;
+using PaymentSystem.Models.Payment;
 
 namespace PaymentSystem.Adapter
 {

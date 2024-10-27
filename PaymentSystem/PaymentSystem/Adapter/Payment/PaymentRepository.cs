@@ -45,6 +45,11 @@ namespace PaymentSystem.Adapter.Payment
             return serviceChargeDbModel.ServiceChargeId;
         }
 
+        public void AddTimeCard(TimeCard timeCard)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteSalesReceiptBy(string salesReceiptId)
         {
 
@@ -77,6 +82,11 @@ namespace PaymentSystem.Adapter.Payment
         }
 
         public IEnumerable<ServiceCharge> GetServiceCharges(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TimeCard> GetTimeCards(string id)
         {
             throw new NotImplementedException();
         }

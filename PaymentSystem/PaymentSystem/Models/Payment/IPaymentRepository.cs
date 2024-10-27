@@ -15,5 +15,8 @@ namespace PaymentSystem.Models.Payment
         IEnumerable<ServiceCharge> GetServiceCharges(string id);
         void DeleteServiceChargeBy(string setviceChargeId);
         string AddServiceCharge(ServiceCharge serviceCharge);
+
+        IEnumerable<TimeCard> GetTimeCards(string id);
+        void AddTimeCard(TimeCard timeCard);
     }
 }

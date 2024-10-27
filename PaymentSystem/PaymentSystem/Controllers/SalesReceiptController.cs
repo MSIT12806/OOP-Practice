@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentSystem.Adapter;
+using PaymentSystem.Adapter.Payment;
 using PaymentSystem.Application;
 using PaymentSystem.Models.Payment;
 using PaymentSystem.ViewModel;
