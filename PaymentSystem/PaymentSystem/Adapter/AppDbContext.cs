@@ -13,19 +13,29 @@ namespace PaymentSystem.Adapter
 
         public DbSet<EmpDbModel> Emps { get; set; }
         public DbSet<ServiceChargeDbModel> ServiceCharges { get; set; }
-        public DbSet<SalaryDbModel> Salaries { get; set; }
+        public DbSet<CompensationAlterEventDbModel> CompensationAlterEvents { get; set; }
         public DbSet<SalesReceiptDbModel> SalesReceipts { get; set; }
         public DbSet<TimeCardDbModel> TimeCards { get; set; }
-        public DbSet<PayRecordDbModel> PayRecords { get; set; }
+        public DbSet<PaymentEventDbModel> PaymentEvents { get; set; }
+        public DbSet<PayrollDbModel> Payrolls { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             SetEmp(modelBuilder);
             SetServiceCharge(modelBuilder);
-            SetSalary(modelBuilder);
+            SetCompensationAlterEvent(modelBuilder);
             SetSalesReceipt(modelBuilder);
             SetTimeCard(modelBuilder);
-            SetPayRecord(modelBuilder);
+            SetPaymentEvent(modelBuilder);
+            SetPayroll(modelBuilder);
+        }
+
+        private void SetPaymentEvent(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PaymentEventDbModel>().HasKey(e => e.Id);
+            modelBuilder.Entity<PaymentEventDbModel>().Property(p => p.Id).IsRequired();
+            modelBuilder.Entity<PaymentEventDbModel>().Property(p => p.EmpId).IsRequired();
+            modelBuilder.Entity<PaymentEventDbModel>().Property(p => p.PayDate).IsRequired();
         }
 
         private static void SetEmp(ModelBuilder modelBuilder)
@@ -51,13 +61,13 @@ namespace PaymentSystem.Adapter
                 .WithMany()
                 .HasForeignKey(x => x.EmpId);
         }
-        private static void SetSalary(ModelBuilder modelBuilder)
+        private static void SetCompensationAlterEvent(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SalaryDbModel>().HasKey(e => e.EmpId);
-            modelBuilder.Entity<SalaryDbModel>()
+            modelBuilder.Entity<CompensationAlterEventDbModel>().HasKey(e => e.EmpId);
+            modelBuilder.Entity<CompensationAlterEventDbModel>()
                 .HasOne<EmpDbModel>()
                 .WithOne()
-                .HasForeignKey<SalaryDbModel>(x => x.EmpId);
+                .HasForeignKey<CompensationAlterEventDbModel>(x => x.EmpId);
         }
         private static void SetSalesReceipt(ModelBuilder modelBuilder)
         {
@@ -69,14 +79,14 @@ namespace PaymentSystem.Adapter
             modelBuilder.Entity<TimeCardDbModel>().HasKey(e => e.Id);
             modelBuilder.Entity<TimeCardDbModel>().HasIndex(e => e.EmpId);
         }
-        private static void SetPayRecord(ModelBuilder modelBuilder)
+        private static void SetPayroll(ModelBuilder modelBuilder)
         {
             // TODO: 思考：因為是 record，所以不要有任何 ForeignKey? 不想要被連帶刪除
-            modelBuilder.Entity<PayRecordDbModel>().HasKey(e => e.Id);
-            modelBuilder.Entity<PayRecordDbModel>().Property(p => p.Id).IsRequired();
-            modelBuilder.Entity<PayRecordDbModel>().Property(p => p.EmpId).IsRequired();
-            modelBuilder.Entity<PayRecordDbModel>().Property(p => p.PayDate).IsRequired();
-            modelBuilder.Entity<PayRecordDbModel>().Property(p => p.Amount).IsRequired();
+            modelBuilder.Entity<PayrollDbModel>().HasKey(e => e.Id);
+            modelBuilder.Entity<PayrollDbModel>().Property(p => p.Id).IsRequired();
+            modelBuilder.Entity<PayrollDbModel>().Property(p => p.EmpId).IsRequired();
+            modelBuilder.Entity<PayrollDbModel>().Property(p => p.PayDate).IsRequired();
+            modelBuilder.Entity<PayrollDbModel>().Property(p => p.Amount).IsRequired();
         }
 
         public TEntity Update<TEntity>(TEntity dbSource, TEntity updateObject) where TEntity : class

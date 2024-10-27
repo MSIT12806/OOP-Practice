@@ -12,13 +12,14 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
         {
             this._appDbContext = appDbContext;
         }
-        public void Build(string empId, string name, string address)
+        public void Build(string empId, string name, string address, Employee.PayWayEnum payWay)
         {
             EmpDbModel empDbModel = new EmpDbModel
             {
                 EmpId = empId,
                 Name = name,
-                Address = address
+                Address = address,
+                PayWay = payWay
             };
 
             this._appDbContext.Emps.Add(empDbModel);
@@ -58,5 +59,6 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
             Console.WriteLine("Dispose");
             this._appDbContext.SaveChanges();
         }
+
     }
 }

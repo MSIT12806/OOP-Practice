@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static PaymentSystem.Models.BasicDataMaintenece.Employee;
 
 namespace PaymentSystem.Adapter.BasicDataMaintenence
 {
@@ -12,5 +13,14 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
 
         [Required]
         public string Address { get; set; }
+
+        [Required]
+        public PayWayEnum PayWay { get; set; }
+
+        [Required]
+        public int Amount { get; set; }
+
+        [Required]
+        public DateOnly StartDate { get; set; }
     }
 }

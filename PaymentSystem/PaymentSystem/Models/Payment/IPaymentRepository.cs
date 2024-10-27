@@ -1,4 +1,5 @@
 ﻿
+
 namespace PaymentSystem.Models.Payment
 {
     public interface IPaymentRepository
@@ -18,5 +19,7 @@ namespace PaymentSystem.Models.Payment
 
         IEnumerable<TimeCard> GetTimeCards(string id);
         void AddTimeCard(TimeCard timeCard);
+        void AddPaymentEvent(string empId, DateOnly dateOnly, BasicDataMaintenece.Employee.PayWayEnum hourly);
+        void AddCompensationAlterEvent(string empId, int amount, DateOnly startDate, BasicDataMaintenece.Employee.PayWayEnum hourly);
     }
 }

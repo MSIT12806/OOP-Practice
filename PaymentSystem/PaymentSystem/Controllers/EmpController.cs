@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LH.Tool.Decoupling;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using PaymentSystem.Adapter.BasicDataMaintenence;
 using PaymentSystem.Application;
+using PaymentSystem.Application.Payment;
 using PaymentSystem.ViewModel;
 
 namespace PaymentSystem.Controllers
@@ -8,10 +11,12 @@ namespace PaymentSystem.Controllers
     public class EmpController : Controller
     {
         private EmpDataService _emp;
+        private PaymentService _payment;
 
-        public EmpController(EmpDataService service)
+        public EmpController(EmpDataService service, PaymentService paymentService)
         {
             this._emp = service;
+            this._payment = paymentService;
         }
 
         public async Task<IActionResult> AddEmp()
@@ -22,7 +27,10 @@ namespace PaymentSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEmp(AddEmpViewModel addEmp)
         {
-            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address);
+            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address, addEmp.PayWay, addEmp.Amount);
+
+            this._payment.Build(addEmp.EmpId, addEmp.Amount, addEmp.StartDate);
+
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }
 

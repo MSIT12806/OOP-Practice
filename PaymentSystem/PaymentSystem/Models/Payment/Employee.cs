@@ -1,4 +1,5 @@
 ﻿
+
 namespace PaymentSystem.Models.Payment
 {
     public abstract class Employee
@@ -15,6 +16,8 @@ namespace PaymentSystem.Models.Payment
 
         public abstract Payroll Settle();
 
-
+        public abstract void AddCompensationAlterEvent(int amount, DateOnly startDate);
+        public abstract void AddPaymentEvent(DateOnly payDate);
+        protected abstract DateOnly NextPayday(DateOnly createDate);
     }
 }

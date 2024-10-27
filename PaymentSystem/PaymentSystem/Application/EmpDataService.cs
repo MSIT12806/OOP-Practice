@@ -1,4 +1,5 @@
 ﻿using NuGet.Protocol.Core.Types;
+using PaymentSystem.Application.Payment;
 using PaymentSystem.Models;
 using PaymentSystem.Models.BasicDataMaintenece;
 
@@ -13,9 +14,9 @@ namespace PaymentSystem.Application
             this._empRepository = empRepository;
         }
 
-        public void Build(string empId, string name, string address)
+        public void Build(string empId, string name, string address, Employee.PayWayEnum payWay, int amount)
         {
-            _empRepository.Build(empId, name, address);
+            _empRepository.Build(empId, name, address, payWay);
         }
 
         public Employee Rebuild(string empId)
@@ -25,12 +26,12 @@ namespace PaymentSystem.Application
 
         public void ChgEmpName(string empId, string name)
         {
-           _empRepository.ChgEmpName(empId,name);
+            _empRepository.ChgEmpName(empId, name);
         }
 
         public void ChgEmpAddress(string empId, string address)
         {
-            _empRepository.ChgEmpAddress(empId,address);
+            _empRepository.ChgEmpAddress(empId, address);
         }
     }
 }

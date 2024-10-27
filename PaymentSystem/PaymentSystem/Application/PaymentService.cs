@@ -1,4 +1,5 @@
-﻿using PaymentSystem.Models;
+﻿using LH.Tool.Decoupling;
+using PaymentSystem.Models;
 using PaymentSystem.Models.Payment;
 
 namespace PaymentSystem.Application
@@ -19,6 +20,13 @@ namespace PaymentSystem.Application
         public Payroll Pay(DateOnly date)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void Build(string empId, int amount, DateOnly startDate)
+        {
+            var emp = this.Rebuild(empId);
+            emp.AddCompensationAlterEvent(amount, startDate);
+            emp.AddPaymentEvent(DateOnly.FromDateTime(DateProvider.Now));
         }
     }
 }

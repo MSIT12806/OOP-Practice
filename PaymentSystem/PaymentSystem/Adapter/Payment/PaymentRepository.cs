@@ -1,4 +1,5 @@
-﻿using PaymentSystem.Infrastructure.ORM;
+﻿using PaymentSystem.Application.Payment;
+using PaymentSystem.Infrastructure.ORM;
 using PaymentSystem.Models.Payment;
 
 namespace PaymentSystem.Adapter.Payment
@@ -12,15 +13,37 @@ namespace PaymentSystem.Adapter.Payment
             this._appDbContext = appDbContext;
         }
 
+        public void AddCompensationAlterEvent(string empId, int amount, DateOnly startDate, Models.BasicDataMaintenece.Employee.PayWayEnum hourly)
+        {
+            CompensationAlterEventDbModel compensationAlterEventDbModel = new CompensationAlterEventDbModel
+            {
+                EmpId = empId,
+                Amount = amount,
+                StartDate = startDate
+            };
+
+            this._appDbContext.CompensationAlterEvents.Add(compensationAlterEventDbModel);
+        }
+
+        public void AddPaymentEvent(string empId, DateOnly dateOnly, Models.BasicDataMaintenece.Employee.PayWayEnum hourly)
+        {
+            this._appDbContext.PaymentEvents.Add(new PaymentEventDbModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                EmpId = empId,
+                PayDate = dateOnly,
+            });
+        }
+
         public void AddSalary(EmpSalary amountCore)
         {
-            SalaryDbModel empSalaryDbModel = new SalaryDbModel
+            CompensationAlterEventDbModel empSalaryDbModel = new CompensationAlterEventDbModel
             {
                 EmpId = amountCore.EmpId,
                 Amount = amountCore.Amount
             };
 
-            this._appDbContext.Salaries.Add(empSalaryDbModel);
+            this._appDbContext.CompensationAlterEvents.Add(empSalaryDbModel);
         }
 
         public string AddSalesReceipt(SalesReceipt salesReceipt)
@@ -93,7 +116,8 @@ namespace PaymentSystem.Adapter.Payment
 
         public Models.Payment.Employee Rebuild(string empId)
         {
-            throw new NotImplementedException();
+            EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empId);
+            return EmpFactory.Build(empId, empDbModel.PayWay, this);
         }
     }
 }

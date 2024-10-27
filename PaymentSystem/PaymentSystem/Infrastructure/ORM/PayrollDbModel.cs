@@ -1,10 +1,10 @@
 ﻿namespace PaymentSystem.Infrastructure.ORM
 {
-    public class SalaryDbModel
+    public class PayrollDbModel
     {
+        public string Id { get; set; }
         public string EmpId { get; set; }
+        public DateOnly PayDate { get; set; }
         public int Amount { get; set; }
-        public int PayWay { get; set; }
-        public DateTime CreateDatetime { get; set; }
     }
 }

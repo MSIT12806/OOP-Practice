@@ -13,6 +13,7 @@ namespace PaymentSystem.Models.BasicDataMaintenece
         public PayWayEnum PayWay { get; internal set; }
         public enum PayWayEnum
         {
+            None,
             Monthly,
             Sales,
             Union,

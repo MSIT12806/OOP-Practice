@@ -5,6 +5,7 @@ namespace PaymentSystem
     public class Program
     {
         public static bool IsDevelopment { get; set; } = true;
+
         public static void Main(string[] args)
         {
 
