@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PaymentSystem.Adapter
+namespace PaymentSystem.Adapter.BasicDataMaintenence
 {
-    public record AddEmpViewModel
+    public record ChgEmpViewModel
     {
         [Required]
         public string EmpId { get; set; }

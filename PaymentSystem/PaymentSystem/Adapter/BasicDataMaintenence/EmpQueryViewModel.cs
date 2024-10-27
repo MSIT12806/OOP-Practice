@@ -1,4 +1,4 @@
-﻿namespace PaymentSystem.Adapter
+﻿namespace PaymentSystem.Adapter.BasicDataMaintenence
 {
     public class EmpQueryViewModel
     {

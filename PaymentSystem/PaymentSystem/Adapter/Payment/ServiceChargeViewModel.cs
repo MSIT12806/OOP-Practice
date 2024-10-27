@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-namespace PaymentSystem.Adapter
+namespace PaymentSystem.Adapter.Payment
 {
     public record ServiceChargeViewModel
     {

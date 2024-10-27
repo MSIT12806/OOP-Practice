@@ -1,4 +1,4 @@
-﻿namespace PaymentSystem.Models
+﻿namespace PaymentSystem.Models.Payment
 {
     public class Payroll
     {

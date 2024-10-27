@@ -1,6 +1,6 @@
-﻿namespace PaymentSystem.Models
+﻿namespace PaymentSystem.Models.Payment
 {
-    public class PayRecordCore
+    public class PayRecord
     {
         public string Id { get; set; }
         public string EmpId { get; set; }

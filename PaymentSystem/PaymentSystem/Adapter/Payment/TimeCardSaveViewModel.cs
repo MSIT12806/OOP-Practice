@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace PaymentSystem.Adapter.Payday
+namespace PaymentSystem.Adapter.Payment
 {
     public class TimeCardSaveViewModel : TimeCardViewModel
     {

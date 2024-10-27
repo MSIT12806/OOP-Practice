@@ -11,11 +11,11 @@ namespace PaymentSystem.Models.Payment
 
         public void SetSalary(int amount)
         {
-            var salary = new EmpSalaryCore(this.Id, amount);
+            var salary = new EmpSalary(this.Id, amount);
             _repository.AddSalary(salary);
         }
 
-        public EmpSalaryCore GetSalary()
+        public EmpSalary GetSalary()
         {
             return _repository.GetSalary(this.Id);
         }

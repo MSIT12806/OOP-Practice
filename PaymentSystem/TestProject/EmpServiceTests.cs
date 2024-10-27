@@ -57,7 +57,7 @@ namespace TestProject
              */
 
             // empService
-            var empService = _serviceProvider.GetRequiredService<EmpService>();
+            var empService = _serviceProvider.GetRequiredService<EmpDataService>();
 
             // 添加員工
             if (ARRANGE)

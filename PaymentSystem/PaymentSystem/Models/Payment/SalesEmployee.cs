@@ -6,11 +6,11 @@
         {
         }
 
-        public IEnumerable<SalesReceiptCore> SalesReceipts => _repository.GetSalesReceipts(this.Id);
+        public IEnumerable<SalesReceipt> SalesReceipts => _repository.GetSalesReceipts(this.Id);
 
         public string AddSalesReceipt(string id, DateOnly dateOnly, int commission)
         {
-            var salesReceipt = new SalesReceiptCore
+            var salesReceipt = new SalesReceipt
             {
                 EmpId = id,
                 SalesDate = dateOnly,
@@ -20,7 +20,7 @@
             return this._repository.AddSalesReceipt(salesReceipt);
         }
 
-        public IEnumerable<SalesReceiptCore> GetSalesReceipts()
+        public IEnumerable<SalesReceipt> GetSalesReceipts()
         {
             return this._repository.GetSalesReceipts(this.Id);
         }

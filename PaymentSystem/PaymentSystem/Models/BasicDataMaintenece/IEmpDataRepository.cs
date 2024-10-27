@@ -1,10 +1,8 @@
 ﻿
 
-using PaymentSystem.Models.BasicDataMaintenece;
-
-namespace PaymentSystem.Models
+namespace PaymentSystem.Models.BasicDataMaintenece
 {
-    public interface IEmpRepository 
+    public interface IEmpDataRepository 
     {
         void Build(string empId, string name, string address);
         Employee Rebuild(string empId);

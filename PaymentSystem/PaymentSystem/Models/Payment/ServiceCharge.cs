@@ -1,6 +1,6 @@
-﻿namespace PaymentSystem.Models
+﻿namespace PaymentSystem.Models.Payment
 {
-    public class ServiceChargeCore
+    public class ServiceCharge
     {
         public string Id { get; set; }
         public string EmpId { get; set; }

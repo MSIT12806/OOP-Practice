@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PaymentSystem.Adapter
+namespace PaymentSystem.Adapter.BasicDataMaintenence
 {
     public record DelEmpViewModel
     {

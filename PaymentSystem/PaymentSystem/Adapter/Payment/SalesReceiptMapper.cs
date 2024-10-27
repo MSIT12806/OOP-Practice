@@ -4,7 +4,7 @@ namespace PaymentSystem.Adapter
 {
     public static class SalesReceiptMapper
     {
-        public static SalesReceiptQueryViewModel ToViewModel(SalesReceiptCore receipt)
+        public static SalesReceiptQueryViewModel ToViewModel(SalesReceipt receipt)
         {
             return new SalesReceiptQueryViewModel
             {

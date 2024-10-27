@@ -16,5 +16,9 @@ namespace PaymentSystem.Application
             return this._paymentRepository.Rebuild(empId);
         }
 
+        public Payroll Pay(DateOnly date)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

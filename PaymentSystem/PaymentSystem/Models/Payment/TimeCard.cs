@@ -1,6 +1,6 @@
-﻿namespace PaymentSystem.Models
+﻿namespace PaymentSystem.Models.Payment
 {
-    public class TimeCardCore
+    public class TimeCard
     {
         public string EmpId { get; set; }
         public DateOnly WorkDate { get; set; }

@@ -4,11 +4,11 @@ using PaymentSystem.Models.BasicDataMaintenece;
 
 namespace PaymentSystem.Application
 {
-    public class EmpService
+    public class EmpDataService
     {
-        private IEmpRepository _empRepository;
+        private IEmpDataRepository _empRepository;
 
-        public EmpService(IEmpRepository empRepository)
+        public EmpDataService(IEmpDataRepository empRepository)
         {
             this._empRepository = empRepository;
         }

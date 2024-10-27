@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Adapter;
+using PaymentSystem.Adapter.BasicDataMaintenence;
 using PaymentSystem.Application;
 using PaymentSystem.ViewModel;
 
@@ -7,9 +7,9 @@ namespace PaymentSystem.Controllers
 {
     public class EmpController : Controller
     {
-        private EmpService _emp;
+        private EmpDataService _emp;
 
-        public EmpController(EmpService service)
+        public EmpController(EmpDataService service)
         {
             this._emp = service;
         }

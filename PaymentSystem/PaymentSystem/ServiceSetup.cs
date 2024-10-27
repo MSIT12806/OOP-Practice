@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PaymentSystem.Adapter;
-using PaymentSystem.Adapter.Payday;
+using PaymentSystem.Adapter.BasicDataMaintenence;
+using PaymentSystem.Adapter.Payment;
 using PaymentSystem.Application;
-using PaymentSystem.Application.Payday;
-using PaymentSystem.Application.ServiceCharge;
-using PaymentSystem.Models;
+using PaymentSystem.Models.BasicDataMaintenece;
+using PaymentSystem.Models.Payment;
 
 public static class ServiceSetup
 {
@@ -15,22 +15,15 @@ public static class ServiceSetup
         services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("InMemoryDb"));
 
         // 加入 Emp 相關服務
-        services.AddTransient<IEmpRepository, EmpRepository>();
-        services.AddTransient<EmpService, EmpService>();
+        services.AddTransient<IEmpDataRepository, EmpDataRepository>();
+        services.AddTransient<EmpDataService, EmpDataService>();
 
         // 加入 Payment 相關服務
         services.AddTransient<IPaymentRepository, PaymentRepository>();
 
         // 加入 ServiceCharge 相關服務
-        services.AddTransient<ServiceChargeService, ServiceChargeService>();
-        services.AddTransient<IServiceChargeRepository, ServiceChargeRepository>();
-        services.AddTransient<IEmpExistChecker, EmpExistChecker>();
 
         // 加入 Payday 相關服務
-        services.AddTransient<IPaydayRepository, PaydayRepository>();
-        services.AddTransient<IServiceChargeSetter, ServiceChargeSetter>();
-        services.AddTransient<ISalesReceiptSetter, SalesReceiptSetter>();
-        services.AddTransient<PaydayService, PaydayService>();
     }
 }
 

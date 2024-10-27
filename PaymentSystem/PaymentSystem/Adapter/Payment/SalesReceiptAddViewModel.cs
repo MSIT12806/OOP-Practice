@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PaymentSystem.Adapter
+namespace PaymentSystem.Adapter.Payment
 {
     public class SalesReceiptAddViewModel
     {

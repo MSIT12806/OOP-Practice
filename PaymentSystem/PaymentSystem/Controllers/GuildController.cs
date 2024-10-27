@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Adapter;
-using PaymentSystem.Application.ServiceCharge;
+using PaymentSystem.Adapter.Payment;
+using PaymentSystem.Application;
+using PaymentSystem.Models.Payment;
 
 namespace PaymentSystem.Controllers
 {
-    public class GuildController : Controller
+    public class GuildController : PaymentControllerBase
     {
-        private ServiceChargeService _service;
-
-        public GuildController(ServiceChargeService service)
+        public GuildController(PaymentService service) : base(service)
         {
-            this._service = service;
         }
+
         public IActionResult AddServiceCharge()
         {
             return this.View();
@@ -21,7 +20,8 @@ namespace PaymentSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddServiceCharge(ServiceChargeViewModel viewModel)
         {
-            this._service.AddServiceCharge(viewModel.EmpId, viewModel.Amount, viewModel.ChargeDate);
+            var emp = this.protectedPaymentService.Rebuild(viewModel.EmpId) as UnionEmployee;
+            emp.SubmitServiceCharge(viewModel.Amount,viewModel.ChargeDate);
             return this.RedirectToAction("Index", "Home");
         }
     }

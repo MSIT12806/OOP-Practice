@@ -2,7 +2,7 @@
 using PaymentSystem.Models;
 using PaymentSystem.Models.BasicDataMaintenece;
 
-namespace PaymentSystem.Adapter
+namespace PaymentSystem.Adapter.BasicDataMaintenence
 {
     public static class EmpMapper
     {

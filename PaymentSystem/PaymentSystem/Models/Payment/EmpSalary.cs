@@ -1,11 +1,11 @@
 ﻿using static PaymentSystem.Models.BasicDataMaintenece.Employee;
 
-namespace PaymentSystem.Models
+namespace PaymentSystem.Models.Payment
 {
-    public class EmpSalaryCore
+    public class EmpSalary
     {
 
-        public EmpSalaryCore(string empId, int salary)
+        public EmpSalary(string empId, int salary)
         {
             EmpId = empId;
             Amount = salary;
