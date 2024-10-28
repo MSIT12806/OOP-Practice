@@ -1,6 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Elfie.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
 using PaymentSystem.Infrastructure.ORM;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Xml;
 
 namespace PaymentSystem.Adapter
 {
@@ -9,9 +15,10 @@ namespace PaymentSystem.Adapter
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
+            Emps = new DbSetWithCache<EmpDbModel>(Set<EmpDbModel>(), i=>i.EmpId);
         }
-
-        public DbSet<EmpDbModel> Emps { get; set; }
+        public DbSetWithCache<EmpDbModel> Emps { get;  set; }
+        private DbSet<EmpDbModel> _Emps { get; set; } 
         public DbSet<ServiceChargeDbModel> ServiceCharges { get; set; }
         public DbSet<CompensationAlterEventDbModel> CompensationAlterEvents { get; set; }
         public DbSet<SalesReceiptDbModel> SalesReceipts { get; set; }
@@ -97,4 +104,42 @@ namespace PaymentSystem.Adapter
 
     }
 
+
+    public class DbSetWithCache<TEntity>:DbSet<TEntity> where TEntity : class
+    {
+        private readonly DbSet<TEntity> _dbSet;
+        private readonly ConcurrentDictionary<string, TEntity> _cache;
+
+        private readonly Func<TEntity, string> getKey;
+        public DbSetWithCache(DbSet<TEntity> dbSet, Func<TEntity,string> getIdFunc)
+        {
+            _dbSet = dbSet;
+            _cache = new ConcurrentDictionary<string, TEntity>();
+            getKey = getIdFunc;
+        }
+
+        public override IEntityType EntityType => _dbSet.EntityType;
+
+        // 包裝 Add 方法，將實體添加到字典中
+        public override EntityEntry<TEntity> Add(TEntity entity)
+        {
+            var key = getKey(entity);
+            _cache.TryAdd(key, entity);
+            return _dbSet.Add(entity);
+        }
+
+        // 查詢方法，先查字典再查資料庫
+        public TEntity FindById(string id)
+        {
+            if (_cache.TryGetValue(id, out TEntity cachedEntity))
+            {
+                return cachedEntity;
+            }
+
+            var entity = _dbSet.Find(id);
+            return entity;
+        }
+
+        // 其他需要的方法可以類似包裝
+    }
 }

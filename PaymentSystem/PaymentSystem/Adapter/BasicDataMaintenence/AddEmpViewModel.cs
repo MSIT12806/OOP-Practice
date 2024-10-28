@@ -15,7 +15,7 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
         public string Address { get; set; }
 
         [Required]
-        public PayWayEnum PayWay { get; set; }
+        public string PayWay { get; set; }
 
         [Required]
         public int Amount { get; set; }

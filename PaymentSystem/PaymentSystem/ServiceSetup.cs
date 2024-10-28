@@ -20,7 +20,7 @@ public static class ServiceSetup
 
         // 加入 Payment 相關服務
         services.AddScoped<IPaymentRepository, PaymentRepository>();
-
+        services.AddScoped<PaymentService, PaymentService>();
         // 加入 ServiceCharge 相關服務
 
         // 加入 Payday 相關服務

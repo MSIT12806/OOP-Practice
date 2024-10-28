@@ -107,7 +107,7 @@ namespace PaymentSystem.Adapter.Payment
 
         public Employee Rebuild(string empId)
         {
-            EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empId);
+            EmpDbModel empDbModel = this._appDbContext.Emps.FindById(empId);
             Type type = null;
             switch (empDbModel.PayWay)
             {

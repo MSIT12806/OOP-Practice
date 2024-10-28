@@ -13,7 +13,7 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
         {
             this._appDbContext = appDbContext;
         }
-        public void Build(string empId, string name, string address, Employee.PayWayEnum payWay)
+        public void Build(string empId, string name, string address, string payWay)
         {
             EmpDbModel empDbModel = new EmpDbModel
             {
@@ -27,14 +27,14 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
         }
         public Employee Rebuild(string empId)
         {
-            EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empId);
+            EmpDbModel empDbModel = this._appDbContext.Emps.FindById( empId);
 
             return new Employee
             {
                 Id = empDbModel.EmpId,
                 Name = empDbModel.Name,
                 Address = empDbModel.Address,
-                PayWay = Enum.Parse<PayWayEnum>(empDbModel.PayWay)
+                PayWay = empDbModel.PayWay
             };
         }
         public IEnumerable<string> GetEmpIds()
@@ -43,14 +43,14 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
         }
         public void ChgEmpName(string empId, string name)
         {
-            var emp = this._appDbContext.Emps.First(e => e.EmpId == empId);
+            var emp = this._appDbContext.Emps.FindById(empId);
             emp.Name = name;
             this._appDbContext.Emps.Update(emp);
         }
 
         public void ChgEmpAddress(string empId, string address)
         {
-            var emp = this._appDbContext.Emps.First(e => e.EmpId == empId);
+            var emp = this._appDbContext.Emps.FindById(empId);
             emp.Address = address;
             this._appDbContext.Emps.Update(emp);
         }

@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Payment.Application;
+using Payment.Models.Payment;
+using PaymentSystem.Adapter.BasicDataMaintenence;
 using PaymentSystem.Controllers;
+using static Payment.Models.BasicDataMaintenece.Employee;
 
 namespace TestProject
 {
@@ -45,9 +48,11 @@ namespace TestProject
                 var addEmpUrl = $"{domainName}/{nameof(EmpController).Replace("Controller", "")}/{nameof(EmpController.AddEmp)}";
                 var postData = new FormUrlEncodedContent(new Dictionary<string, string>
                 {
-                    { "EmpId", "AA" },
-                    { "Name", "Jane Doe" },
-                    { "Address", "123 Main St" }
+                    { nameof(AddEmpViewModel.EmpId), "AA" },
+                    { nameof(AddEmpViewModel.Name), "Jane Doe" },
+                    { nameof(AddEmpViewModel.Address), "123 Main St" },
+                    {nameof(AddEmpViewModel.PayWay), nameof(MounthlyEmployee) },
+                    {nameof(AddEmpViewModel.StartDate), new DateTime(2024,1,1).ToString() },
                 });
 
                 var response = await client.PostAsync(addEmpUrl, postData);
