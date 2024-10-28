@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Application;
+﻿using LH.Tool.Decoupling;
+using Microsoft.AspNetCore.Mvc;
+using Payment.Application;
 
 namespace PaymentSystem.Controllers
 {
@@ -16,7 +17,7 @@ namespace PaymentSystem.Controllers
 
         public IActionResult PayResult()
         {
-            var result = protectedPaymentService.Pay(DateOnly.FromDateTime(DateTime.Now));
+            var result = protectedPaymentService.Pay(DateProvider.Now);
             return View(result);
         }
     }

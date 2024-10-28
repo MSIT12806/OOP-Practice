@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Payment.Application;
+using Payment.Models.Payment;
 using PaymentSystem.Adapter.Payment;
-using PaymentSystem.Application;
-using PaymentSystem.Models.Payment;
 
 namespace PaymentSystem.Controllers
 {
@@ -22,7 +22,7 @@ namespace PaymentSystem.Controllers
         public IActionResult SetSalary(SalarySaveViewModel vm)
         {
             var emp = protectedPaymentService.Rebuild(vm.EmpId) as MounthlyEmployee;
-            emp.SetSalary(vm.Salary);
+            emp.SetSalary(vm.Salary, vm.StartDate.ToDateTime(TimeOnly.MinValue));
 
             return RedirectToAction(nameof(EmpController.ChgEmp), nameof(EmpController).Replace("Controller", ""));
         }

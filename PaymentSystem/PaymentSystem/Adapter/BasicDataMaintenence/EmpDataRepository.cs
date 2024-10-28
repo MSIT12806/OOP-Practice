@@ -1,5 +1,6 @@
-﻿using PaymentSystem.Infrastructure.ORM;
-using PaymentSystem.Models.BasicDataMaintenece;
+﻿using Payment.Models.BasicDataMaintenece;
+using PaymentSystem.Infrastructure.ORM;
+using static Payment.Models.BasicDataMaintenece.Employee;
 
 namespace PaymentSystem.Adapter.BasicDataMaintenence
 {
@@ -19,7 +20,7 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
                 EmpId = empId,
                 Name = name,
                 Address = address,
-                PayWay = payWay
+                PayWay = payWay.ToString()
             };
 
             this._appDbContext.Emps.Add(empDbModel);
@@ -33,7 +34,7 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
                 Id = empDbModel.EmpId,
                 Name = empDbModel.Name,
                 Address = empDbModel.Address,
-                PayWay = empDbModel.PayWay
+                PayWay = Enum.Parse<PayWayEnum>(empDbModel.PayWay)
             };
         }
         public IEnumerable<string> GetEmpIds()

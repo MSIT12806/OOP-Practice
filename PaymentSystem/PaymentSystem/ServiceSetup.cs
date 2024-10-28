@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Payment.Application;
+using Payment.Models.BasicDataMaintenece;
+using Payment.Models.Payment;
 using PaymentSystem.Adapter;
 using PaymentSystem.Adapter.BasicDataMaintenence;
 using PaymentSystem.Adapter.Payment;
-using PaymentSystem.Application;
-using PaymentSystem.Models.BasicDataMaintenece;
-using PaymentSystem.Models.Payment;
 
 public static class ServiceSetup
 {

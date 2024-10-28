@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PaymentSystem.Models.Payment.Payroll>
+﻿@model IEnumerable<PaymentSystem.Adapter.Payment.PayrollViewModel>
 
 @{
     ViewData["Title"] = "PayResult";
@@ -18,15 +18,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Salary)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ServiceCharge)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SalesReceipt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShouldPay)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -39,15 +30,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Salary)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ServiceCharge)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SalesReceipt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ShouldPay)
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

@@ -6,6 +6,4 @@
         public DateOnly WorkDate { get; set; }
         public int Hours { get; set; }
     }
-
-
 }

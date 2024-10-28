@@ -10,10 +10,10 @@ namespace Payment.Models.Payment
         {
         }
 
-        public void SetSalary(int amount)
+        public void SetSalary(int amount, DateTime dateTime)
         {
             var salary = new EmpSalary(this.Id, amount);
-            _repository.AddSalary(salary);
+            _repository.AddCompensationAlterEvent(this.Id, amount, dateTime, nameof(MounthlyEmployee));
         }
 
         public EmpSalary GetSalary()

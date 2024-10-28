@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Payment.Application;
+using Payment.Models.Payment;
 using PaymentSystem.Adapter;
 using PaymentSystem.Adapter.Payment;
-using PaymentSystem.Application;
-using PaymentSystem.Models.Payment;
 using PaymentSystem.ViewModel;
 
 namespace PaymentSystem.Controllers

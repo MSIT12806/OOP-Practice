@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using PaymentSystem.Application;
+using Payment.Application;
 using PaymentSystem.Controllers;
-using System.Text.RegularExpressions;
 
 namespace TestProject
 {

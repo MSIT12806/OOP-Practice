@@ -2,8 +2,9 @@
 {
     public class CompensationAlterEventDbModel
     {
-        public string EmpId { get; set; }
-        public int Amount { get; set; }
-        public DateOnly StartDate { get; set; }
+        public string EmpId { get; internal set; }
+        public int Amount { get; internal set; }
+        public DateOnly StartDate { get; internal set; }
+        public string CompensationType { get; internal set; }
     }
 }

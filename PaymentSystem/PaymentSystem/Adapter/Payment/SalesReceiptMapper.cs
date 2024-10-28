@@ -1,5 +1,5 @@
-﻿using PaymentSystem.Adapter.Payment;
-using PaymentSystem.Models.Payment;
+﻿using Payment.Models.Payment;
+using PaymentSystem.Adapter.Payment;
 
 namespace PaymentSystem.Adapter
 {
@@ -10,7 +10,7 @@ namespace PaymentSystem.Adapter
             return new SalesReceiptQueryViewModel
             {
                 Id = receipt.Id,
-                SalesDate = receipt.SalesDate.ToDateTime(TimeOnly.MinValue),
+                SalesDate = receipt.SalesDate,
                 Commission = receipt.Commission
             };
         }

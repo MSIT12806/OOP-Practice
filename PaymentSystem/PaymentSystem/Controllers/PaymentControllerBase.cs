@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Application;
+using Payment.Application;
 
 namespace PaymentSystem.Controllers
 {

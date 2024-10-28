@@ -26,7 +26,7 @@ namespace PaymentSystem.Controllers
         {
             this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address, addEmp.PayWay, addEmp.Amount);
 
-            this._payment.Build(addEmp.EmpId, addEmp.Amount, addEmp.StartDate);
+            this._payment.Build(addEmp.EmpId, addEmp.Amount, addEmp.StartDate.ToDateTime(TimeOnly.MinValue));
 
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }

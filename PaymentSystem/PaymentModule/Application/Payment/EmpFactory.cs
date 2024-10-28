@@ -5,7 +5,7 @@ namespace Payment.Application.Payment
 {
     public static class EmpFactory
     {
-        public static Employee Build(string empId, string name, string address, Type EmployeeType, IPaymentRepository repository)
+        public static Employee Build(string empId, Type EmployeeType, IPaymentRepository repository)
         {
             Employee emp = null;
             switch (EmployeeType.Name)

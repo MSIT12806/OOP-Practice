@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using static PaymentSystem.Models.BasicDataMaintenece.Employee;
+﻿using static Payment.Models.BasicDataMaintenece.Employee;
 
 namespace PaymentSystem.Infrastructure.ORM
 {
@@ -11,6 +10,6 @@ namespace PaymentSystem.Infrastructure.ORM
 
         public string Address { get; internal set; }
 
-        public PayWayEnum PayWay { get; internal set; }
+        public string PayWay { get; internal set; }
     }
 }

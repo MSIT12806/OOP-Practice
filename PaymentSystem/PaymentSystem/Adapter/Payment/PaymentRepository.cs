@@ -1,6 +1,6 @@
-﻿using PaymentSystem.Application.Payment;
+﻿using Payment.Application.Payment;
+using Payment.Models.Payment;
 using PaymentSystem.Infrastructure.ORM;
-using PaymentSystem.Models.Payment;
 
 namespace PaymentSystem.Adapter.Payment
 {
@@ -13,37 +13,28 @@ namespace PaymentSystem.Adapter.Payment
             this._appDbContext = appDbContext;
         }
 
-        public void AddCompensationAlterEvent(string empId, int amount, DateOnly startDate, Models.BasicDataMaintenece.Employee.PayWayEnum hourly)
+        public void AddCompensationAlterEvent(string empId, int amount, DateTime startDate, string compensationType)
         {
             CompensationAlterEventDbModel compensationAlterEventDbModel = new CompensationAlterEventDbModel
             {
                 EmpId = empId,
                 Amount = amount,
-                StartDate = startDate
+                StartDate = DateOnly.FromDateTime(startDate),
+                CompensationType = compensationType
             };
 
             this._appDbContext.CompensationAlterEvents.Add(compensationAlterEventDbModel);
         }
 
-        public void AddPaymentEvent(string empId, DateOnly dateOnly, Models.BasicDataMaintenece.Employee.PayWayEnum hourly)
+        public void AddPaymentEvent(string empId, DateTime dateOnly, string compensationType)
         {
             this._appDbContext.PaymentEvents.Add(new PaymentEventDbModel
             {
                 Id = Guid.NewGuid().ToString(),
                 EmpId = empId,
-                PayDate = dateOnly,
+                PayDate = DateOnly.FromDateTime(dateOnly),
+                CompensationType = compensationType
             });
-        }
-
-        public void AddSalary(EmpSalary amountCore)
-        {
-            CompensationAlterEventDbModel empSalaryDbModel = new CompensationAlterEventDbModel
-            {
-                EmpId = amountCore.EmpId,
-                Amount = amountCore.Amount
-            };
-
-            this._appDbContext.CompensationAlterEvents.Add(empSalaryDbModel);
         }
 
         public string AddSalesReceipt(SalesReceipt salesReceipt)
@@ -75,7 +66,7 @@ namespace PaymentSystem.Adapter.Payment
 
         public void DeleteSalesReceiptBy(string salesReceiptId)
         {
-
+            throw new NotImplementedException();
         }
 
         public void DeleteServiceChargeBy(string setviceChargeId)
@@ -114,10 +105,32 @@ namespace PaymentSystem.Adapter.Payment
             throw new NotImplementedException();
         }
 
-        public Models.Payment.Employee Rebuild(string empId)
+        public Employee Rebuild(string empId)
         {
             EmpDbModel empDbModel = this._appDbContext.Emps.First(e => e.EmpId == empId);
-            return EmpFactory.Build(empId, empDbModel.PayWay, this);
+            Type type = null;
+            switch (empDbModel.PayWay)
+            {
+                case nameof(HourlyEmployee):
+                    type = typeof(HourlyEmployee);
+                    break;
+
+                case nameof(MounthlyEmployee):
+                    type = typeof(MounthlyEmployee);
+                    break;
+
+                case nameof(SalesEmployee):
+                    type = typeof(SalesEmployee);
+                    break;
+
+                case nameof(UnionEmployee):
+                    type = typeof(UnionEmployee);
+                    break;
+
+                default:
+                    throw new ArgumentException("Invalid employee type", empId);
+            }
+            return EmpFactory.Build(empId, type, this);
         }
     }
 }

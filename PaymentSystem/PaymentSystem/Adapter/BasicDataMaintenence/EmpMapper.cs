@@ -1,6 +1,4 @@
-﻿using PaymentSystem.Infrastructure.ORM;
-using PaymentSystem.Models;
-using PaymentSystem.Models.BasicDataMaintenece;
+﻿using Payment.Models.BasicDataMaintenece;
 
 namespace PaymentSystem.Adapter.BasicDataMaintenence
 {

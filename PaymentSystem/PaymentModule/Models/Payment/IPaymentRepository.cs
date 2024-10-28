@@ -12,7 +12,6 @@ namespace Payment.Models.Payment
         void DeleteSalesReceiptBy(string salesReceiptId);
         IEnumerable<SalesReceipt> GetSalesReceipts(string empId);
 
-        void AddSalary(EmpSalary amountCore);
         IEnumerable<EmpSalary> GetSalaries();
         EmpSalary GetSalary(string empId);
 

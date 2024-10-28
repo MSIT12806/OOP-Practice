@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Payment.Application;
+using Payment.Models.Payment;
 using PaymentSystem.Adapter.Payment;
-using PaymentSystem.Application;
-using PaymentSystem.Models.Payment;
 
 namespace PaymentSystem.Controllers
 {
@@ -21,7 +21,7 @@ namespace PaymentSystem.Controllers
         public IActionResult AddServiceCharge(ServiceChargeViewModel viewModel)
         {
             var emp = this.protectedPaymentService.Rebuild(viewModel.EmpId) as UnionEmployee;
-            emp.SubmitServiceCharge(viewModel.Amount,viewModel.ChargeDate);
+            emp.SubmitServiceCharge(viewModel.Amount,viewModel.ChargeDate.ToDateTime(TimeOnly.MinValue));
             return this.RedirectToAction("Index", "Home");
         }
     }
