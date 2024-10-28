@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Adapter.Payday;
-using PaymentSystem.Application.Payday;
+using PaymentSystem.Application;
+using PaymentSystem.Models.Payment;
 using PaymentSystem.ViewModel;
 
 namespace PaymentSystem.Controllers
 {
-    public class TimeCardController : PayControllerBase
+    public class TimeCardController : PaymentControllerBase
     {
-        public TimeCardController(PaydayService service) : base(service)
+        public TimeCardController(PaymentService service) : base(service)
         {
         }
 
@@ -18,21 +18,8 @@ namespace PaymentSystem.Controllers
                 return this.View("Error", new ErrorViewModel { RequestId = empId });
             }
 
-            var timeCards = protectedPaydayService.GetTimeCards(empId);
-            return View(timeCards);
-        }
-
-        public IActionResult SaveTimeCard(string timeCardId)
-        {
-            var saveVM = protectedPaydayService.GetTimeCard(timeCardId);
-            return View(saveVM);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult SaveTimeCard(TimeCardSaveViewModel vm)
-        {
-            return RedirectToAction(nameof(TimeCardController.Index), new { empId = vm.EmpId });
+            var emp = protectedPaymentService.Rebuild(empId) as HourlyEmployee;
+            return View(emp.TimeCards);
         }
     }
 }

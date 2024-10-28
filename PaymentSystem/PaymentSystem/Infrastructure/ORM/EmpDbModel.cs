@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static PaymentSystem.Models.Emp;
+using static PaymentSystem.Models.BasicDataMaintenece.Employee;
 
 namespace PaymentSystem.Infrastructure.ORM
 {

@@ -1,17 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Adapter;
-using PaymentSystem.Application.Emp;
+﻿using LH.Tool.Decoupling;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using PaymentSystem.Adapter.BasicDataMaintenence;
+using PaymentSystem.Application;
+using PaymentSystem.Application.Payment;
 using PaymentSystem.ViewModel;
 
 namespace PaymentSystem.Controllers
 {
     public class EmpController : Controller
     {
-        private EmpService _emp;
+        private EmpDataService _emp;
+        private PaymentService _payment;
 
-        public EmpController(EmpService service)
+        public EmpController(EmpDataService service, PaymentService paymentService)
         {
             this._emp = service;
+            this._payment = paymentService;
         }
 
         public async Task<IActionResult> AddEmp()
@@ -20,10 +25,12 @@ namespace PaymentSystem.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddEmp(AddEmpViewModel addEmp)
         {
-            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address, Models.Emp.PayWayEnum.Monthly);
+            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address, addEmp.PayWay, addEmp.Amount);
+
+            this._payment.Build(addEmp.EmpId, addEmp.Amount, addEmp.StartDate);
+
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }
 
@@ -33,7 +40,6 @@ namespace PaymentSystem.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DelEmp(DelEmpViewModel delEmp)
         {
             return this.RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""), new { empId = delEmp.EmpId });
@@ -45,12 +51,11 @@ namespace PaymentSystem.Controllers
             {
                 return this.View("Error", new ErrorViewModel { RequestId = empId });
             }
-
-            var chgem = EmpMapper.ToChgModel(this._emp.Rebuild(empId));
+            var emp = this._emp.Rebuild(empId);
+            var chgem = EmpMapper.ToChgModel(emp);
             return this.View(chgem);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChgEmp(ChgEmpViewModel chgEmp)
         {
             this._emp.ChgEmpName(chgEmp.EmpId, chgEmp.Name);

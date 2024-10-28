@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Application.Payday;
+using PaymentSystem.Application;
 
 namespace PaymentSystem.Controllers
 {
-    public class PayController : PayControllerBase
+    public class PayController : PaymentControllerBase
     {
-        public PayController(PaydayService service) : base(service)
+        public PayController(PaymentService service) : base(service)
         {
         }
 
@@ -16,7 +16,7 @@ namespace PaymentSystem.Controllers
 
         public IActionResult PayResult()
         {
-            var result = protectedPaydayService.Pay(DateOnly.FromDateTime(DateTime.Now));
+            var result = protectedPaymentService.Pay(DateOnly.FromDateTime(DateTime.Now));
             return View(result);
         }
     }

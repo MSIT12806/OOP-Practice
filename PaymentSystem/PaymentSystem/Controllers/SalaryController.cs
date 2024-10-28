@@ -1,26 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentSystem.Adapter.Payday;
-using PaymentSystem.Application.Payday;
+using PaymentSystem.Adapter.Payment;
+using PaymentSystem.Application;
+using PaymentSystem.Models.Payment;
 
 namespace PaymentSystem.Controllers
 {
-    public class SalaryController : PayControllerBase
+    public class SalaryController : PaymentControllerBase
     {
-        public SalaryController(PaydayService service) : base(service)
+        public SalaryController(PaymentService service) : base(service)
         {
         }
 
         public IActionResult SetSalary(string empId)
         {
-            var emp = protectedPaydayService.GetEmpSalary(empId);
-            return View(emp);
+            var emp = protectedPaymentService.Rebuild(empId) as MounthlyEmployee;
+            return View(emp.GetSalary());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SetSalary(SalarySaveViewModel vm)
         {
-            protectedPaydayService.SetSalary(PaydayMapper.ToCore(vm));
+            var emp = protectedPaymentService.Rebuild(vm.EmpId) as MounthlyEmployee;
+            emp.SetSalary(vm.Salary);
+
             return RedirectToAction(nameof(EmpController.ChgEmp), nameof(EmpController).Replace("Controller", ""));
         }
     }
