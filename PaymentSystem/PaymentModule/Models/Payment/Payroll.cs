@@ -1,10 +1,6 @@
-﻿namespace PaymentSystem.Models.Payment
+﻿namespace Payment.Models.Payment
 {
-<<<<<<<< HEAD:PaymentSystem/PaymentSystem/Models/Payment.cs
-    public class Payment
-========
     public class Payroll
->>>>>>>> refactor/重新反思領域模型:PaymentSystem/PaymentSystem/Models/Payment/Payroll.cs
     {
         public string EmpId { get; set; }
         public int Salary { get; set; }

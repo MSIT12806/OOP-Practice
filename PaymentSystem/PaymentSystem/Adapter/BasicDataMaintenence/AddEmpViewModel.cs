@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static PaymentSystem.Models.BasicDataMaintenece.Employee;
+using static Payment.Models.BasicDataMaintenece.Employee;
 
 namespace PaymentSystem.Adapter.BasicDataMaintenence
 {

@@ -1,7 +1,10 @@
 ﻿
-using static PaymentSystem.Models.BasicDataMaintenece.Employee;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static Payment.Models.BasicDataMaintenece.Employee;
 
-namespace PaymentSystem.Models.Payment
+namespace Payment.Models.Payment
 {
     public class HourlyEmployee : Employee
     {
@@ -13,16 +16,16 @@ namespace PaymentSystem.Models.Payment
 
         public int HourlyRate { get; private set; }
 
-        public override void AddCompensationAlterEvent(int amount, DateOnly startDate)
+        public override void AddCompensationAlterEvent(int amount, DateTime startDate)
         {
-            this._repository.AddCompensationAlterEvent(this.Id, amount, startDate, PayWayEnum.Hourly);
+            this._repository.AddCompensationAlterEvent(this.Id, amount, startDate, nameof(HourlyEmployee));
         }
 
-        public override void AddPaymentEvent(DateOnly createDate)
+        public override void AddPaymentEvent(DateTime createDate)
         {
-            this._repository.AddPaymentEvent(this.Id, NextPayday(createDate), PayWayEnum.Hourly);
+            this._repository.AddPaymentEvent(this.Id, NextPayday(createDate), nameof(HourlyEmployee));
         }
-        protected override DateOnly NextPayday(DateOnly createDate)
+        protected override DateTime NextPayday(DateTime createDate)
         {
             switch (createDate.DayOfWeek)
             {

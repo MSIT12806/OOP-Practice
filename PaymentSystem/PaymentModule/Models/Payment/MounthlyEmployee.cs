@@ -1,7 +1,8 @@
 ﻿
-using static PaymentSystem.Models.BasicDataMaintenece.Employee;
 
-namespace PaymentSystem.Models.Payment
+using System;
+
+namespace Payment.Models.Payment
 {
     public class MounthlyEmployee : Employee
     {
@@ -29,6 +30,21 @@ namespace PaymentSystem.Models.Payment
                 EmpId = this.Id,
                 Salary = salary.Amount,
             };
+        }
+
+        public override void AddCompensationAlterEvent(int amount, DateTime startDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddPaymentEvent(DateTime payDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override DateTime NextPayday(DateTime createDate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

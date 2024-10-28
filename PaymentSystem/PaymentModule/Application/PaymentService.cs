@@ -1,8 +1,8 @@
 ﻿using LH.Tool.Decoupling;
-using PaymentSystem.Models;
-using PaymentSystem.Models.Payment;
+using Payment.Models.Payment;
+using System;
 
-namespace PaymentSystem.Application
+namespace Payment.Application
 {
     public class PaymentService
     {
@@ -17,16 +17,16 @@ namespace PaymentSystem.Application
             return this._paymentRepository.Rebuild(empId);
         }
 
-        public Payroll Pay(DateOnly date)
+        public Payroll Pay(DateTime date)
         {
             throw new System.NotImplementedException();
         }
 
-        public void Build(string empId, int amount, DateOnly startDate)
+        public void Build(string empId, int amount, DateTime startDate)
         {
             var emp = this.Rebuild(empId);
             emp.AddCompensationAlterEvent(amount, startDate);
-            emp.AddPaymentEvent(DateOnly.FromDateTime(DateProvider.Now));
+            emp.AddPaymentEvent(DateProvider.Now);
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using static PaymentSystem.Models.Payment.Employee;
-
-namespace PaymentSystem.Models.BasicDataMaintenece
+﻿
+namespace Payment.Models.BasicDataMaintenece
 {
     public class Employee
     {

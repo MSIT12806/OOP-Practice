@@ -1,9 +1,6 @@
-﻿using NuGet.Protocol.Core.Types;
-using PaymentSystem.Application.Payment;
-using PaymentSystem.Models;
-using PaymentSystem.Models.BasicDataMaintenece;
+﻿using Payment.Models.BasicDataMaintenece;
 
-namespace PaymentSystem.Application
+namespace Payment.Application
 {
     public class EmpDataService
     {

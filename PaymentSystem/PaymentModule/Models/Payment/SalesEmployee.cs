@@ -1,16 +1,20 @@
-﻿namespace PaymentSystem.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Payment.Models.Payment
 {
     public class SalesEmployee : MounthlyEmployee
     {
-        public SalesEmployee(string id, IEmpRepository repository) : base(id, repository)
+        public SalesEmployee(string id, IPaymentRepository repository) : base(id, repository)
         {
         }
 
-        public IEnumerable<SalesReceiptCore> SalesReceipts => _repository.GetSalesReceipts(this.Id);
+        public IEnumerable<SalesReceipt> SalesReceipts => _repository.GetSalesReceipts(this.Id);
 
-        public string AddSalesReceipt(string id, DateOnly dateOnly, int commission)
+        public string AddSalesReceipt(string id, DateTime dateOnly, int commission)
         {
-            var salesReceipt = new SalesReceiptCore
+            var salesReceipt = new SalesReceipt
             {
                 EmpId = id,
                 SalesDate = dateOnly,
@@ -20,7 +24,7 @@
             return this._repository.AddSalesReceipt(salesReceipt);
         }
 
-        public IEnumerable<SalesReceiptCore> GetSalesReceipts()
+        public IEnumerable<SalesReceipt> GetSalesReceipts()
         {
             return this._repository.GetSalesReceipts(this.Id);
         }
@@ -30,11 +34,11 @@
             this._repository.DeleteSalesReceiptBy(salesReceiptId);
         }
 
-        public override Payment Settle()
+        public override Payroll Settle()
         {
             var salary = _repository.GetSalary(this.Id);
 
-            return new Payment
+            return new Payroll
             {
                 EmpId = this.Id,
                 Salary = salary.Amount + SalesReceipts.Sum(i => i.Commission),

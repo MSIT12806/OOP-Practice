@@ -1,7 +1,9 @@
 ﻿
 
 
-namespace PaymentSystem.Models.BasicDataMaintenece
+using System.Collections.Generic;
+
+namespace Payment.Models.BasicDataMaintenece
 {
     public interface IEmpDataRepository 
     {

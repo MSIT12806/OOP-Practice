@@ -1,26 +1,30 @@
-﻿namespace PaymentSystem.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Payment.Models.Payment
 {
     public class UnionEmployee : MounthlyEmployee
     {
-        public UnionEmployee(string id, IEmpRepository repository) : base(id, repository)
+        public UnionEmployee(string id, IPaymentRepository repository) : base(id, repository)
         {
         }
 
-        public IEnumerable<ServiceChargeCore> ServiceCharges => _repository.GetServiceCharges(this.Id);
+        public IEnumerable<ServiceCharge> ServiceCharges => _repository.GetServiceCharges(this.Id);
 
-        public string SubmitServiceCharge(string id, int amount, DateOnly dateOnly)
+        public string SubmitServiceCharge(int amount, DateTime date)
         {
-            var serviceCharge = new ServiceChargeCore
+            var serviceCharge = new ServiceCharge
             {
-                EmpId = id,
+                EmpId = this.Id,
                 Amount = amount,
-                ApplyDate = dateOnly,
+                ApplyDate = date,
             };
 
             return _repository.AddServiceCharge(serviceCharge);
         }
 
-        public ServiceChargeCore GetServiceChargeBy(string setviceChargeId)
+        public ServiceCharge GetServiceChargeBy(string setviceChargeId)
         {
             var db = _repository.GetServiceCharges(this.Id).FirstOrDefault(x => x.Id == setviceChargeId);
             return db;
@@ -31,16 +35,16 @@
             _repository.DeleteServiceChargeBy(setviceChargeId);
         }
 
-        public IEnumerable<ServiceChargeCore> GetServiceCharge()
+        public IEnumerable<ServiceCharge> GetServiceCharge()
         {
             return _repository.GetServiceCharges(this.Id);
         }
 
-        public override Payment Settle()
+        public override Payroll Settle()
         {
             var salary = _repository.GetSalary(this.Id);
 
-            return new Payment
+            return new Payroll
             {
                 EmpId = this.Id,
                 Salary = salary.Amount - ServiceCharges.Sum(i => i.Amount),

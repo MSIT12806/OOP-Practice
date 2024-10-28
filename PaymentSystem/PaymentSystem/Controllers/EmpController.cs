@@ -1,9 +1,6 @@
-﻿using LH.Tool.Decoupling;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+﻿using Microsoft.AspNetCore.Mvc;
+using Payment.Application;
 using PaymentSystem.Adapter.BasicDataMaintenence;
-using PaymentSystem.Application;
-using PaymentSystem.Application.Payment;
 using PaymentSystem.ViewModel;
 
 namespace PaymentSystem.Controllers
