@@ -9,7 +9,5 @@ namespace PaymentSystem.Infrastructure.ORM
         public string Name { get; internal set; }
 
         public string Address { get; internal set; }
-
-        public string PayWay { get; internal set; }
     }
 }

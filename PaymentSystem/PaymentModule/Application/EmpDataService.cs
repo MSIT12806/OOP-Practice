@@ -11,9 +11,9 @@ namespace Payment.Application
             this._empRepository = empRepository;
         }
 
-        public void Build(string empId, string name, string address, string payWay, int amount)
+        public void Build(string empId, string name, string address)
         {
-            _empRepository.Build(empId, name, address, payWay);
+            _empRepository.Build(empId, name, address);
         }
 
         public Employee Rebuild(string empId)

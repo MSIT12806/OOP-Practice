@@ -20,7 +20,7 @@ namespace PaymentSystem.Adapter.Payment
                 EmpId = empId,
                 Amount = amount,
                 StartDate = DateOnly.FromDateTime(startDate),
-                CompensationType = compensationType
+                EmployeeType = compensationType
             };
 
             this._appDbContext.CompensationAlterEvents.Add(compensationAlterEventDbModel);
@@ -87,7 +87,9 @@ namespace PaymentSystem.Adapter.Payment
 
         public EmpSalary GetSalary(string empId)
         {
-            throw new NotImplementedException();
+            var newestSalarySetting = this._appDbContext.CompensationAlterEvents.Where(i=>i.EmpId==empId).OrderByDescending(i=>i.CreateDateTime).First();
+
+            return new EmpSalary(empId, newestSalarySetting.Amount, newestSalarySetting.EmployeeType);
         }
 
         public IEnumerable<SalesReceipt> GetSalesReceipts(string empId)
@@ -108,29 +110,8 @@ namespace PaymentSystem.Adapter.Payment
         public Employee Rebuild(string empId)
         {
             EmpDbModel empDbModel = this._appDbContext.Emps.FindById(empId);
-            Type type = null;
-            switch (empDbModel.PayWay)
-            {
-                case nameof(HourlyEmployee):
-                    type = typeof(HourlyEmployee);
-                    break;
-
-                case nameof(MounthlyEmployee):
-                    type = typeof(MounthlyEmployee);
-                    break;
-
-                case nameof(SalesEmployee):
-                    type = typeof(SalesEmployee);
-                    break;
-
-                case nameof(UnionEmployee):
-                    type = typeof(UnionEmployee);
-                    break;
-
-                default:
-                    throw new ArgumentException("Invalid employee type", empId);
-            }
-            return EmpFactory.Build(empId, type, this);
+            EmpSalary empSalary = this.GetSalary(empId);
+            return EmpFactory.Build(empId, empSalary.EmployeeType, this);
         }
     }
 }

@@ -24,9 +24,9 @@ namespace PaymentSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEmp(AddEmpViewModel addEmp)
         {
-            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address, addEmp.PayWay, addEmp.Amount);
+            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address);
 
-            this._payment.Build(addEmp.EmpId, addEmp.Amount, addEmp.StartDate.ToDateTime(TimeOnly.MinValue));
+            this._payment.SetSalaryAndPaymentDate(addEmp.EmpId, addEmp.PayWay, addEmp.Amount, addEmp.StartDate.ToDateTime(TimeOnly.MinValue));
 
             return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
         }

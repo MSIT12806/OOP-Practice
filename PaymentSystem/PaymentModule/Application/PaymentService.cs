@@ -1,4 +1,5 @@
 ﻿using LH.Tool.Decoupling;
+using Payment.Application.Payment;
 using Payment.Models.Payment;
 using System;
 
@@ -17,10 +18,10 @@ namespace Payment.Application
             return this._paymentRepository.Rebuild(empId);
         }
 
-        public void Build(string empId, int amount, DateTime startDate)
+        public void SetSalaryAndPaymentDate(string empId, string payWay, int amount, DateTime startDate)
         {
-            var emp = this.Rebuild(empId);
-            emp.AddCompensationAlterEvent(amount, startDate);
+            var emp = EmpFactory.Build(empId, payWay, _paymentRepository);
+            emp.SetSalary(amount, startDate);
             emp.AddPaymentEvent(DateProvider.Now);
         }
 

@@ -13,14 +13,13 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
         {
             this._appDbContext = appDbContext;
         }
-        public void Build(string empId, string name, string address, string payWay)
+        public void Build(string empId, string name, string address)
         {
             EmpDbModel empDbModel = new EmpDbModel
             {
                 EmpId = empId,
                 Name = name,
-                Address = address,
-                PayWay = payWay.ToString()
+                Address = address
             };
 
             this._appDbContext.Emps.Add(empDbModel);
@@ -34,7 +33,6 @@ namespace PaymentSystem.Adapter.BasicDataMaintenence
                 Id = empDbModel.EmpId,
                 Name = empDbModel.Name,
                 Address = empDbModel.Address,
-                PayWay = empDbModel.PayWay
             };
         }
         public IEnumerable<string> GetEmpIds()

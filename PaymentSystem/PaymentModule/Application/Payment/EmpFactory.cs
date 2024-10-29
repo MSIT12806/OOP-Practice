@@ -5,32 +5,25 @@ namespace Payment.Application.Payment
 {
     public static class EmpFactory
     {
-        public static Employee Build(string empId, Type EmployeeType, IPaymentRepository repository)
+        public static Employee Build(string empId, string employeeType, IPaymentRepository repository)
         {
-            Employee emp = null;
-            switch (EmployeeType.Name)
+            switch (employeeType)
             {
                 case nameof(MounthlyEmployee):
-                    emp = new MounthlyEmployee(empId, repository);
-                    break;
+                    return new MounthlyEmployee(empId, repository);
 
                 case nameof(SalesEmployee):
-                    emp = new SalesEmployee(empId, repository);
-                    break;
+                    return new SalesEmployee(empId, repository);
 
                 case nameof(UnionEmployee):
-                    emp = new UnionEmployee(empId, repository);
-                    break;
+                    return new UnionEmployee(empId, repository);
 
                 case nameof(HourlyEmployee):
-                    emp = new HourlyEmployee(empId, repository);
-                    break;
+                    return new HourlyEmployee(empId, repository);
 
                 default:
                     throw new NotImplementedException();
             }
-
-            return emp;
         }
     }
 }

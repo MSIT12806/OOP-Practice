@@ -4,13 +4,18 @@ using System.Linq;
 
 namespace Payment.Models.Payment
 {
-    public class UnionEmployee : MounthlyEmployee
+    public class UnionEmployee : Employee
     {
         public UnionEmployee(string id, IPaymentRepository repository) : base(id, repository)
         {
         }
 
         public IEnumerable<ServiceCharge> ServiceCharges => _repository.GetServiceCharges(this.Id);
+
+        NextPaydayGetter _nextPaydayGetter = new MounthlyPaymentDateGetter();
+        protected override NextPaydayGetter nextPaydayGetter => _nextPaydayGetter;
+
+        protected override string EmployeeType => nameof(UnionEmployee);
 
         public string SubmitServiceCharge(int amount, DateTime date)
         {
@@ -49,6 +54,12 @@ namespace Payment.Models.Payment
                 EmpId = this.Id,
                 Salary = salary.Amount - ServiceCharges.Sum(i => i.Amount),
             };
+        }
+
+        public override void SetSalary(int amount, DateTime startDate)
+        {
+            var salary = new EmpSalary(this.Id, amount, nameof(MounthlyEmployee));
+            _repository.AddCompensationAlterEvent(this.Id, amount, startDate, nameof(UnionEmployee));
         }
     }
 }
