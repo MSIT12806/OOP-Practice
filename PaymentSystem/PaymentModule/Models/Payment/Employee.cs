@@ -7,9 +7,9 @@ namespace Payment.Models.Payment
     public abstract class Employee
     {
         protected IPaymentRepository _repository;
+        protected abstract NextPaydayGetter nextPaydayGetter { get; }
         public string Id { get; }
-        abstract protected NextPaydayGetter nextPaydayGetter { get; }
-        abstract protected string EmployeeType { get; }
+        public abstract string EmployeeType { get; }
 
         public Employee(string id, IPaymentRepository repository)
         {
@@ -18,13 +18,13 @@ namespace Payment.Models.Payment
         }
 
         public abstract Payroll Settle();
-
         public abstract void SetSalary(int amount, DateTime startDate);
+        public abstract int GetSalary();
         public void AddPaymentEvent(DateTime payDate)
         {
             this._repository.AddPaymentEvent(this.Id, NextPayday(payDate), EmployeeType);
         }
-        protected DateTime NextPayday(DateTime createDate)
+        public DateTime NextPayday(DateTime createDate)
         {
             return nextPaydayGetter.GetNextPayday(createDate);
         }

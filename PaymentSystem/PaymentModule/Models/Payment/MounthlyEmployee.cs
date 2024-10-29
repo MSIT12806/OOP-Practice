@@ -49,9 +49,9 @@ namespace Payment.Models.Payment
 
         private DateTime GetNextMonthLastDay(DateTime payDate)
         {
-            var nextMonth = payDate.AddMonths(1);
-            var lastDay = new DateTime(nextMonth.Year, nextMonth.Month, DateTime.DaysInMonth(nextMonth.Year, nextMonth.Month));
-            return lastDay;
+            var nextDay = payDate.AddDays(1);
+            var lastDayOfNextDayMounth = new DateTime(nextDay.Year, nextDay.Month, DateTime.DaysInMonth(nextDay.Year, nextDay.Month));
+            return lastDayOfNextDayMounth;
         }
     }
 }

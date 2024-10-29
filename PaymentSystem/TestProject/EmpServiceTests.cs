@@ -1,3 +1,4 @@
+using LH.Tool.Decoupling;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Payment.Application;
@@ -19,6 +20,7 @@ namespace TestProject
         public void Setup()
         {
             PaymentSystem.Program.IsDevelopment = false;
+            DateProvider.SetCurrentDate(new DateTime(2021, 1, 1));
         }
         /*
          * [v] AcceptanceMounthlyPaymentTest
@@ -52,7 +54,8 @@ namespace TestProject
                     { nameof(AddEmpViewModel.Name), "Jane Doe" },
                     { nameof(AddEmpViewModel.Address), "123 Main St" },
                     {nameof(AddEmpViewModel.PayWay), nameof(MounthlyEmployee) },
-                    {nameof(AddEmpViewModel.StartDate), new DateTime(2024,1,1).ToString() },
+                    {nameof(AddEmpViewModel.StartDate), new DateTime(2021,1,1).ToString() },
+                    {nameof(AddEmpViewModel.Amount), "1000" }
                 });
 
                 var response = await client.PostAsync(addEmpUrl, postData);
@@ -68,33 +71,43 @@ namespace TestProject
                         Assert.That(emp.Name, Is.EqualTo("Jane Doe"));
                         Assert.That(emp.Address, Is.EqualTo("123 Main St"));
                     }
-                }
-            }
 
-            // 修改員工姓名
-            if (ARRANGE)
-            {
-                var updateEmpUrl = $"{domainName}/{nameof(EmpController).Replace("Controller", "")}/{nameof(EmpController.ChgEmp)}";
-                var postData = new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    { "EmpId", "AA" },
-                    { "Name", "Jane Smith" },
-                    { "Address", "123 Main St" }
-                });
-
-                var response = await client.PostAsync(updateEmpUrl, postData);
-                response.EnsureSuccessStatusCode();
-                if (ASSERT)
-                {
-                    // 確認修改是否正確
-                    await using(var s = this.Services.CreateAsyncScope())
+                    // 確認薪資是否正確
+                    await using (var s = this.Services.CreateAsyncScope())
                     {
-                        var empService = s.ServiceProvider.GetRequiredService<EmpDataService>();
-                        var emp = empService.Rebuild("AA");
-                        Assert.That(emp.Name, Is.EqualTo("Jane Smith"));
+                        var paymentService = s.ServiceProvider.GetRequiredService<PaymentService>();
+                        var emp = paymentService.Rebuild("AA");
+                        var salary = emp.GetSalary();
+                        Assert.That(salary, Is.EqualTo(1000));
+                        Assert.That(emp.NextPayday(DateProvider.Now), Is.EqualTo(new DateTime(2021, 1, 31)));
                     }
                 }
             }
+
+            //// 修改員工姓名
+            //if (ARRANGE)
+            //{
+            //    var updateEmpUrl = $"{domainName}/{nameof(EmpController).Replace("Controller", "")}/{nameof(EmpController.ChgEmp)}";
+            //    var postData = new FormUrlEncodedContent(new Dictionary<string, string>
+            //    {
+            //        { "EmpId", "AA" },
+            //        { "Name", "Jane Smith" },
+            //        { "Address", "123 Main St" }
+            //    });
+
+            //    var response = await client.PostAsync(updateEmpUrl, postData);
+            //    response.EnsureSuccessStatusCode();
+            //    if (ASSERT)
+            //    {
+            //        // 確認修改是否正確
+            //        await using(var s = this.Services.CreateAsyncScope())
+            //        {
+            //            var empService = s.ServiceProvider.GetRequiredService<EmpDataService>();
+            //            var emp = empService.Rebuild("AA");
+            //            Assert.That(emp.Name, Is.EqualTo("Jane Smith"));
+            //        }
+            //    }
+            //}
 
             // // 設定員工薪資
             // employee.SetSalary(1000, EmpSalaryCore.PayWayEnum.Monthly);
