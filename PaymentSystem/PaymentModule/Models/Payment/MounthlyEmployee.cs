@@ -8,7 +8,7 @@ namespace Payment.Models.Payment
     {
         protected NextPaydayGetter _nextPaydayGetter = new MounthlyPaymentDateGetter();
         protected override NextPaydayGetter nextPaydayGetter => _nextPaydayGetter;
-        protected override string EmployeeType => nameof(MounthlyEmployee);
+        public override string EmployeeType => nameof(MounthlyEmployee);
 
         public MounthlyEmployee(string id, IPaymentRepository repository) : base(id, repository)
         {
@@ -20,21 +20,24 @@ namespace Payment.Models.Payment
             _repository.AddCompensationAlterEvent(this.Id, amount, dateTime, nameof(MounthlyEmployee));
         }
 
-        public EmpSalary GetSalary()
+        public override int GetSalary()
         {
-            return _repository.GetSalary(this.Id);
+            return _repository.GetSalary(this.Id).Amount;
         }
 
-        public override Payroll Settle()
+        public override Payroll Settle(DateTime dateTime)
         {
-            var salary = _repository.GetSalary(this.Id);
-
-            // AddPaymentEvent
+            var salary =this.GetSalary();
+            var payrollDetail = new PayrollDetail
+            {
+                Description = "Regular Pay",
+                Amount = salary,
+            };
 
             return new Payroll
             {
                 EmpId = this.Id,
-                Salary = salary.Amount,
+                PayrollDetails = new[] { payrollDetail },
             };
         }
     }

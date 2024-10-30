@@ -23,5 +23,6 @@ namespace Payment.Models.Payment
         void AddTimeCard(TimeCard timeCard);
         void AddPaymentEvent(string empId, DateTime dateOnly, string employeeType);
         void AddCompensationAlterEvent(string empId, int amount, DateTime startDate, string employeeType);
+        DateTime GetPaymentEventByRecently(string id, DateTime payDate);
     }
 }

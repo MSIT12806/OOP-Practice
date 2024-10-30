@@ -1,4 +1,5 @@
-﻿using Payment.Application.Payment;
+﻿using LH.Tool.Decoupling;
+using Payment.Application.Payment;
 using Payment.Models.Payment;
 using PaymentSystem.Infrastructure.ORM;
 
@@ -32,7 +33,7 @@ namespace PaymentSystem.Adapter.Payment
             {
                 Id = Guid.NewGuid().ToString(),
                 EmpId = empId,
-                PayDate = DateOnly.FromDateTime(dateOnly),
+                PayDate = dateOnly,
                 CompensationType = compensationType
             });
         }
@@ -80,6 +81,15 @@ namespace PaymentSystem.Adapter.Payment
             this._appDbContext.SaveChanges();
         }
 
+        public DateTime GetPaymentEventByRecently(string empId, DateTime payDate)
+        {
+            return this._appDbContext.PaymentEvents
+                .Where(i => i.EmpId == empId)
+                .Where(i => i.PayDate < payDate)
+                .OrderByDescending(i => i.PayDate)
+                .First().PayDate;
+        }
+
         public IEnumerable<EmpSalary> GetSalaries()
         {
             throw new NotImplementedException();
@@ -87,7 +97,7 @@ namespace PaymentSystem.Adapter.Payment
 
         public EmpSalary GetSalary(string empId)
         {
-            var newestSalarySetting = this._appDbContext.CompensationAlterEvents.Where(i=>i.EmpId==empId).OrderByDescending(i=>i.CreateDateTime).First();
+            var newestSalarySetting = this._appDbContext.CompensationAlterEvents.Where(i => i.EmpId == empId).OrderByDescending(i => i.CreateDateTime).First();
 
             return new EmpSalary(empId, newestSalarySetting.Amount, newestSalarySetting.EmployeeType);
         }

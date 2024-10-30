@@ -17,15 +17,16 @@ namespace Payment.Models.Payment
         NextPaydayGetter _nextPaydayGetter = new NextFridayDateGetter();
         protected override NextPaydayGetter nextPaydayGetter => _nextPaydayGetter;
 
-        protected override string EmployeeType => nameof(HourlyEmployee);
+        public override string EmployeeType => nameof(HourlyEmployee);
 
         public override void SetSalary(int amount, DateTime startDate)
         {
             this._repository.AddCompensationAlterEvent(this.Id, amount, startDate, nameof(HourlyEmployee));
         }
-
-
-       
+        public override int GetSalary()
+        {
+            throw new NotImplementedException();
+        }
 
         public void AddTimeCard(TimeCard timeCard)
         {
@@ -34,15 +35,29 @@ namespace Payment.Models.Payment
 
 
 
-        public override Payroll Settle()
+        public override Payroll Settle(DateTime payday)
         {
+            const int OVERTIME_RATE = 2;
+            var previousPayday = GetPayday(payday);
+
+            var regularPayrollDetail = new PayrollDetail
+            {
+                Description = "Regular Pay",
+                Amount = HourlyRate * TimeCards.Where(x => x.WorkDate > previousPayday).Sum(x => x.GetRegularHours()),
+            };
+
+            var overtimePayrollDetail = new PayrollDetail
+            {
+                Description = "Overtime Pay",
+                Amount = HourlyRate * OVERTIME_RATE * TimeCards.Where(x => x.WorkDate > previousPayday).Sum(x => x.GetOvertimeHours()),
+            };
+
             return new Payroll
             {
                 EmpId = this.Id,
-                Salary = HourlyRate * TimeCards.Sum(x => x.Hours),
+                PayrollDetails = new List<PayrollDetail> { regularPayrollDetail, overtimePayrollDetail },
             };
         }
-
     }
 
 

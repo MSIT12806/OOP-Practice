@@ -15,7 +15,7 @@ namespace Payment.Models.Payment
         NextPaydayGetter _nextPaydayGetter = new MounthlyPaymentDateGetter();
         protected override NextPaydayGetter nextPaydayGetter => _nextPaydayGetter;
 
-        protected override string EmployeeType => nameof(UnionEmployee);
+        public override string EmployeeType => nameof(UnionEmployee);
 
         public string SubmitServiceCharge(int amount, DateTime date)
         {
@@ -45,21 +45,39 @@ namespace Payment.Models.Payment
             return _repository.GetServiceCharges(this.Id);
         }
 
-        public override Payroll Settle()
-        {
-            var salary = _repository.GetSalary(this.Id);
-
-            return new Payroll
-            {
-                EmpId = this.Id,
-                Salary = salary.Amount - ServiceCharges.Sum(i => i.Amount),
-            };
-        }
-
         public override void SetSalary(int amount, DateTime startDate)
         {
             var salary = new EmpSalary(this.Id, amount, nameof(MounthlyEmployee));
             _repository.AddCompensationAlterEvent(this.Id, amount, startDate, nameof(UnionEmployee));
+        }
+
+        public override Payroll Settle(DateTime payday)
+        {
+            var salary = this.GetSalary();
+            var serviceCharges = this.GetServiceCharge();
+            var totalServiceCharge = serviceCharges.Sum(x => x.Amount);
+            var payrollDetail = new PayrollDetail
+            {
+                Description = "Regular Pay",
+                Amount = salary,
+            };
+
+            var serviceChargePayrollDetail = new PayrollDetail
+            {
+                Description = "Service Charge",
+                Amount = -totalServiceCharge,
+            };
+
+            return new Payroll
+            {
+                EmpId = this.Id,
+                PayrollDetails = new[] { payrollDetail },
+            };
+        }
+
+        public override int GetSalary()
+        {
+            return _repository.GetSalary(this.Id).Amount;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Payment.Models.Payment
             this._repository = repository;
         }
 
-        public abstract Payroll Settle();
+        public abstract Payroll Settle(DateTime payday);
         public abstract void SetSalary(int amount, DateTime startDate);
         public abstract int GetSalary();
         public void AddPaymentEvent(DateTime payDate)
@@ -27,6 +27,10 @@ namespace Payment.Models.Payment
         public DateTime NextPayday(DateTime createDate)
         {
             return nextPaydayGetter.GetNextPayday(createDate);
+        }
+        public DateTime GetPayday(DateTime payDate)
+        {
+            return this._repository.GetPaymentEventByRecently(this.Id, payDate);
         }
     }
 

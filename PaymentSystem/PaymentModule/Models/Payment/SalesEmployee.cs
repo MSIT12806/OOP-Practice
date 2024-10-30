@@ -15,7 +15,7 @@ namespace Payment.Models.Payment
         NextPaydayGetter _nextPaydayGetter = new NextTwoWeeksFridayGetter();
         protected override NextPaydayGetter nextPaydayGetter => _nextPaydayGetter;
 
-        protected override string EmployeeType => throw new NotImplementedException();
+        public override string EmployeeType => nameof(SalesEmployee);
 
         public string AddSalesReceipt(string id, DateTime dateOnly, int commission)
         {
@@ -39,20 +39,38 @@ namespace Payment.Models.Payment
             this._repository.DeleteSalesReceiptBy(salesReceiptId);
         }
 
-        public override Payroll Settle()
+        public override void SetSalary(int amount, DateTime startDate)
         {
-            var salary = _repository.GetSalary(this.Id);
+            this._repository.AddCompensationAlterEvent(this.Id, amount, startDate, nameof(SalesEmployee));
+        }
+
+        public override Payroll Settle(DateTime payday)
+        {
+            var salesReceipts = this.GetSalesReceipts();
+            var salary = this.GetSalary();
+            var commission = salesReceipts.Sum(x => x.Commission);
+            var payrollDetail = new PayrollDetail
+            {
+                Description = "Regular Pay",
+                Amount = salary,
+            };
+
+            var commissionPayrollDetail = new PayrollDetail
+            {
+                Description = "Commission",
+                Amount = commission,
+            };
 
             return new Payroll
             {
                 EmpId = this.Id,
-                Salary = salary.Amount + SalesReceipts.Sum(i => i.Commission),
+                PayrollDetails = new[] { payrollDetail, commissionPayrollDetail },
             };
         }
 
-        public override void SetSalary(int amount, DateTime startDate)
+        public override int GetSalary()
         {
-            throw new NotImplementedException();
+            return this._repository.GetSalary(this.Id).Amount;
         }
     }
 
