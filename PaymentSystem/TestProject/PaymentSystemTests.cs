@@ -9,7 +9,10 @@ using static Payment.Models.BasicDataMaintenece.Employee;
 
 namespace TestProject
 {
-    public class EmpServiceTests : WebApplicationFactory<PaymentSystem.Program>
+    /// <summary>
+    /// 關於 整個支付薪水App 的整合測試
+    /// </summary>
+    public class PaymentSystemTests : WebApplicationFactory<PaymentSystem.Program>
     {
         const bool ASSERT = true;
         const bool ARRANGE = true;
