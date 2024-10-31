@@ -4,7 +4,7 @@
     {
         public string Id { get; set; }
         public string EmpId { get; set; }
-        public DateOnly WorkDate { get; set; }
+        public DateTime WorkDate { get; set; }
         public int Hours { get; set; }
     }
 }

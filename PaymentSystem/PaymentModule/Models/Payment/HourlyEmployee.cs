@@ -10,12 +10,12 @@ namespace Payment.Models.Payment
         {
         }
 
-        public IEnumerable<TimeCard> TimeCards => _repository.GetTimeCards(this.Id);
+        public IEnumerable<TimeCard> TimeCards => this._repository.GetTimeCards(this.Id);
 
-        public int HourlyRate { get; private set; }
+        public int HourlyRate => this.GetSalary();
 
         NextPaydayGetter _nextPaydayGetter = new NextFridayDateGetter();
-        protected override NextPaydayGetter nextPaydayGetter => _nextPaydayGetter;
+        protected override NextPaydayGetter nextPaydayGetter => this._nextPaydayGetter;
 
         public override string EmployeeType => nameof(HourlyEmployee);
 
@@ -25,12 +25,13 @@ namespace Payment.Models.Payment
         }
         public override int GetSalary()
         {
-            throw new NotImplementedException();
+            return this._repository.GetSalary(this.Id).Amount;
         }
 
-        public void AddTimeCard(TimeCard timeCard)
+        public void AddTimeCard(DateTime wordDate, int hours)
         {
-            _repository.AddTimeCard(timeCard);
+            var timeCard = new TimeCard(this.Id, wordDate, hours);
+            this._repository.AddTimeCard(timeCard);
         }
 
 
@@ -38,25 +39,28 @@ namespace Payment.Models.Payment
         public override Payroll Settle(DateTime payday)
         {
             const int OVERTIME_RATE = 2;
-            var previousPayday = GetPayday(payday);
+            var previousPayday = this.GetPayday(payday) ?? DateTime.MinValue;
 
             var regularPayrollDetail = new PayrollDetail
             {
                 Description = "Regular Pay",
-                Amount = HourlyRate * TimeCards.Where(x => x.WorkDate > previousPayday).Sum(x => x.GetRegularHours()),
+                Amount = this.HourlyRate * this.TimeCards.Where(x => x.WorkDate > previousPayday).Sum(x => x.GetRegularHours()),
             };
 
             var overtimePayrollDetail = new PayrollDetail
             {
                 Description = "Overtime Pay",
-                Amount = HourlyRate * OVERTIME_RATE * TimeCards.Where(x => x.WorkDate > previousPayday).Sum(x => x.GetOvertimeHours()),
+                Amount = this.HourlyRate * OVERTIME_RATE * this.TimeCards.Where(x => x.WorkDate > previousPayday).Sum(x => x.GetOvertimeHours()),
             };
 
-            return new Payroll
+            var payroll = new Payroll
             {
                 EmpId = this.Id,
                 PayrollDetails = new List<PayrollDetail> { regularPayrollDetail, overtimePayrollDetail },
             };
+
+            base.AddPayroll(payroll);
+            return payroll;
         }
     }
 

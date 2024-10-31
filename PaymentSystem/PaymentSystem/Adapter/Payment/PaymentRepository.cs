@@ -1,5 +1,4 @@
-﻿using LH.Tool.Decoupling;
-using Payment.Application.Payment;
+﻿using Payment.Application.Payment;
 using Payment.Models.Payment;
 using PaymentSystem.Infrastructure.ORM;
 
@@ -27,15 +26,38 @@ namespace PaymentSystem.Adapter.Payment
             this._appDbContext.CompensationAlterEvents.Add(compensationAlterEventDbModel);
         }
 
-        public void AddPaymentEvent(string empId, DateTime dateOnly, string compensationType)
+        public void AddPaymentPlan(string empId, DateTime dateOnly, string compensationType)
         {
-            this._appDbContext.PaymentEvents.Add(new PaymentEventDbModel
+            this._appDbContext.PaymentPlans.Add(new PaymentPlanDbModel
             {
                 Id = Guid.NewGuid().ToString(),
                 EmpId = empId,
                 PayDate = dateOnly,
                 CompensationType = compensationType
             });
+        }
+
+        public void AddPayroll(Payroll payroll)
+        {
+            PayrollDbModel payrollDbModel = new PayrollDbModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                EmpId = payroll.EmpId,
+                PayDate = payroll.PayDate,
+                Amount = payroll.TotoalPay
+            };
+
+            foreach (var payrollDetail in payroll.PayrollDetails)
+            {
+                this._appDbContext.PayrollDetails.Add(new PayrollDetailDbModel
+                {
+                    PayrollId = payrollDbModel.Id,
+                    Description = payrollDetail.Description,
+                    Amount = payrollDetail.Amount
+                });
+            }
+
+            this._appDbContext.Payrolls.Add(payrollDbModel);
         }
 
         public string AddSalesReceipt(SalesReceipt salesReceipt)
@@ -62,7 +84,15 @@ namespace PaymentSystem.Adapter.Payment
 
         public void AddTimeCard(TimeCard timeCard)
         {
-            throw new NotImplementedException();
+            TimeCardDbModel timeCardDbModel = new TimeCardDbModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                EmpId = timeCard.EmpId,
+                WorkDate = timeCard.WorkDate,
+                Hours = timeCard.Hours
+            };
+
+            this._appDbContext.TimeCards.Add(timeCardDbModel);
         }
 
         public void DeleteSalesReceiptBy(string salesReceiptId)
@@ -81,13 +111,13 @@ namespace PaymentSystem.Adapter.Payment
             this._appDbContext.SaveChanges();
         }
 
-        public DateTime GetPaymentEventByRecently(string empId, DateTime payDate)
+        public DateTime? GetPaymentEventByRecently(string empId, DateTime payDate)
         {
-            return this._appDbContext.PaymentEvents
+            return this._appDbContext.Payrolls
                 .Where(i => i.EmpId == empId)
                 .Where(i => i.PayDate < payDate)
                 .OrderByDescending(i => i.PayDate)
-                .First().PayDate;
+                .FirstOrDefault()?.PayDate;
         }
 
         public IEnumerable<EmpSalary> GetSalaries()
@@ -112,9 +142,10 @@ namespace PaymentSystem.Adapter.Payment
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TimeCard> GetTimeCards(string id)
+        public IEnumerable<TimeCard> GetTimeCards(string empId)
         {
-            throw new NotImplementedException();
+            var timeCardDbModels = this._appDbContext.TimeCards.Where(i => i.EmpId == empId);
+            return timeCardDbModels.Select(i => new TimeCard(i.EmpId, i.WorkDate, i.Hours));
         }
 
         public Employee Rebuild(string empId)

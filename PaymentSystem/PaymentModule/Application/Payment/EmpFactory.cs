@@ -22,7 +22,7 @@ namespace Payment.Application.Payment
                     return new HourlyEmployee(empId, repository);
 
                 default:
-                    throw new NotImplementedException();
+                    throw new ArgumentException(message: $"invalid employee type:{employeeType}", paramName: nameof(employeeType));
             }
         }
     }

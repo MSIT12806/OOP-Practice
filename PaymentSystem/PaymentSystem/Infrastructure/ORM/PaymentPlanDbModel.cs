@@ -1,6 +1,6 @@
 ﻿namespace PaymentSystem.Infrastructure.ORM
 {
-    public class PaymentEventDbModel
+    public class PaymentPlanDbModel
     {
         public string Id { get; set; }
         public string EmpId { get; set; }

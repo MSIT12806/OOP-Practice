@@ -1,12 +1,8 @@
-﻿using Elfie.Serialization;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using PaymentSystem.Infrastructure.ORM;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Xml;
 
 namespace PaymentSystem.Adapter
 {
@@ -15,16 +11,17 @@ namespace PaymentSystem.Adapter
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            Emps = new DbSetWithCache<EmpDbModel>(Set<EmpDbModel>(), i=>i.EmpId);
+            this.Emps = new DbSetWithCache<EmpDbModel>(this.Set<EmpDbModel>(), i => i.EmpId);
         }
-        public DbSetWithCache<EmpDbModel> Emps { get;  set; }
-        private DbSet<EmpDbModel> _Emps { get; set; } 
+        public DbSetWithCache<EmpDbModel> Emps { get; set; }
+        private DbSet<EmpDbModel> _Emps { get; set; }
         public DbSet<ServiceChargeDbModel> ServiceCharges { get; set; }
         public DbSet<CompensationAlterEventDbModel> CompensationAlterEvents { get; set; }
         public DbSet<SalesReceiptDbModel> SalesReceipts { get; set; }
         public DbSet<TimeCardDbModel> TimeCards { get; set; }
-        public DbSet<PaymentEventDbModel> PaymentEvents { get; set; }
+        public DbSet<PaymentPlanDbModel> PaymentPlans { get; set; }
         public DbSet<PayrollDbModel> Payrolls { get; set; }
+        public DbSet<PayrollDetailDbModel> PayrollDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,14 +32,23 @@ namespace PaymentSystem.Adapter
             SetTimeCard(modelBuilder);
             SetPaymentEvent(modelBuilder);
             SetPayroll(modelBuilder);
+            SetPayrollDetail(modelBuilder);
         }
 
-        private void SetPaymentEvent(ModelBuilder modelBuilder)
+        private static void SetPayrollDetail(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PaymentEventDbModel>().HasKey(e => e.Id);
-            modelBuilder.Entity<PaymentEventDbModel>().Property(p => p.Id).IsRequired();
-            modelBuilder.Entity<PaymentEventDbModel>().Property(p => p.EmpId).IsRequired();
-            modelBuilder.Entity<PaymentEventDbModel>().Property(p => p.PayDate).IsRequired();
+            modelBuilder.Entity<PayrollDetailDbModel>().HasKey(e => new { e.PayrollId, e.Description, e.Amount });
+            modelBuilder.Entity<PayrollDetailDbModel>().Property(p => p.PayrollId).IsRequired();
+            modelBuilder.Entity<PayrollDetailDbModel>().Property(p => p.Description).IsRequired();
+            modelBuilder.Entity<PayrollDetailDbModel>().Property(p => p.Amount).IsRequired();
+        }
+
+        private static void SetPaymentEvent(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PaymentPlanDbModel>().HasKey(e => e.Id);
+            modelBuilder.Entity<PaymentPlanDbModel>().Property(p => p.Id).IsRequired();
+            modelBuilder.Entity<PaymentPlanDbModel>().Property(p => p.EmpId).IsRequired();
+            modelBuilder.Entity<PaymentPlanDbModel>().Property(p => p.PayDate).IsRequired();
         }
 
         private static void SetEmp(ModelBuilder modelBuilder)
@@ -98,45 +104,45 @@ namespace PaymentSystem.Adapter
 
         public TEntity Update<TEntity>(TEntity dbSource, TEntity updateObject) where TEntity : class
         {
-            Entry(dbSource).CurrentValues.SetValues(updateObject);
+            this.Entry(dbSource).CurrentValues.SetValues(updateObject);
             return base.Update(dbSource).Entity;
         }
 
     }
 
 
-    public class DbSetWithCache<TEntity>:DbSet<TEntity> where TEntity : class
+    public class DbSetWithCache<TEntity> : DbSet<TEntity> where TEntity : class
     {
         private readonly DbSet<TEntity> _dbSet;
         private readonly ConcurrentDictionary<string, TEntity> _cache;
 
         private readonly Func<TEntity, string> getKey;
-        public DbSetWithCache(DbSet<TEntity> dbSet, Func<TEntity,string> getIdFunc)
+        public DbSetWithCache(DbSet<TEntity> dbSet, Func<TEntity, string> getIdFunc)
         {
-            _dbSet = dbSet;
-            _cache = new ConcurrentDictionary<string, TEntity>();
-            getKey = getIdFunc;
+            this._dbSet = dbSet;
+            this._cache = new ConcurrentDictionary<string, TEntity>();
+            this.getKey = getIdFunc;
         }
 
-        public override IEntityType EntityType => _dbSet.EntityType;
+        public override IEntityType EntityType => this._dbSet.EntityType;
 
         // 包裝 Add 方法，將實體添加到字典中
         public override EntityEntry<TEntity> Add(TEntity entity)
         {
-            var key = getKey(entity);
-            _cache.TryAdd(key, entity);
-            return _dbSet.Add(entity);
+            var key = this.getKey(entity);
+            this._cache.TryAdd(key, entity);
+            return this._dbSet.Add(entity);
         }
 
         // 查詢方法，先查字典再查資料庫
         public TEntity FindById(string id)
         {
-            if (_cache.TryGetValue(id, out TEntity cachedEntity))
+            if (this._cache.TryGetValue(id, out TEntity cachedEntity))
             {
                 return cachedEntity;
             }
 
-            var entity = _dbSet.Find(id);
+            var entity = this._dbSet.Find(id);
             return entity;
         }
 

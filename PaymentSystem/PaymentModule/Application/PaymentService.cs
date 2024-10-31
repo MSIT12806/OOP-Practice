@@ -20,9 +20,9 @@ namespace Payment.Application
 
         public void SetSalaryAndPaymentDate(string empId, string payWay, int amount, DateTime startDate)
         {
-            var emp = EmpFactory.Build(empId, payWay, _paymentRepository);
+            var emp = EmpFactory.Build(empId, payWay, this._paymentRepository);
             emp.SetSalary(amount, startDate);
-            emp.AddPaymentEvent(DateProvider.Now);
+            emp.AddPaymentPlan(DateProvider.Now);
         }
 
         public IEquatable<Payroll> Pay(DateTime dateOnly)

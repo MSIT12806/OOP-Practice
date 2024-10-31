@@ -21,8 +21,9 @@ namespace Payment.Models.Payment
 
         IEnumerable<TimeCard> GetTimeCards(string id);
         void AddTimeCard(TimeCard timeCard);
-        void AddPaymentEvent(string empId, DateTime dateOnly, string employeeType);
+        void AddPaymentPlan(string empId, DateTime dateOnly, string employeeType);
         void AddCompensationAlterEvent(string empId, int amount, DateTime startDate, string employeeType);
-        DateTime GetPaymentEventByRecently(string id, DateTime payDate);
+        DateTime? GetPaymentEventByRecently(string id, DateTime payDate);
+        void AddPayroll(Payroll payroll);
     }
 }
