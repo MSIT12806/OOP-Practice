@@ -13,7 +13,7 @@ namespace Payment.Application
 
         public void Build(string empId, string name, string address)
         {
-            _empRepository.Build(empId, name, address);
+            this._empRepository.Build(empId, name, address);
         }
 
         public Employee Rebuild(string empId)
@@ -23,12 +23,12 @@ namespace Payment.Application
 
         public void ChgEmpName(string empId, string name)
         {
-            _empRepository.ChgEmpName(empId, name);
+            this._empRepository.ChgEmpName(empId, name);
         }
 
         public void ChgEmpAddress(string empId, string address)
         {
-            _empRepository.ChgEmpAddress(empId, address);
+            this._empRepository.ChgEmpAddress(empId, address);
         }
     }
 }

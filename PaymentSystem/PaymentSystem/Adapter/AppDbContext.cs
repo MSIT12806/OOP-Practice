@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using IdentityModule.Implement;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using PaymentSystem.Infrastructure.ORM;
@@ -23,6 +24,14 @@ namespace PaymentSystem.Adapter
         public DbSet<PayrollDbModel> Payrolls { get; set; }
         public DbSet<PayrollDetailDbModel> PayrollDetails { get; set; }
 
+        #region Identity
+
+        public DbSet<AspNetUser> DefaultUsers { get; set; }
+        public DbSet<AspNetRole> DefaultRoles { get; set; }
+        public DbSet<AspNetUserRole> DefaultUserRoles { get; set; }
+
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             SetEmp(modelBuilder);
@@ -33,6 +42,11 @@ namespace PaymentSystem.Adapter
             SetPaymentEvent(modelBuilder);
             SetPayroll(modelBuilder);
             SetPayrollDetail(modelBuilder);
+
+
+            this.SetUsers(modelBuilder);
+            this.SetRoles(modelBuilder);
+            this.SetUserRoles(modelBuilder);
         }
 
         private static void SetPayrollDetail(ModelBuilder modelBuilder)
@@ -107,6 +121,22 @@ namespace PaymentSystem.Adapter
             this.Entry(dbSource).CurrentValues.SetValues(updateObject);
             return base.Update(dbSource).Entity;
         }
+
+        private void SetUserRoles(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AspNetUserRole>().HasKey(x => x.Id);
+        }
+
+        private void SetRoles(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AspNetRole>().HasKey(x => x.Id);
+        }
+
+        private void SetUsers(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AspNetUser>().HasKey(x => x.Id);
+        }
+
 
     }
 

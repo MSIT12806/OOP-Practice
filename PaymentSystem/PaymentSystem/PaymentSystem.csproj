@@ -17,4 +17,10 @@
     <ProjectReference Include="..\PaymentModule\PaymentModule.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="IdentityCoreModule">
+      <HintPath>..\Ref\IdentityCoreModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

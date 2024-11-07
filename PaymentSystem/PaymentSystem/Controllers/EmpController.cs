@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IdentityCoreModule;
+using Microsoft.AspNetCore.Mvc;
 using Payment.Application;
 using PaymentSystem.Adapter.BasicDataMaintenence;
+using PaymentSystem.Adapter.IdentityValidation;
 using PaymentSystem.ViewModel;
 
 namespace PaymentSystem.Controllers
@@ -24,11 +26,18 @@ namespace PaymentSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEmp(AddEmpViewModel addEmp)
         {
-            this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address);
+            if (IdentityService.Verify(this.User, () => new HRForId(this.User.Identity.Name), out var empVerified))
+            {
+                this._emp.Build(addEmp.EmpId, addEmp.Name, addEmp.Address);
 
-            this._payment.SetSalaryAndPaymentDate(addEmp.EmpId, addEmp.PayWay, addEmp.Amount, addEmp.StartDate.ToDateTime(TimeOnly.MinValue));
+                this._payment.SetSalaryAndPaymentDate(addEmp.EmpId, addEmp.PayWay, addEmp.Amount, addEmp.StartDate.ToDateTime(TimeOnly.MinValue));
 
-            return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
+                return this.RedirectToAction(nameof(ChgEmp), new { empId = addEmp.EmpId });
+            }
+            else
+            {
+                return this.Content("您無權限執行此操作");
+            }
         }
 
         public async Task<IActionResult> DelEmp()
@@ -56,7 +65,7 @@ namespace PaymentSystem.Controllers
         public async Task<IActionResult> ChgEmp(ChgEmpViewModel chgEmp)
         {
             this._emp.ChgEmpName(chgEmp.EmpId, chgEmp.Name);
-                this._emp.ChgEmpAddress(chgEmp.EmpId, chgEmp.Address);
+            this._emp.ChgEmpAddress(chgEmp.EmpId, chgEmp.Address);
             return this.RedirectToAction(nameof(ChgEmp), new { empId = chgEmp.EmpId });
         }
 
